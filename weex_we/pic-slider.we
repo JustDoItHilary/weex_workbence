@@ -1,0 +1,98 @@
+<template>
+	<div> 
+		<slider style="height:{{deviceHeight}};width:750;" auto-play="true" interval="3000" onchange="sliderChange">
+			<div repeat="item in list" style="height:{{deviceHeight}};"> 
+
+				<img id="img" class="img" style="height:{{deviceHeight}};" resize="cover" src="{{item.picsrc}}" onclick="clickImg"/>
+				<nav-bar id="top{{$index}}" class="navbar" title="{{time}}" onclick="clickNav"></nav-bar>
+
+				<div id="img-info{{$index}}" class="bottom" onclick="clickContent">
+					<text style="color:#eee;">{{item.index}}</text>
+					<text style="color:#eee;">{{item.time}}</text>
+					<text style="color:#eee;">{{item.content}} by {{item.author}}</text>
+				</div>
+			</div>
+			<!-- <indicator></indicator> -->
+		</slider>
+	</div>
+</template>
+
+<style>
+	.navbar{
+		width: 750;
+	}
+	.img{
+		position: absolute;
+		width: 750;
+	}
+	.bottom{
+		position: absolute;
+		bottom: 10;
+		width:750;
+		font-size: 5;
+		margin-left: 10;
+		margin-right: 10;
+	}
+</style>
+
+<script>
+	var modal=require('@weex-module/modal');
+	var animation=require('@weex-module/animation');
+	module.exports={
+		data:{
+			time:'2016-12-20',
+			list:[
+				{'id':0,'index':0,'time':'2016','content':'太阳当空照，花儿对我笑，小鸟说：早早早，你为什么背着小书包。。。','author':'DINGDANG','picsrc':'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=715133909,3016426832&fm=21&gp=0.jpg'},
+				{'id':1,'index':1,'time':'2016','content':'人之初 性本善 性相近 习相远 苟不教 性乃迁 教之道 贵以专','author':'DINGDANG','picsrc':'http://img06.tooopen.com/images/20161113/tooopen_sl_186542832657.jpg'},
+				{'id':2,'index':2,'time':'2016','content':'树欲静而风不止 子欲养而亲不在 ','author':'DINGDANG','picsrc':'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2725035265,1735414183&fm=21&gp=0.jpg'},
+				{'id':3,'index':3,'time':'2016','content':'树欲静而风不止 子欲养而亲不在 ','author':'DINGDANG','picsrc':'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=234547529,4156186303&fm=21&gp=0.jpg'},
+				{'id':4,'index':4,'time':'2016','content':'树欲静而风不止 子欲养而亲不在 ','author':'DINGDANG','picsrc':'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2137201449,2953361531&fm=21&gp=0.jpg'},
+				],
+			shownav:'false',
+			index:0,
+            deviceHeight: 1024,
+            translate_top:'',
+            translate_bottom:'',
+		},
+		created:function(){
+			
+		},
+		methods:{
+			sliderChange:function(e){
+				var self=this;
+				if (self.translate_top) {
+					self.hide();
+				}
+				self.index=e.index;
+				// modal.toast({'message':e.index,'doation':1});
+			},
+			clickImg:function(){
+				var self=this;
+				self.hide();
+
+				// modal.toast({'message':'clickImg','doation':1});
+			},
+			clickNav:function(){
+				var self=this;
+				self.hide();
+				// modal.toast({'message':'clickNav','doation':1});
+			},
+			clickContent:function(){
+				var self=this;
+				self.hide();
+				// modal.toast({'message':'clickContent','doation':1});
+
+			},
+			hide:function(){
+				var self=this;
+				var bottom=self.$el('img-info'+self.index);
+				var top=self.$el('top'+self.index);
+				self.translate_top=self.translate_top?'':'translate(0,-100%)';
+				self.translate_bottom=self.translate_bottom?'':'translate(0,100%)';
+
+				animation.transition(top,{styles:{transform:self.translate_top},duration:500,timingFuction:'ease-out'},function(){});
+				animation.transition(bottom,{styles:{transform:self.translate_bottom},duration:500,timingFuction:'ease-out'},function(){});
+			},
+		}
+	}
+</script>

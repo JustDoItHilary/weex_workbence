@@ -1,0 +1,80 @@
+<template>
+	<div>
+		<div class="search-content">
+			<input id="input" type="text" class="input" oninput ="input" autofocus="true" placeholder="请输入。。。" ></input>
+			<text onclick="search">search</text>
+		</div>
+		<text class="history-title">history</text>
+		<list>
+			<cell repeat="item in obj_list">
+				<text>{{item.tit}}</text>
+			</cell>
+		</list>
+	</div>
+</template>
+
+<style>
+	.search-content{
+		flex-direction: row;
+		padding: 10;
+	}
+	.input{
+		flex:1;
+		height: 100;
+		lines:3;
+	}
+	.history-title{
+		text-align: center;
+		color: #2222ff;
+	}
+</style>
+
+<script>
+	var storage=require('@weex-module/storage');
+	var modal=require('@weex-module/modal');
+	module.exports={
+		data:{
+			his_list:[],
+			his_item:'',
+			obj_list:[],
+			obj_item:'',
+		},
+		created:function(){
+			var self=this;
+			//方法区分大小写，大小写出错可导致页面无法正常渲染
+			storage.getAllKeys(function(e){
+				if (e.result=='success'&&e.data.length) {
+					e.data.forEach(function(item){
+						if (item.indexOf('obj_')>-1) {
+							self.obj_list.push(item.split('obj_')[1]);
+						}
+					});
+				}
+			});
+		},
+		methods:{
+			input:function(el){
+				var self=this;
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('inSput');  
+				self.obj_item=el.value;
+				// modal.toast({'message':self.his_item,'doation':1});
+			},
+			search:function(){
+				var self=this;
+				if (!self.obj_item) return;
+				var date=new Date();
+				var time=date.getTime();
+				// modal.toast({'message':time,'doation':1});
+				var obj={
+					id:time,tit:self.obj_item,type:1
+				};
+				modal.toast({'message':obj.type,'doation':1});
+				storage.setItem('obj_'+self.tiem,obj,function(e){
+					self.obj_list.push(obj);
+				});
+			},
+		},
+	}
+</script>

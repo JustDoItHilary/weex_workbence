@@ -1,0 +1,371 @@
+<template>
+	<div >
+		<!-- <wxc-navpage if="false" height="{{navpageHeight}}" title="MyList" background-color="#ffffff" title-color="#000000" left-item-src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2192841312,1420710418&fm=116&gp=0.jpg" right-item-title="刷新" right-item-color="#33aaff"></wxc-navpage> -->
+		
+		<!-- <richtext tel="123" style="height:{{navpageHeight}}">456</richtext> -->
+		<!-- <div class="loading" v-if="loading">
+      		<text class="loading-text">loading ...</text>
+    	</div> -->
+		<actionbar  tit="公告" style="height:{{navpageHeight}}"></actionbar> 
+		<!-- <div class="actionbar" style="height:{{navpageHeight}};background-color:{{actionbarColor}}" data-role="none">
+			<div class="img">
+				<img src="">
+			</div>
+				<text class="firtit">{{firTxt}}</text>
+		</div> -->
+		<list class="list">
+			<!-- <header if="false">
+				<text style="text-align:center;color:#66ff99;font-weight:bold;">HEAD</text>
+			</header> -->
+			<refresh style="width:750;padding:30;flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{isShowRefresh}}">
+				<loading-indicator style="width:50;height:50;color:#3192e1"></loading-indicator>
+			</refresh>
+			<cell repeat="item in mylist">
+				<div  onclick="itemClick" web_url="{{item.web_url}}" url="{{item.URL}}" author="{{item.AUTHOR}}" date="{{item.CREATEDATE}}" title="{{item.TITLE}}" style="border-bottom-width:1;border-color:#cccccc;">
+					<text class="time">{{item.CREATEDATE}}</text>
+					<text class="title">{{item.TITLE}}</text>
+					<text class="author">发布人 / {{item.AUTHOR}}</text>
+					<text class="excerpt">{{item.DESC}}</text>
+					<div class="div-tab">
+						<div repeat="tab in item.tab_items">
+        					<text class="text-tab" style="background-color:{{tab.background_color}};">{{tab.tab}}</text>
+        				</div>
+        			</div>
+				</div>
+			</cell>
+			<!-- <loading style="width:750;padding:30;justify-content:center;" onloading="loading" display="{{isSHowLoading}}">
+				<text style="text-align:center;color:#3192e1;">正在加载。。。</text>
+			</loading> -->
+		</list>
+	</div>
+</template>
+
+<style>
+	.list{
+		padding:20;
+	}
+	.time{
+		color: #888888;
+		margin-top: 20;
+	}
+	.title{
+		font-size: 35;
+		font-weight: bold;
+		margin-top: 15;
+	}
+	.author{
+		font-size: 25;
+		margin-top: 10;
+	}
+	.excerpt{
+		color: black;
+		font-size: 30;
+		margin-top: 20;
+	}
+    .text-tab{
+        padding: 6;
+        margin-right: 20;
+        /*background-color: #66ddff;*/
+        color: #ff5555;
+        font-size: 25;
+        text-align: center;
+    }
+    .div-tab{
+        padding: 20;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+  .loading {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loading-text {
+    margin: auto;
+    text-align: center;
+    font-size: 40px;
+    color: #BBB;
+  }
+</style>
+
+<script>
+    require('weex-components');
+	var modal=require('@weex-module/modal');
+  	var navigator = require('@weex-module/navigator');
+	var stream=require('@weex-module/stream');
+	var configModule= require('@weex-module/configModule');
+	// var api=require('../common/api');
+	module.exports={
+		data:{
+			navpageHeight:112,
+			list:[
+				{	"id":"216",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'}],},
+				{	"id":"217",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                		{'type':3,'tab':'放假了','background_color':'#ffaaff'}],},
+				{	"id":"218",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
+                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
+				{	"id":"219",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
+                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
+				{	"id":"220",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
+                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
+				{	"id":"220",
+					"time":"2016-12-20",
+                    "type":2,
+                    "content":{
+                        "id":"217",
+                        "serial_id":"35",
+                        "number":"10",
+                        "title":"灰猫奇异事务所·坚果大劫案（二）",
+                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
+                        "read_num":"16900",
+                        "maketime":"2016-12-20 21:00:00",
+                        "start_video":"",
+                        "author":"康夫",
+                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
+                        },
+					tab_items:[
+                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
+                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
+                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],}
+                		],
+			mylist:[],
+			pagerUrl:'http://romenscd.cn:6240/api/v1/user/paper/8?isPractice=false',
+			isShowRefresh:'hide',
+			isSHowLoading:'hide',
+			notice_item_url:'',
+			scrollerHeight:700,
+			noticeUrl:'http://im.yiyao365.cn/',
+			time:0,
+			loading:true,
+		},
+		created:function(){
+			var self=this;
+			// require('@weex-module/myModule').printLog("oncreated");
+			// this.$on('naviBar.rightItem.click',function(e){
+			// 	modal.toast({'message':'naviBar.rightItem.click','doation':1});
+			// 	self.refresh();
+			// });
+			// this.$on('naviBar.leftItem.click',function(e){
+			// 	modal.toast({'message':'naviBar.leftItem.click','doation':1});
+			// 	// require('@weex-module/backModule').onBack('BACK');
+			// });
+			self.getData(self.noticeUrl,function(retdata){
+				self.getList(retdata);
+			});
+			
+		},
+		
+		ready:function(){
+			 // 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+            if (this.$getConfig().env.platform != "iOS") {
+              // 适配 Android
+            	this.mainExtra = "mainExtraAndroid";
+                configModule.getContainerHeight(function(params) {
+              	// modal.toast({'message':params,'doation':1});
+                // require('@weex-module/myModule').printLog(params);
+                // require('@weex-module/myModule').printLog(params.height);
+                	var ratio = this.$getConfig().env.deviceWidth / 750;
+                	this.scrollerHeight = params.height / ratio ;
+              	}.bind(this));
+            } else {
+              // 适配 iPhone 4S
+              if (this.$getConfig().env.deviceHeight < 1000) {
+                this.scrollerHeight = 700;
+              }
+            }
+		},
+		methods:{
+			getData:function(url,callback){
+				console.log('ret:',url);
+				require('@weex-module/myModule').printLog('getData');
+				// stream.fetch({method:'GET',url:url,type:'json'},function(ret){
+				// 	// var retData=JSON.parse(ret);
+				// 	console.log('ret:',ret.data);
+				// 	callback(ret.data);
+				// });
+				// var body='QueryType=GetNotice&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+				var body='';
+				var handleName='';
+				configModule.getRequestBody(function(ret){
+					body=ret.body;
+					handleName=ret.handleName;
+					require('@weex-module/myModule').printLog('body');
+					// require('@weex-module/myModule').printLog(handleName);
+					stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
+						require('@weex-module/myModule').printLog('callback');
+						console.log('ret:',ret);
+						callback(ret.data);
+					// require('@weex-module/myModule').printLog(ret);
+					});
+				});
+					
+				
+			},
+			getList:function(retdata){
+				var self=this;
+				console.log('ret:',retdata.length);
+				for (var i = 0; i <retdata.length; i++) {
+					var item=retdata[i];
+					// var tabs=item.tab_items;
+					// if (!tabs) {
+					// 	tabs=[{'type':1,'tab':'有通知','background_color':'#66ddff'},{'type':2,'tab':'有消息','background_color':'#ffdd66'},{'type':3,'tab':'放假了','background_color':'#ffaaff'},{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}];
+					// }
+					var web_url=item.web_url;
+					if (!web_url) {
+						var config=this.$getConfig();
+						var bundleUrl=config.bundleUrl;
+						// web_url=bundleUrl.split('/').slice(0,-1).join('/')+'/newRep.js';
+						web_url='http://weex.yy365.cn/notice-item.js';
+					}
+					item.tab_items=[];
+					item.web_url=web_url;
+					self.mylist.push(item);
+				require('@weex-module/myModule').printLog(item);
+				// console.log('ret:',item.content.web_url);
+				}
+			},
+			itemClick:function(e){
+				var self=this;
+				// var url=self.processUrl(e.target.attr.url);
+				var webUrl=e.target.attr.web_url
+				var url=e.target.attr.url;
+				var title=e.target.attr.title;
+				var author=e.target.attr.author;
+				var date=e.target.attr.date;
+				var nextPageUrl='';
+			
+				// configModule.getUrl(url, function(ret){
+				// 	nextPageUrl='key='+ret;
+				// 	webUrl=webUrl+'?'+nextPageUrl+'&title='+title+'&author='+author+'&date='+date;
+				// 	require('@weex-module/myModule').printLog("url : "+ webUrl);
+				// 	console.log('URL:',e.target.attr.URL);
+					var params = {'url':webUrl,'animated':'true'};
+        			navigator.push(params, function(e) {
+					});
+				// });
+			},
+			refresh:function(){
+				var self=this;
+				self.isShowRefresh='show';
+				self.getData(self.itemUrl,function(){
+
+				});
+				self.isShowRefresh='hide';
+			},
+			loading:function(){
+				var self=this;
+				self.isSHowLoading='show';
+				//获取下一页
+				self.isSHowLoading='hide';
+			},
+    		processUrl: function (url) {
+    			var self=this;
+      			var platform = self.$getConfig().env.platform.toLowerCase();  
+      
+      			if (url) {
+        			// iOS do not need encode
+       				if (platform === 'ios') {
+          				return self.notice_item_url + '?weburl=' + url;
+        			} else if (platform === 'web') {
+          				return url;
+        			} else {
+          				var encodeUrl = encodeURIComponent(url);
+          				return self.notice_item_url + '?weburl=' + encodeUrl;
+        			}
+      			}
+    		}
+		},
+	}
+</script>

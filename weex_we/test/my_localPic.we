@@ -1,0 +1,66 @@
+<template>
+	<div class="content">
+		<div style="flex:1;flex-direction:center;align-items:center;">
+			<img class="img" src="{{url}}"/>
+		</div>
+		<div class="btn">
+			<text class="btn_item" onclick="changeHttp">网络图片</text>
+			<text class="btn_item" onclick="changeLocal">本地图片</text>
+		</div>
+	</div>
+</template>
+
+<style>
+	.content{
+		border-width: 1;
+		border-color: #ff0000;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.img{
+		height: 500;
+		width: 500;
+		border-color: #00ff00;
+		border-width: 1;
+	}
+	.btn{
+		flex-direction: row;
+	}
+	.btn_item{
+		border-color:#0000ff;
+		border-width:1;
+		padding:20;
+		margin-right: 20;
+	}
+</style>
+<script>
+	module.exports={
+		data:{
+			httpUrl:'http://pic.qiantucdn.com//58pic/25/57/78/25W58PIC2FH.jpg!qt226',
+			localUrl:'mipmap://ic_launcher',
+			isLocal:false,
+			url:'',
+		},
+		methods:{
+			changeHttp:function(){
+				var self=this;
+				if (self.isLocal) {
+					self.isLocal=false;
+					self.url=self.httpUrl;
+				}
+			},
+
+			changeLocal:function(){
+				var self=this;
+				if (!self.isLocal) {
+					self.isLocal=true;
+					self.url=self.localUrl;
+				}
+			}
+		},
+		created:function(e){
+			this.url=this.httpUrl;
+		}
+	}
+</script>

@@ -1,0 +1,86 @@
+<template>
+<div class="modal-bg">
+	<div style="flex-direction:row;width:750;" if="{{test_modal}}">
+		<text style="background-color:#22ffff;flex:1;text-align:center;" onclick="clickAlert">alert</text>
+		<text style="background-color:#ffff22;flex:1;text-align:center;" onclick="clickToast">toast</text>
+	</div>
+	<div class="modal-bg" style="
+		background-color: rgba(0,0,0,0.3);
+		margin-top: 50;" id="alert" if="{{showAlert}}">
+		<div class="modal-alert" >
+			<text style="margin:5;">{{message}}</text>
+			<text style="text-align:center;margin:5;" onclick="clickAlert_ok">{{oktitle}}</text>
+		</div>
+	</div>
+	<div class="modal-toast" if="{{showToast}}">
+		<text style="margin:5;">{{message}}</text>
+	</div>
+</div>
+</template>
+
+<style>
+	.modal-bg{
+		position:absolute;
+		justify-content: center;
+		align-items: center;
+		width: 750;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+	.modal-alert{
+		flex-direction: column;
+		justify-content: center;
+		width: 500;
+		background-color: #ffffff;
+	}
+	.modal-toast{
+		flex-direction: column;
+		justify-content: center;
+		width: 500;
+		background-color: rgba(0,0,0,0.3);
+	}
+</style>
+
+<script>
+	var animation=require('@weex-module/animation');
+	//浏览器预览高度太小，显示遮盖内容，在移动端显示正常
+	var modal=require('@weex-module/modal');
+
+	module.exports={
+		data:{
+			oktitle:'OK',
+			message:'message message message ',
+			showAlert:true,
+			showToast:false,
+			test_modal:false,
+		},
+		methods:{
+			clickAlert_ok:function(){
+				var self=this;
+				self.showAlert=false;
+				var params = {
+          'message': self.message,
+          'duration': 2,
+        }
+        // this.$call('modal','toast',params);
+			},
+			clickAlert:function(){
+				var self=this;
+        		modal.alert({'message':self.message,'oktitle':'OK'});},
+			clickToast:function(){
+				var self=this;				
+        		modal.toast({'message':self.message,'doation':2});
+        		// modal.confirm({'message':self.message,'okTitle': 'YES','cancelTitle': 'NO'},function(e){});
+			},
+		},
+		created:function(){
+			var self=this;
+			for(var i=0;i<6;i++){
+				self.message+=self.message;
+			}
+			var toast=self.$el('toast');
+		}
+	}
+</script>

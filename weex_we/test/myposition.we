@@ -1,0 +1,16 @@
+<element name="foo">
+  <text style="width:50;height:50;">Foo</text>
+</element>
+
+<template>
+  <div>
+  <text>喵喵</text>
+    <foo></foo>
+  <text>喵喵</text>
+  </div>
+</template>
+
+<script>
+</script>
+
+

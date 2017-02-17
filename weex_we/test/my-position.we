@@ -1,0 +1,29 @@
+<template>
+	<div class="wrapper">
+		<div class="div1">
+		</div>
+		<div class="div2"></div>
+	</div>
+</template>
+
+<style>
+	.wrapper{
+		background-color: #eeeeee;
+		height: 960;
+		position: absolute;
+	}
+	.div1{
+		background-color:#ffff00;
+		height: 300;
+		width: 300;
+		bottom: 20;
+		position: absolute;
+	}
+	.div2{
+		/*position: relative;*/
+		width: 300;
+		height: 300;
+		top:50;
+		background-color: #ff00ff;
+	}
+</style>

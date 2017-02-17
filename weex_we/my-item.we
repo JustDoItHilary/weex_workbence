@@ -1,0 +1,137 @@
+<template>
+	<div>
+		<div style="flex-direction:row;">
+			<input id="input" style="margin:20;flex:1;" placeholder ="请输入序列号。。" autofocus="true" oninput="onInput_num"></input>
+			<text style="margin:20;background-color:#5592e1;text-align:center;" onclick="search">search</text>
+		</div>
+		<scroller>
+			<div class="all">
+				<text class="time">{{time}}</text>
+					<text class="title">{{title}}</text>
+					<text class="author">作者/ {{author}}</text>
+					<div class="div-tab">
+					<div repeat="tab in tab_items">
+        				<text class="text-tab" style="background-color:{{tab.background_color}};">{{tab.tab}}</text>
+        			</div>
+        			</div>        			
+					<text class="excerpt">{{content}}</text>
+			</div>
+		</scroller>
+	</div>
+</template>
+
+<style>
+	.all{
+		padding: 20;		
+	}
+	.time{
+		color: #888888;
+		margin-top: 20;
+	}
+	.title{
+		font-size: 35;
+		font-weight: bold;
+		margin-top: 15;
+	}
+	.author{
+		padding-left: 20;
+		font-size: 30;
+		margin-top: 10;
+	}
+	.excerpt{
+		color: black;
+		font-size: 30;
+	}
+    .text-tab{
+        padding: 6;
+        margin-right: 20;
+        /*background-color: #66ddff;*/
+        color: #ff5555;
+        font-size: 30;
+        text-align: center;
+    }
+    .div-tab{
+        padding: 20;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }</style>
+
+<script>
+	var modal=require('@weex-module/modal');
+	var stream=require('@weex-module/stream');
+
+	module.exports={
+		data:{
+			url:'http://v3.wufazhuce.com:8000/api/serialcontent/',
+			time:'2016-12-20',
+			title:'灰猫',
+			author:'康夫',
+			excerpt:'真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。',
+			content:'',
+			tab_items:[
+                {'type':1,'tab':'有通知','background_color':'#66ddff'},
+                {'type':2,'tab':'有消息','background_color':'#ffdd66'},
+                {'type':3,'tab':'放假了','background_color':'#ffaaff'},
+                {'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],
+            input_num:'217',
+		},
+		created:function(){
+			var self=this;
+			// self.getUrl();
+			self.getData(self.url+self.input_num,function(){});
+		},
+		methods:{
+            getUrlParams: function(url) {
+                var queryStr = url.split('?')[1] || '';
+                var queryArr = queryStr.split('&');
+                var ret = {};
+
+                queryArr.forEach(function(item, index) {
+                    var kv = item.split('=');
+                    var key = kv[0];
+                    var value = kv[1];
+
+                    if (key) {
+                        ret[key] = value;
+                // modal.alert({'message':key+':'+value,'oktitle':'OK'});
+                    }
+                });
+
+                return ret;
+            },
+			getUrl:function(){
+            var bundleUrl = this.$getConfig().bundleUrl || '';
+            var bundleUrlParams = this.getUrlParams(bundleUrl);
+            // var encodeURI=encodeURIComponent('');
+            var webUrl = bundleUrlParams.weburl || '';
+            this.url = decodeURIComponent(webUrl);
+
+        	},
+        	getData:function(url,callback){
+        		var self=this;
+				console.log('i am the callback '+url);
+            	stream.fetch({method: 'GET',url: url,type:'json'}, 
+            	function(res) {
+        			try {
+          				var results = res.data.data || [];
+						self.title=results.title;
+						self.content=results.content;
+						self.author=results.author.user_name;	
+						// console.log('i am the callback '+results.id);
+        			} catch(e) {}
+      			},function(res){});
+        	},
+        	onInput_num:function(el){
+        		var self=this;
+        		if (!el.value) return;
+        		self.input_num=el.value;
+        		console.log('i am the callback '+el.value);
+        	},
+        	search:function(){
+        		var self=this;
+				self.getData(self.url+self.input_num,function(){});
+        	},
+		},
+	}
+</script>

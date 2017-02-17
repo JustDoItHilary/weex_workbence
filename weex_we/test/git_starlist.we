@@ -1,0 +1,137 @@
+<template>
+	<div>
+		<list class="list">
+			<!-- <header class="header">
+				<text> HEADERS </text>
+			</header>
+			<refresh style="width:750;padding:30;" onfresh="refreshData">
+				<text > ↓ Pull to refresh</text>
+				<loading-indicator class="indicator"></loading-indicator>
+			</refresh> -->
+			<cell repeat="{{item in gitlist}}" index="{{$index}}">
+				<div class="item" >
+					<text class="text">git_name: {{item.full_name}}</text>
+					<text class="text">git_star: {{item.stargazers_count}}</text>
+				</div>
+			</cell>
+			<!-- <loading onloading="loadingData" style="width:750;padding:30;" display="{{loadingDisplay}}">
+				<text>{{loadingText}}</text>
+			</loading> -->
+		</list>
+
+    	<!-- <div class="up" onclick="goToTop">
+      		<img class="img" src="https://img.alicdn.com/tps/TB1ZVOEOpXXXXcQaXXXXXXXXXXX-200-200.png"></img>
+    	</div> -->
+	</div>
+</template>
+
+<style >
+	.list{
+		width: 750;
+		flex:1;
+	}
+	.item{
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		margin-top: 10;
+	}
+	.indicator{
+		background-color: #ff0000;
+		height: 20;
+	}
+	.header{
+		justify-content: center;
+		align-items: center;
+	}
+	.img{
+		width: 50;
+		height: 50;
+	}
+	.text{
+		font-size: 30;
+		text-align: center;
+	}
+</style>
+
+<script >
+
+	var modal=require('@weex-module/modal');
+	var stream=require('@weex-module/stream');
+	var dom=require('@weex-module/dom');
+
+	var SEARCH_URL = 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc';
+
+	module.exports={
+		data:{
+			gitlist:[
+				{full_name:"one",stargazers_count:21},
+				{full_name:"one",stargazers_count:21},
+				{full_name:"one",stargazers_count:21},
+			],
+    		page: 1,
+    		loadingDisplay: 'show',
+    		loadingText: 'Loading...',
+		},
+		methods:{
+			getgitList:function(url){
+				var self = this;
+      			// modal.toast({'message':url,'doation':1});
+				// stream.fetch({method:'GET',url:url,type:'json'},function(res){},function(rec){});
+
+      			stream.fetch({
+        			method: 'GET',
+        			url: url,
+        			type:'json'
+      				}, function(res) {
+        				try {
+          				var results = res.data.items;
+          					if (Array.isArray(results)) {
+            					for(var i = 0; i < results.length; i++) {
+              						self.gitlist.push(results[i]);
+            						}
+          					}
+          					// modal.toast({'message':self.gitlist,'doation':1});
+        				} catch(e) {}
+      					},function(res){
+
+      						});
+    		},
+    		loadingData: function (e) {
+      			var url = SEARCH_URL + '&page=' + this.page;
+      			var self = this;
+
+      			if (self.page <=10 ) {
+        			self.getgitList(url);
+        			self.page++;
+      			} else {
+        			self.loadingDisplay = 'hide';
+        			self.loadingText = 'NO MORE!';
+      			}
+    		},
+    		// goToTop: function (e) {
+      // 			dom.scrollToElement(this.$el('item-0'), {
+      //   		offset: -100
+      // 			});
+    		// },
+    		refreshData: function (e) {
+      			var url = SEARCH_URL + '&page=1';
+
+      			modal.toast({
+        		'message': 'Refreshing...', 
+        		'duration': 1
+      			});
+
+      			this.items = [];
+      			this.page = 1;
+      			this.getgitList(url);
+    		}
+		},
+		created:function(){
+    		var url = SEARCH_URL + '&page=' + this.page;
+    		this.getgitList(url);
+    		this.page++;
+    		// modal.toast({'message':this.gitlist[1].full_name,'doation':1});
+		}
+	}
+</script>

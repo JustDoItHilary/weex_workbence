@@ -1,0 +1,246 @@
+<template><!-- 1. 拦截交互事件 2. 关闭 3. 获取当前页面 url file://assets/component/navigator-demo.js?test=1 -->
+	<div >
+		<div if="{{isPaperList}}">
+		<wxc-navpage height="{{navpageHeight}}" background-color="#3192e1" title="考试列表" title-color="#ffffff" left-item-src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2192841312,1420710418&fm=116&gp=0.jpg"></wxc-navpage>
+		<list class="list" style="margin-top:{{navpageHeight}};">
+			<refresh style="width:750;padding:30;flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{isShowRefresh}}">
+				<text style="text-align:center;">PULL TO REFRESH</text>
+				<loading-indicator style="width:50;height:50;color:#3192e1;" ></loading-indicator>
+			</refresh>
+			<cell>
+				<div class="item" repeat="item in paperList">
+					<text class="title">{{item.title}}</text>
+					<div class="div-tag">
+						<text class="target">考试条件:</text>
+						<!-- <div  style="border-width:1;"> -->
+        					<text repeat="tag in item.tags" class="text-tag" style="color:{{tag.color}};">{{tag.name}}</text>
+        				<!-- </div> -->
+        			</div>
+					<!-- <text class="duration">考试时长：{{item.duration}}</text>
+					<text class="newstime">发布时间：{{item.newstime}}</text>
+					<text class="deadline">截止时间：{{item.deadline}}</text> -->
+					<div class="exam-div" >
+						<!-- <a href="{{item.url}}"> -->
+							<text class="exam" url="{{item.url}}" onclick="exam">参加考试</text>
+						<!-- </a> -->
+					</div>
+					<!-- <wxc-panel>
+						<wxc-button type="primary" size="small" value="参加考试"></wxc-button>
+					</wxc-panel> -->
+				</div>
+			</cell>
+			<loading style="width:750;padding:30;justify-content:center;background-color:#cccccc;" onloading="loading" display="{{isShowLoading}}">
+				<text style="text-align:center;color:#3192e1;">正在加载。。。</text>
+			</loading>
+		</list>
+
+		</div>
+	</div>
+</template>
+
+<style>
+	.list{
+		padding: 10;
+		min-height: 60;
+	}
+	.item{
+		padding: 20;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+	.title{
+		font-size: 45;
+		font-weight: bold;
+		color: black;
+	}
+	.duration{
+		font-size: 35;
+		color: #aaaaaa;
+		margin-top: 10;
+	}
+	.newstime{
+		font-size: 35;
+		color: #aaaaaa;
+		margin-top: 10;
+	}
+	.deadline{
+		font-size: 35;
+		color: #ff0000;
+		margin-top: 10;
+	}
+	.exam-div{
+		margin-top: 20;
+		flex-direction: row;
+		justify-content: center;
+	}
+	.exam{
+		border-radius: 15;
+		padding: 10;
+		color: #ffffff;
+		background-color: #3192e1;
+	}
+    .div-tag{
+        padding: 20;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .text-tag{
+    	flex-direction: row;
+    	justify-content: center;
+        padding: 10;
+        margin-right: 20;
+        background-color: #cccccc;
+        /*color: #ff5555;*/
+        font-size: 22;
+        text-align: center;
+        border-radius: 10;
+    }
+    .target{
+		font-size: 30;
+		text-align: center;
+		margin-right: 10;
+    }
+</style>
+
+<script>
+	require('weex-components');
+	var dom = require('@weex-module/dom') || {}
+	var modal=require('@weex-module/modal');
+	var stream = require('@weex-module/stream');
+  	var navigator = require('@weex-module/navigator');
+  	var web_module = require('@weex-module/webview');
+  	var modal=require('@weex-module/modal');
+
+	module.exports={
+		data:{
+			navpageHeight:88,
+			deviceHeight:1024,
+			isShowRefresh:'hide',
+			isShowLoading:'hide',
+			isPaperList:true,
+			isExam:true,
+			paperList:[
+				// {'title':'考试名称','duration':'60分','newstime':'2016-12-30 08:30:00','deadline':'2016-12-30 08:30:00'},
+				// {'title':'考试名称','duration':'60分','newstime':'2016-12-30 08:30:00','deadline':'2016-12-30 08:30:00'},
+				// {'title':'考试名称','duration':'60分','newstime':'2016-12-30 08:30:00','deadline':'2016-12-30 08:30:00'},
+				// {'title':'考试名称','duration':'60分','newstime':'2016-12-30 08:30:00','deadline':'2016-12-30 08:30:00'},
+				// {'title':'考试名称','duration':'60分','newstime':'2016-12-30 08:30:00','deadline':'2016-12-30 08:30:00'},
+				],
+			examList:[],
+			paperUrl:'http://192.168.100.140:8080/test_yn/exam/Exam/examList',
+			// examUrl:'http://romenscd.cn:6240/api/v1/user/paper',
+			aUrl:'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page=1',
+			examUrl:'http://romenscd.cn:4740/?',
+			examSrc:'http://192.168.100.140:8080/test/ui/zhy/js/exam.js',
+			src:'',
+			PAGE_URL :'http://dotwe.org/raw/dist/f1fa0895d0fa0fd80896e02a589443dd.js',
+			weburl:'http://192.168.100.140:8080/test/ui/zhy/js/web-demo.js',
+		},
+		methods:{
+			exam:function(e){
+				console.log('i am the callback '+e.target.attr.url);
+				var self=this;
+				// var pid=e.target.attr.pid;
+				// modal.alert({'message':self.examUrl+'pid='+pid,'oktitle':'ok'});
+				// var url=self.examUrl+'pid='+pid;
+				// var url='http://192.168.100.140:8080/test/ui/zhy/js/exam.js';
+				// var url='file://assets/dist/modules/exam.js'
+				var url=e.target.attr.url;
+				modal.toast({'message':url,'doation':1});
+				var params = {'url':url,'animated':'true'};
+        		navigator.push(params, function(e) {});
+			},
+			getPaper:function(url,callback){
+				var self=this;
+				stream.sendHttp({
+        			method: 'GET',
+        			url: url
+    				}, function (ret) {
+        				var retdata = JSON.parse(ret);
+        				// modal.toast({'message':ret,'doation':1});
+        				callback(retdata.data);
+    				});
+			},
+			getData:function(url,callback){   			
+				var self = this;
+				console.log('i am the callback '+url);
+				stream.fetch({method: 'GET',url: url,type:'json'}, function(res) {
+					console.log('i am the callback '+res.status);
+        			try {
+          				var results = res.data.data || [];
+						if (Array.isArray(results)) {
+          					callback(results);         			
+              			modal.alert({'message':results.length,'oktitle':'ok'});
+              			}
+        		    } catch(e) {}
+      			},function(res){});
+			},
+			refresh:function(){
+				var self=this;
+				self.isShowRefresh='show';
+				self.getPaper(self.paperUrl,function(results){
+					self.paperList=[];
+					self.isShowLoading='hide';
+					for(var i = 0; i < results.length; i++) {
+            			var paper=results[i];
+              			self.paperList.push(paper);
+            		}
+				});
+				self.isShowRefresh='hide';
+			},
+			loading:function(){
+				var self=this;
+				self.isShowLoading='show';
+				self.getPaper(self.paperUrl,function(results){
+					self.paperList=[];
+					self.isShowLoading='hide';
+					for(var i = 0; i < results.length; i++) {
+            			var paper=results[i];
+              			self.paperList.push(paper);
+            		}
+				});
+				self.isShowLoading='hide';
+			},
+    		processUrl: function (url) {
+    			var self=this;
+      			var platform = self.$getConfig().env.platform.toLowerCase();  
+      
+      			if (url) {
+        			// iOS do not need encode
+       				if (platform === 'ios') {
+          				return self.weburl + '?weburl=' + url;
+        			} else if (platform === 'web') {
+          				return url;
+        			} else {
+          				var encodeUrl = encodeURIComponent(url);
+          				return self.weburl + '?weburl=' + encodeUrl;
+        			}
+      			}
+    		}
+		},
+		created:function(){
+			var self=this;
+
+			// self.getData(self.paperUrl,function(results){
+			// 	// modal.toast({'message':retdata.data.length,'doation':1});
+   //          	for(var i = 0; i < results.length; i++) {
+   //          		var paper=results[i];
+   //            		self.paperList.push(paper);
+   //          	}
+			// });
+			
+				self.getPaper(self.paperUrl,function(results){
+					self.paperList=[];
+					self.isShowLoading='hide';
+					for(var i = 0; i < results.length; i++) {
+            			var paper=results[i];
+            			var url=self.examUrl+'pid='+paper.id;
+            			paper.url=self.processUrl(url);
+              			self.paperList.push(paper);
+            		}
+				});
+		},
+
+	}
+</script>

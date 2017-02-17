@@ -1,0 +1,61 @@
+<template>
+	<div>
+		<input id="input" class="input" type="url" name="web-url" placeholder="请输入 url" value="http://www.baidu.com" onchange="changeUrl"></input>
+		<div style="flex-direction:row;justify-content:space-between;margin:20;">
+			<text onclick="webload"> loadUrl</text>
+			<text onclick="webback"> back</text>
+			<text onclick="webforward"> forward</text>
+			<text onclick="reload"> reload</text>
+		</div>
+		<div>
+			<web id="webview" src="{{url}}" class="web"></web>
+		</div>
+		
+	</div>
+</template>
+
+<style>
+	.web{
+		width: 750;
+		height: 1000;
+		padding: 20;
+	}
+	.input{
+		margin:20;
+
+	}
+</style>
+
+<script>
+	
+    var web_module=require('@weex-module/webview');
+    var modal=require('@weex-module/modal');
+
+    module.exports={
+    	data:{
+    		url:'http://www.taobao.com',
+    	},
+    	methods:{
+    		changeUrl:function(e){
+    		},    		
+			webload:function(e){
+				var input=this.$el('input');
+				this.url=input.attr.value;
+			},
+			webback:function(e){
+				var webview=this.$el('webview');
+				web_module.goBack(webview);
+				modal.toast({'message':this.url,'doation':1});
+			},
+			webforward:function(e){
+				var webview=this.$el('webview');
+				web_module.goForward(webview);
+				modal.toast({'message':this.url,'doation':1});
+			},
+			reload:function(e){
+				var webview=this.$el('webview');
+				web_module.reload(webview.ref);
+			}
+    	}
+    }
+</script>

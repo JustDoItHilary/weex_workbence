@@ -1,0 +1,34 @@
+<template>
+	<scroller style="height:1000;">
+		<text style="margin-top:20;font-weight=bold;text-align:center;" id="top2" onclick="alert">Top</text>
+		<foo repeat="(k,v) in list" title="{{k}}-{{v}}"></foo>
+		<text style="margin-bottom:20;" onclick="toTop">BOTTOM </text>
+	</scroller>
+</template>
+
+<style>
+	
+</style>
+
+<script>
+	require('mimi/foo.we');
+	var modal=require('@weex-module/modal');
+    var dom=require('@weex-module/dom');
+	module.exports={
+		data:{
+			list:[],
+		},
+		methods:{
+
+			alert:function(){
+				modal.alert({'message':'太阳当空照，花儿对我笑，小鸟说：早早早，你为什么背着小书包。。。','okTitle':'OK'});
+			},
+			toTop:function(){
+				var aim=this.$el('top2');
+				//失败，未解决
+				dom.scrollToElement(aim,{offset:0});
+				modal.toast({'message':"叮噹",'doation':1});
+			},
+		}
+	}
+</script>

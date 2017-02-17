@@ -1,0 +1,286 @@
+<template>
+	<div>
+		<!-- <wxc-tabber title="TEST"></wxc-tabber> -->
+		<nav-bar-normal title="USER"></nav-bar-normal>
+		<!-- <div class="style-translucent"></div> -->
+		<list class="style-list">
+            <refresh class="refresh-view" display="{{refresh_display}}" onrefresh="onrefresh">
+                <text class="refresh-arrow" if="{{(refresh_display==='hide')}}">刷新</text>
+                <loading-indicator></loading-indicator>
+            </refresh>
+			<cell repeat="{{item in userinfolist}}" index="{{$index}}">
+				<!-- <div class="div-test">
+					<text style="border-width:1;">哒哒哒</text>
+				</div> -->
+				<div class="div-icon style-border" if="{{item.showType1}}">
+					<img class="img-icon" src="{{item.src_url}}">
+					<text class="text-icon style-text">{{item.title}}</text>
+				</div>
+
+				<div class="div-singletext style-border" if="{{item.showType2}}">
+					<text class="style-text-title text-left-100">{{item.title}}</text>
+					<text class="style-text text-right-flex">{{item.value}}</text>
+					<img class="img-arrow" src="{{item.src_url}}"/>
+				</div>
+
+				<div class="style-border div-double-row" if="{{item.showType3}}">
+					<div class="div-doubletext-column">
+						<div class="div-height-100">
+							<text class="style-text-title text-left">{{item.title}}</text>
+						</div>
+						<div class="div-height-100">
+							<text class="style-text text-left">{{item.value}}</text>
+						</div>
+					</div>
+					<img class="img-arrow" src="{{item.src_url}}"/>
+				</div>
+
+				<div class="style-border div-double-column" if="{{item.showType4}}">
+					<div class="div-height-100">
+						<text class="style-text-title text-left">{{item.title}}</text>
+					</div>
+					<div class="div-single-textAndImg">
+						<text class="style-text text-left-flex-inrow">{{item.value}}</text>
+						<img class="img-arrow" src="{{item.src_url}}">
+					</div>
+				</div>
+
+				<div class="dialog" if="{{showType1}}">
+					<text class="dialog-title">这是一个dialog</text>
+					<text class="dialog-body">×</text>
+				</div>
+			</cell>
+
+
+            <loading class="refresh-view" display="{{loading_display}}" onloading="onloading">
+                <text class="refresh-arrow"
+                      if="{{(refresh_display==='hide')}}">加载更多</text>
+                <loading-indicator></loading-indicator>
+            </loading>
+		</list>
+	</div>
+</template>
+
+<style >
+    .refresh-arrow {
+        font-size: 30px;
+        color: #45b5f0;
+    }
+    .refresh-view {
+        height: 80px;
+        width: 750px;
+        justify-content: center;
+        align-items: center;
+    }
+	.style-translucent{
+		opacity: .5;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-color: #000000;
+	}
+	.style-list{
+		margin-left: 20px;
+		margin-right: 20px;
+		padding: 10px;
+	}	
+	.style-border{
+		border-bottom-width: 1px;
+		border-color: #dedede;
+	}
+	.style-text-title{
+		font-size: 30px;
+		color: #45b5f0;
+	}
+	.style-text{
+		font-size: 40px;
+	}
+	.div-icon{
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-top: 30px;
+	}
+	.div-singletext{
+		height: 130px;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.div-double-row{
+		height: 200;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div-doubletext-column{
+		flex:1;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
+	.div-double-column{
+		height: 200px;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+	}
+	.div-single-textAndImg{
+		height: 100px;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.div-height-100{
+		height: 100;		
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	.img-icon{
+		width: 100px;
+		height: 100px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.img-arrow{
+		width: 48px;
+		height: 48px;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+	.text-icon{
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	.text-left-100{
+		width: 100px;
+		text-align: left;
+		margin-left: 10px;
+	}
+	.text-right-flex{
+		flex:1;
+		text-align: right;
+	}
+	.text-left{
+		margin-left: 10px;
+		margin-right: 10;
+		text-align: center;
+		justify-content: center;
+	}
+	.text-left-flex-inrow{
+		flex: 1;
+		text-align: left;
+		margin-left: 10px;
+
+	}
+	.div-test{
+		border-width: 1;
+		border-color: #ffee00;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+	}
+</style>
+
+<script >
+
+    require('weex-components');
+    var navigator = require('@weex-module/navigator');
+    var modal=require('@weex-module/modal');
+    var apis=require('../mycommon/myapi');
+
+	module.exports={
+		data:{
+			userlist:[
+			{type:1,title:"用户头像",src_url:"http://gtms01.alicdn.com/tps/i1/TB1qw.hMpXXXXagXXXX9t7RGVXX-46-46.png",defaultValue:"",warn:"",value:""},
+			{type:2,title:"姓名",src_url:"http://gtms01.alicdn.com/tps/i1/TB1qw.hMpXXXXagXXXX9t7RGVXX-46-46.png",defaultValue:"输入姓名",warn:"最多输入10个字",value:""},
+			{type:3,title:"职业",src_url:"http://gtms01.alicdn.com/tps/i1/TB1qw.hMpXXXXagXXXX9t7RGVXX-46-46.png",defaultValue:"无",warn:""},
+			{type:4,title:"出生日期",src_url:"http://gtms01.alicdn.com/tps/i1/TB1qw.hMpXXXXagXXXX9t7RGVXX-46-46.png",defaultValue:"",warn:"",value:"2016-12-08"}
+			],
+			readingList:[],
+			userinfolist:[],
+			currentIndex : 0, 
+			baseURL:'',
+            refresh_display: 'hide',
+            loading_display: 'hide',
+
+		},
+		computed:{},
+		methods:{
+            onrefresh: function (e) {
+                var self = this;
+                self.refresh_display = 'show';
+                self.currentIndex = 0;
+                self.getUserInfoList(self.currentIndex, false);
+                self.refresh_display = 'hide';
+
+            },
+            onloading: function (e) {
+                var self = this;
+                this.loading_display = "show";
+                self.refresh_display = 'show';
+
+                self.getReadingIndex(++self.currentIndex, true);
+                self.loading_display = 'hide';
+                self.refresh_display = 'hide';
+
+
+            },
+			getUserInfoList: function(index,loadmore){
+				var self=this;
+				apis.getUserList(index,function(ret){
+					if (!loadmore) {
+						self.userinfolist=[];
+					}
+					self.getType(ret.data,function(item){
+						self.userinfolist.push(item);
+					});
+				});
+			},
+
+            getReadingIndex: function (index, loadmore) {
+                var self = this;
+                apis.getReadingIndex(index, function (ret) {
+                	// modal.toast({'message':"redinglist",'doation':1});
+                    if (!loadmore) {
+                        self.readingList = [];
+                    }
+                    for (var i = 0; i < ret.data.length; i++) {
+                        var items = ret.data[i].items;
+                        self.getType(items,function(item){
+                        	self.readingList.push(item);
+                        });                        
+                    }
+                    self.showListItem = self.readingList.length > 0;
+                });
+            },
+            getType:function(items,callback){
+                for (var j = 0; j < items.length; j++) {
+                	items[j].showType1 = items[j].type == 1;
+                	items[j].showType2 = items[j].type == 2;
+                	items[j].showType3 = items[j].type == 3;
+                	items[j].showType4 = items[j].type == 4;
+                	callback(items[j]);
+                }
+            }
+		},
+
+        created: function () {
+            var self = this; 
+            self.currentIndex=0;
+            // self.getReadingIndex(self.currentIndex,false);
+            self.getType(self.userlist,function(item){});
+            self.getUserInfoList(self.currentIndex,false);
+            var base=apis.getBaseUrl(self.$getConfig().bundleUrl,true);
+            this.baseURL=base;
+        },
+        ready: function () {
+            var self = this;
+        }  
+	}
+	
+</script>

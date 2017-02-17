@@ -1,0 +1,83 @@
+<template>
+	<div class="browserStyle">
+		<web id="webview" src="{{src}}" class="webStyle"></web>
+  </div>
+</template>
+
+<style>
+  .browserStyle {
+  	width: 750;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color:#778899 ;
+  }
+	.webStyle{
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    background-color: #8B0000;
+	}
+</style>
+
+<script>
+	  require('weex-components');
+  	var web_module = require('@weex-module/webview');
+  	var modal=require('@weex-module/modal');
+    var globalEvent = require('@weex-module/globalEvent');
+    var PAGE_URL = 'http://dotwe.org/raw/dist/f1fa0895d0fa0fd80896e02a589443dd.js';
+
+  	module.exports = {
+    data: {
+      src : "http://romenscd.cn:4740/?",
+      url:'',
+      // src:'http://192.168.100.140:8080/test/ui/zhy/js/test.js',
+    },
+
+    methods: {
+      onBack:function(){
+        modal.toast({'message':"dingdong",'doation':1});
+      },
+      processUrl: function (url) {
+        var platform = this.$getConfig().env.platform.toLowerCase();
+            
+        if (url) {
+          // iOS do not need encode
+          if (platform === 'ios') {
+            return PAGE_URL + '?weburl=' + url;
+          } else if (platform === 'web') {
+            return url;
+          } else {
+            var encodeUrl = encodeURIComponent(url);
+            return PAGE_URL + '?weburl=' + encodeUrl;
+          }
+        }
+      }
+    },
+    created:function(){
+      this.url=this.processUrl('http://www.taobao.com');
+      var web=this.$el('webview');
+      var evt = new Event('some-type');
+      evt.data = { foo: 'bar' };
+      web.dispatchEvent(evt);
+      // web.fireGlobalEventCallback('click',{});
+      globalEvent.addEventListener('click',function(){
+        modal.toast({'message':"dingdong",'doation':1});        
+      });
+    	// this.$getConfig(function (config) {
+     //            self.deviceHeight = 750 / config.env.deviceWidth * config.env.deviceHeight - 240
+     //        }.bind(this));
+    	// console.log('deviceHeight: '+self.deviceHeight);
+    },
+    ready: function() {
+      var config = this.$getConfig();
+      // modal.toast({'message':JSON.stringify(config),'doation':1});
+      console.log('config', JSON.stringify(config));
+      this.src=this.src+'pid='+8;
+    },
+  }
+</script>

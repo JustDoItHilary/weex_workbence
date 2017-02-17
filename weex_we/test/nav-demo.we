@@ -1,0 +1,45 @@
+<template>
+  <div>
+    <text style="padding: 20;text-align: center; background-color: blue;color: #ffffff;" onClick="openUrl" href="{{url}}">
+      click
+    </text>
+  </div>
+</template>
+
+<script>
+var event = require('@weex-module/event')
+
+var parseParams = function (param, key) {
+  var paramStr = ''
+
+  if (typeof param === 'string' || typeof param === 'number' || typeof param === 'boolean') {
+    paramStr += '&' + key + '=' + encodeURIComponent(param)
+  } else {
+    for (var i in param) {
+      var value = param[i]
+      var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
+
+      paramStr += '&' + parseParams(value, k)
+    }
+  }
+  return paramStr.substr(1)
+}
+
+module.exports = {
+  data: {
+    url: 'http://dotwe.org/raw/dist/fbc244c8fdd64377798d77aed9a69589.js',
+    obj: {
+      a: 'a',
+      b: 'b'
+    }
+  },
+  methods: {
+    openUrl: function (e) {
+      var queryStr = parseParams(this.obj)
+      var url = this.url + '?' + queryStr
+      
+      event.openURL(url)
+    }
+  }
+}
+</script>

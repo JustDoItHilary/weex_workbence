@@ -1,0 +1,42 @@
+<template>
+	<wxc-navpage class="nav" background-color="#cccccc" title="啦啦啦" title-color="#ff00ff" right-item-title="dingdong" right-item-color="#ff0000" left-item-src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2192841312,1420710418&fm=116&gp=0.jpg">
+				<text> dida dida </text>
+				<wxc-panel title="push a new page">
+      				<wxc-button type="primary" size="small" value="push" onclick="push"></wxc-button>
+    			</wxc-panel>
+    			<wxc-panel title="pop to the last page">
+      				<wxc-button type="success" size="small" value="pop" onclick="pop"></wxc-button>
+    			</wxc-panel>
+			</wxc-navpage>
+	</wxc-navpage>
+</template>
+
+<script>
+    require('weex-components');
+	var modal=require('@weex-module/modal');
+	var navigator=require('@weex-module/navigator');
+	module.exports={
+		created:function(){
+			this.$on('naviBar.rightItem.click',function(e){
+				modal.toast({'message':'naviBar.rightItem.click','doation':1});
+			});
+			this.$on('naviBar.leftItem.click',function(e){
+				modal.toast({'message':'naviBar.leftItem.click','doation':1});
+			});
+		},
+		methods:{
+			pop:function(){
+				modal.toast({'message':'pop','doation':1});
+			},
+			push:function(){
+				var params={
+					'url':'http://dotwe.org/raw/dist/33dfcbe81979c60ba5de72c235d7d0f8.js',
+					'animated':'true'
+				}
+				navigator.push(params,function(e){
+				modal.toast({'message':'push','doation':1});
+				});
+			},
+		}
+	}
+</script>

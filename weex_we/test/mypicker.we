@@ -1,0 +1,38 @@
+<template>
+	<div style="padding:10;">
+		<text style="padding:10;">pick value: {{pickvalue}}</text>
+		<text class="picker" onclick="pick">pick data</text>
+	</div>
+</template>
+
+<style>
+	.picker{
+		padding: 10;
+		border-width: 2;
+		border-radius: 5;
+		border-color: #22ffff;
+		text-align: center;
+	}
+</style>
+
+<script>
+	var picker=require('@weex-module/picker');
+	var modal=require('@weex-module/modal');
+
+	module.exports={
+		data:{
+			pickvalue:'',
+		},
+		methods:{
+			pick:function(){
+				var self=this;
+				picker.pickTime({value:'08:30'},function(e){
+					if (e.result=='success') {
+						modal.toast({'message':'success','doation':1});
+						self.value=e.data;
+					}
+				})
+			},
+		},
+	}
+</script>

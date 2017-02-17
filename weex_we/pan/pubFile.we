@@ -1,0 +1,254 @@
+<template>
+	<div class="wrapper" style="height:{{devHeight}}"> 
+		<div class="div_titBar" data-role="none">
+			<img class="img_back" src="">
+			<text class="text_save">关闭</text>
+			<text class="text_titBar">公共文件</text>
+			<text class="text_save" onclick="click_morefunc">更多</text>
+		</div>
+		<div class="div_tit">
+			<img class="img_choice" src="">
+			<div class="div_search">
+				<img src="">
+				<text class="txt_center">搜索</text>
+			</div>
+		</div>
+
+			<list class="list">
+				<cell repeat="item in list" class="div_cell" style="height:80;" if="{{(item.type==1)}}">
+					<div class="div_select" if="{{isBatched}}" onclick="click_select" isSelected={{item.isSelected}}>
+						<img class="img_select isSelected_{{item.isSelected}}" src="">
+					</div>
+					<img class="img_logo" src="{{item.src}}">
+					<text class="txt_flex">{{item.txt}}</text>
+					<img class="img_go" src="{{item.src}}">
+				</cell>
+				<cell repeat="item in list" class="div_cell" style="height:120;" if={{(item.type==2)}}>
+					<div class="div_select" if="{{isBatched}}" onclick="click_select">
+						<img class="img_select isSelected_{{item.isSelected}}" src="">
+					</div>
+					<img class="img_logo" src="{{item.img_src}}">
+					<div class="div_txt">
+						<text class="txt_flex">{{item.txt}}</text>
+						<text class="txt_grey">{{item.time}}    {{item.size}}</text>
+					</div>
+					<img class="img_go" src="{{item.img_go}}">
+				</cell>
+			</list>
+
+		<div class="popup" if="{{isShowFunc}}">
+			<text class="choice" onclick="click_upload">上传文件</text>
+			<text class="choice" onclick="click_batched">批量操作</text>
+			<text class="choice" onclick="click_new">新建文件夹</text>
+			<text class="choice" onclick="click_login">登录网页版</text>
+		</div>
+	</div>
+</template>
+
+<style>
+	.wrapper{
+		position: absolute;
+		width: 750;
+		background-color: #ebedef;
+	}
+	.div_titBar{
+		height:100;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color: #ffffff;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		border-width: 1;
+		margin-left: 20;
+	}
+	.text_titBar{
+		flex:1;
+		text-align: center;
+		font-size: 30;
+	}
+	.text_save{
+		font-size: 28;
+		margin-right: 20;
+		margin-left: 20;
+		color: #85C1E9;
+	}
+	.div_tit{
+		height: 70;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color: #ffffff;
+		text-align: center;
+	}
+	.img_choice{
+		height: 48;
+		width: 48;
+		border-width: 1;
+		margin-left: 20;
+		margin-right: 10;
+	}
+	.div_search{
+		background-color: #ebedef;
+		flex:1;
+		height: 50;
+		border-radius: 50;
+		align-items: center;
+		justify-content: center;
+		margin-right: 20;
+	}
+	.txt_center{
+		text-align: center;
+		color: #cccccc;
+		font-weight: bold;
+		font-size: 24;
+	}
+	.list{
+		background-color: #ebedef;
+	}
+	.div_cell{
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color:#ffffff;
+		border-top-width: 1;
+		border-color: #ebedef;
+	}
+	.img_logo{
+		height: 60;
+		width: 60;
+		margin-left: 20;
+		border-width: 1;
+	}
+	.div_txt{
+		flex:1;
+		height: 80;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
+	.txt_flex{
+		flex:1;
+		text-align: left;
+		margin-left: 20;
+		font-size: 28;
+	}
+	.txt_grey{
+		font-size: 20;
+		color: #aaaaaa;
+		text-align: left;
+		margin-left: 20;
+	}
+	.popup{
+		position: absolute;
+		padding: 20;
+		right: 0;
+		top: 120;
+		width:200;
+		height: 300;
+		background-color: #273746;
+		border-radius: 10;
+		opacity: 0.8;
+		/*justify-content: center;*/
+		align-items: center;
+	}
+	.choice{
+		height: 60;
+		width: 160;
+		text-align: center;
+		justify-content: center;
+		border-bottom-width: 1;
+		border-color: #cccccc;
+		color: #cccccc;
+		font-size: 28;
+	}
+	.img_go{
+		height: 32;
+		width: 32;
+		border-width: 1;
+		margin-right: 20;
+	}
+	.div_select{
+		height: 32;
+		width: 32;
+		border-radius: 100;
+		background-color: #ebedef;
+		margin-left: 20;
+		justify-content: center;align-items: center;
+	}
+	.img_select{
+		height: 16;
+		width: 16;
+		background-color: #279999;
+		border-radius: 100;
+	}
+	.isSelected_true{
+		background-color: #ff0000;
+	}
+	.isSelected_false{
+		background-color: #ebedef;
+	}
+</style>
+
+<script>
+	var configModule=require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+	module.exports={
+		data:{
+			navpageHeight:112,
+			devHeight:1160,
+			isShowFunc:false,
+			isBatched:false,
+			list:[
+			{type:2,img_src:'',img_go:'',txt:'规章制度',time:'2017-02',size:'',isSelected:false},
+			{type:2,img_src:'',img_go:'',txt:'办公指南',time:'2017-02',size:'',isSelected:false},
+			{type:2,img_src:'',img_go:'',txt:'公司介绍',time:'2017-02',size:'',isSelected:false},
+			],
+		},
+		methods:{
+			click_morefunc:function(e){
+				this.isShowFunc=!this.isShowFunc;
+			},
+			click_upload:function(e){
+
+			},
+			click_batched:function(e){
+				this.isBatched=!this.isBatched;
+			},
+			click_new:function(e){},
+			click_login:function(e){},
+			click_select:function(e){
+				e.target.attr.isSelected=!e.target.attr.isSelected;
+				// modal.toast({'message':'click_select','doation':1});
+			},
+			// click_upload:function(e){},
+			// click_upload:function(e){},
+			// click_upload:function(e){},
+		},
+		ready:function(e){
+			var self=this;
+			self.getUrlParams();
+			// modal.toast({'message':'ready','doation':1});
+			// 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+            if (this.$getConfig().env.platform != "iOS") {
+              // 适配 Android
+            	this.mainExtra = "mainExtraAndroid";
+                require('@weex-module/myModule').printLog('getDevHeight');
+                configModule.getDevHeight(function(params) {
+                // require('@weex-module/myModule').printLog(params);
+                require('@weex-module/myModule').printLog(params.height);
+                	var ratio = this.$getConfig().env.deviceWidth / 750;
+                	this.devHeight = params.height / ratio ;
+                	// this.scrollerHeight=this.devHeight-320;
+              	}.bind(this));
+            } else {
+              // 适配 iPhone 4S
+              if (this.$getConfig().env.deviceHeight < 1000) {
+                this.scrollerHeight = 700;
+              }
+            }
+
+		},
+	}
+</script>

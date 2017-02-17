@@ -1,0 +1,81 @@
+<template>
+  <div class="browserStyle">
+    <!-- <div style="flex-direction: row">
+      <input id="urlInput" type="url"  autofocus="false"  placeholder="input url" onchange="change" oninput="input" class="textStyle"   value="https://www.baidu.com">
+      </input>
+    </div> -->
+    <!-- <div style="flex-direction: row">
+      <text class="buttonSytle" onclick="loadURL">LoadURL</text>
+      <text class="buttonSytle" onclick="backforward">Backward</text>
+      <text class="buttonSytle"  onclick="forward">Forward</text>
+    </div> -->
+    <div>
+      <web id="webview" src="{{src}}" class="webStyle"></web>
+    </div>
+  </div>
+</template>
+
+<style>
+  .browserStyle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color:#778899 ;
+  }
+
+  .textStyle {
+    width: 750;
+    height: 50;
+    background-color: #D3D3D3;
+    font-size: 30;
+  }
+
+  .buttonSytle {
+    width:200;
+    height: 50;
+    background-color: #D3D3D3;
+    margin:10;
+    padding-left: 5;
+    padding-right: 5;
+    font-size: 30;
+  }
+
+  .webStyle {
+    width: 750;
+    height: 800;
+    background-color: #8B0000;
+  }
+</style>
+
+<script>
+  var web_module = require('@weex-module/webview');
+  var modal=require('@weex-module/modal');
+
+  module.exports = {
+    data: {
+      src : "http://romenscd.cn:4740/?pid=8",
+      deviceHeight:1024,
+    },
+
+    // methods: {
+    //   loadURL: function (e) {
+    //     var input = this.$el("urlInput");
+    //     this.src = input.attr.value;
+    //   },
+
+    //   backforward: function (e) {
+    //     var web_element = this.$el('webview');
+    //     modal.toast({'message':this.src,'doation':1});
+    //     web_module.goBack(web_element);
+    //   },
+
+    //   forward: function (e) {
+    //     var web_element = this.$el('webview');
+    //     modal.toast({'message':this.src,'doation':1});
+    //     web_module.goForward(web_element);
+    //    }
+    // }
+  }
+</script>

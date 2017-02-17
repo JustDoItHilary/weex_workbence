@@ -1,0 +1,29 @@
+<template>
+	<div >
+		<text onclick="click">{{title}}</text>
+		<img style="width:50;height:50;border-width:1;" src="{{imgSrc}}"></img>
+	</div>
+</template>
+
+<style >
+	
+</style>
+
+<script >
+	var dom=require('@weex-module/dom');
+	module.exports={
+		data:{
+			title:null,
+			imgSrc:null,
+		},
+		methods:{
+			setTitle:function(s){
+				this.title=s;
+			},
+			click:function(){
+				this.imgSrc="https://img.alicdn.com/tps/TB1ZVOEOpXXXXcQaXXXXXXXXXXX-200-200.png";
+			},
+		}
+	}
+	
+</script>

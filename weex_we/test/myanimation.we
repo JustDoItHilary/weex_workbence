@@ -1,0 +1,123 @@
+<template>
+	<div>
+		<text onclick="change">change</text>
+		<div style="left:-740;background-color:{{secondProColor}}" class="progressbar2" id="secondpro" onclick="scrollSecPro"></div>
+		<div class="progressbar" id="progressbar" onclick="scroll"></div>
+		<div class="block" id="block" onclick="change"></div>
+	</div>
+</template>
+
+<style>
+	.block{
+		position: relative;
+		width: 250;
+		height: 250;
+		left: 400;
+		top:400;
+		background-color: #ff0000;
+	}
+	.progressbar{
+		position: absolute;
+		width: 300;
+		height: 20;
+		background-color: #ff0000;
+		top: 200;
+	}
+	.progressbar2{
+		position: absolute;
+		width: 300;
+		height: 20;
+		top: 200;
+	}
+</style>
+
+<script>
+	var animation=require('@weex-module/animation');
+	var modal=require('@weex-module/modal');
+
+	module.exports={
+		data:{
+			width:250,
+			height:250,
+			color:'#ff0000',
+			opacity:1,
+			scale:1,
+			rotate:0,
+			translation:5,
+			showSecondPro:true,
+			transSecond:5,
+			secondProColor:'#ffffff',
+		},
+		methods:{
+			change:function(){
+				var self=this;
+				self.width=self.width===250?50:250;
+				self.height=self.height===250?50:250;
+				self.opacity=self.opacity===1?0.3:1;
+				self.color=self.color==='#ff0000'?'#00ff00':'#ff0000';
+				self.scale=self.scale===1?2:1;
+				self.rotate+=5;
+				var el=self.$el('block');
+				// animation.transition(el,{styles:{width:self.width},duration:500,timingFuction:'linear'},function(){});
+				// animation.transition(el,{styles:{height:self.height},duration:500,timingFuction:'linear'},function(){});
+				// animation.transition(el,{styles:{opacity:self.opacity},duration:500,timingFuction:'linear'},function(){});
+				// animation.transition(el,{styles:{backgroundColor:self.color},duration:500,timingFuction:'linear'},function(){});
+				// animation.transition(el,{styles:{transform:'translate(50%,0)'},duration:500,timingFuction:'ease-in'},function(){
+				// });
+				// animation.transition(el,{styles:{transform:'scale('+self.scale+')'},duration:500,timingFuction:'linear'},function(){});
+				// animation.transition(el,{styles:{transform:'rotate(90deg) scale(2)'},duration:500,timingFuction:'ease-out'},function(){});
+				// animation.transition(el,{styles:{transform:'rotate('+self.rotate+'deg)'},duration:50,timingFuction:'ease-in-out'},function(){
+				// 	// if (self.rotate===360) {
+				// 	// 	self.rotate=0;
+				// 	// }else{
+				// 		self.change();
+				// 	// }
+				// });
+				self.scroll();
+				self.scrollSecPro();
+			},
+			scroll:function(){
+				var self=this;
+				if (self.translation==350) {
+					self.secondProColor='#ff0000';
+				}else if (self.translation==750) {
+					self.translation=0;
+					self.secondProColor='#ffffff';
+				}
+				self.translation+=5;
+				var progressbar=self.$el('progressbar');
+				animation.transition(progressbar,{styles:{transform:'translate('+self.translation/3+'%,0)'},duration:10,timingFuction:'ease-in'},function(){
+					self.scroll();
+				});
+				// var el=self.$el('secondpro');
+				// animation.transition(el,{styles:{transform:'translate('+self.translation+'%,0)'},duration:1,timingFuction:'ease-in'},function(){
+				// 	self.scroll();
+				// });
+				// var el=self.$el('block');
+				// animation.transition(el,{styles:{transform:'rotate('+self.rotate+'deg)'},duration:50,timingFuction:'ease-in-out'},function(){
+				// 	// if (self.rotate===360) {
+				// 	// 	self.rotate=0;
+				// 	// }else{
+				// 		self.change();
+				// 	// }
+				// });
+			},
+			scrollSecPro:function(){
+				var self=this;
+					if (self.translation==750) {	
+						self.transSecond=0;
+					}
+					self.transSecond+=5;
+					var secondpro=self.$el('secondpro');
+					animation.transition(secondpro,{styles:{transform:'translate('+self.transSecond/3+'%,0)'},duration:10,timingFuction:'ease-in'},function(){
+						self.scrollSecPro();
+						});
+			},
+			click:function(){
+				var el=this.$el('block');
+
+				modal.toast({'message':el.offsetLeft,'doation':1});
+			},
+		},
+	}
+</script>

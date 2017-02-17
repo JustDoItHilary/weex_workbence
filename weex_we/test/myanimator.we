@@ -1,0 +1,143 @@
+<template>
+	<div>
+		<wxc-panel title="Transform" type="primary">
+			<wxc-button value="Rotate" type="primary" onclick="route" size="middle"></wxc-button>
+      		<wxc-button value="Scale" onclick="scale" type="primary" size="middle" style="margin-top:12px;"></wxc-button>
+      		<wxc-button value="Translate" onclick="translate" type="primary" size="middle"
+                 style="margin-top:12px;"></wxc-button>
+      		<wxc-button value="TranslateX" onclick="translateX" type="primary" size="middle" style="margin-top:12px;"></wxc-button>
+			<wxc-button value="TranslateY" type="primary" onclick="translateY" size="middle" style="margin-top:12px;"></wxc-button>
+			<wxc-button value="Height" type="primary" onclick="changeHeight" size="middle" style="margin-top:12px;"></wxc-button>
+			<wxc-button value="Width" type="primary" onclick="changeWidth" size="middle" style="margin-top:12px;"></wxc-button>
+			<wxc-button value="Color" type="primary" onclick="changeColor" size="middle" style="margin-top:12px;"></wxc-button>
+			<wxc-button value="Opacity" type="primary" onclick="changeOpacity" size="middle" style="margin-top:12px;"></wxc-button>
+    	</wxc-panel>
+
+    	<wxc-panel title="Others" type="primary">
+      		<wxc-button value="BgColor" onclick="{{color}}" type="primary" size="middle"></wxc-button>
+      		<wxc-button value="Opacity" onclick="{{opacity}}" type="primary" size="middle"
+                 style="margin-top:12px;"></wxc-button>
+      		<wxc-button value="All" onclick="{{composite}}" type="success" size="middle" style="margin-top:12px;"></wxc-button>
+    	</wxc-panel>
+
+    	<div id="block" class="block" style="transform-origin:{{transformOrigin}}">
+      		<text class="block-txt">Anim</text>
+    	</div>
+	</div>
+</template>
+<script>
+	require('weex-components');
+	var modal=require('@weex-module/modal');
+	var animation=require('@weex-module/animation');
+	module.exports={
+		data:{
+      		transformOrigin: 'center center',
+      		current_rotate: 0,
+      		current_scale: 1,
+      		current_color: '#FF0000',
+     		current_opacity: 1,
+      		current_translate: '',
+      		current_transform: '',
+      		current_width: 250,
+      		current_height: 250,
+      		isStop: true
+		},
+		methods:{
+			route:function(){
+
+        		var self = this;
+        		self.current_rotate += 90;
+        		self.animate({transform: 'rotate(' + self.current_rotate + 'deg)'}, 'ease-in-out', 500, function() {
+          			if (self.current_rotate === 360) {
+            		self.current_rotate = 0;
+          			}else {
+            		self.rotate();
+          			}
+        		});
+			},
+			scale:function(){
+				var self=this;
+				self.current_scale=this.current_scale=== 2 ? .5 : 2;
+				self.anim({transform:'scale('+self.current_scale+')'},'linear',500,function(){});
+			},
+			translate:function(){
+				var self=this;
+				self.current_translate=self.current_translate?'':'translate(50%,50%)';
+				self.anim({transform:self.current_translate},'ease-in',500,function(){});
+			},
+			translateX:function(){
+				var self=this;
+				self.current_translate=self.current_translate?'':'translate(500%,0)';
+				self.animate({transform:self.current_translate},'ease-in',500,function(){});
+			},
+			translateY:function(){
+				var self=this;
+				self.current_translate=self.current_translate?'':'translate(0,100%)';
+				self.animate({transform:self.current_translate},'ease-in',500,function(){});
+			},
+			changeWidth:function(){
+				var self=this;
+				self.current_width=self.current_width===250?50:250;
+				self.animate({width:self.current_width},'linear',500,function(){});
+			},
+			changeHeight:function(){
+				var self=this;
+				self.current_height=self.current_height===250?50:250;
+				self.animate({height:self.current_height},'ease-in',500,function(){});
+			},
+			changeColor:function(){
+				var self=this;
+				self.current_color=self.current_color==='#F0AD4E'?'#FF0000':'#F0AD4E';
+				self.animate({backgroundColor:self.current_color},'linear',500,function(){});
+			},
+			changeOpacity:function(){
+				var self=this;
+				self.current_opacity=self.current_opacity===1?0.3:1;
+				self.animate({opacity:self.current_opacity},'linear',500,function(){});
+			},
+			transform:function(){
+				var self=this;
+				self.current_width=self.current_width===250?50:250;},
+			color:function(){
+				var self=this;
+				self.current_width=self.current_width===250?50:250;},
+			opacity:function(){
+				var self=this;
+				self.current_width=self.current_width===250?50:250;},
+			composite:function(){
+				var self=this;
+				self.current_width=self.current_width===250?50:250;},
+			animate:function(styles, timingFunction, duration, callback){
+				var el=this.$el('block');
+				animation.transition(el,{styles: styles,timingFunction: timingFunction,duration: duration}, callback);
+
+				// modal.toast({'message':'route','doation':1});
+			},
+      		anim: function(styles, timingFunction, duration, callback) {
+        		this.$call('animation', 'transition', this._ids.block.el.ref, {
+          		styles: styles,
+          		timingFunction: timingFunction,
+          		duration: duration
+        		}, callback);
+      		},
+		}
+	}
+</script>
+
+<style>
+  .block {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    top: 300px;
+    left: 400px;
+    background-color: #F0AD4E;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .block-txt {
+    color: #FFFFFF;
+    font-size: 70px;
+  }
+</style>

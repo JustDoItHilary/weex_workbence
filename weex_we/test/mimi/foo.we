@@ -1,0 +1,19 @@
+<template>
+	<div>
+		<text>{{title}}</text>
+	</div>
+</template>
+
+<style >
+	
+</style>
+
+<script >
+	var env="foo";
+	module.exports={
+		data:{
+			title:null
+		}
+	}
+	
+</script>

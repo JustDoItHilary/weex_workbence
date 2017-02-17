@@ -1,0 +1,26 @@
+<template>
+	<div>
+		<text class="first">鞋儿破，帽儿破，身上的袈裟破</text>
+		<text class="second">你笑我，他笑我，一把扇儿破</text>
+		<text class="third">南无阿弥陀佛</text>
+	</div>
+</template>
+
+<style>
+	.first{
+		position: absolute;
+		border-width: 1;
+		border-color: #22ffff;
+	}
+	.second{
+		padding: 10;
+		/*position: relative;*/
+		border-width: 1;
+		border-color: #ff22ff;
+	}
+	.third{
+		padding: 20;
+		border-width: 1;
+		border-color: #ffff22;	
+	}
+</style>

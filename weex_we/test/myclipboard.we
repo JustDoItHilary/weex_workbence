@@ -1,0 +1,33 @@
+<template>
+	<div>
+	<div style="flex-direction:row;padding:10;">
+			<input style="placeholder-color:#6666ff;flex:1;" type="text" name="input_clip" placeholder="请输入。。。" autofocus="true" oninput="setclip">
+			<text onclick="getclip">paste</text>
+		</div>
+		<text>{{clipboardmess}}</text>
+	</div>
+</template>
+
+<script>
+	var clipboard=require('@weex-module/clipboard');
+
+	module.exports={
+		data:{
+			clipboardmess:'dida',
+		},
+		methods:{
+			setclip:function(e){
+				var self=this;
+				if (!e.value) return;
+				clipboard.setString(e.value);
+			},
+			getclip:function(){
+				var self=this;
+				if (!self.clipboardmess) return;
+				clipboard.getString(function(e){
+				self.clipboardmess=e.data;
+				});
+			},
+		},
+	}
+</script>

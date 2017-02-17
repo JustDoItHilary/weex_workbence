@@ -1,0 +1,79 @@
+<template>
+	<div style="height:500">
+		<wxc-tabbar selected-color="#ff00ff" tab-items={{tabItems}}></wxc-tabbar>
+	</div>
+</template>
+
+<style >
+
+</style>
+
+<script>
+	require('weex-components');
+	var modal=require('@weex-module/modal');
+	module.exports={
+		data:{
+			tabItems:[
+			{	
+				index:0,
+				title:'one',
+				titleColor: 0x0,
+                    icon: "",
+				image:'http://gtms01.alicdn.com/tps/i1/TB1qw.hMpXXXXagXXXX9t7RGVXX-46-46.png',
+				selectedImage:'http://gtms04.alicdn.com/tps/i4/TB16jjPMpXXXXazXVXX9t7RGVXX-46-46.png',
+				src:'',
+				visibility:'visible'
+			},
+			{
+				index:1,
+				title:'two',
+				titleColor:0x0,
+                    icon: "",
+                image: "http://gtms03.alicdn.com/tps/i3/TB1LEn9MpXXXXaUXpXX9t7RGVXX-46-46.png",
+                selectedImage: "http://gtms02.alicdn.com/tps/i2/TB1qysbMpXXXXcnXXXX9t7RGVXX-46-46.png",
+				src:'',
+				visibility:'hidden'
+			},
+			{
+				index:2,
+				title:'three',
+				titleColor:'#555555',
+                icon: "",
+                image: "http://gtms01.alicdn.com/tps/i1/TB1B0v5MpXXXXcvXpXX9t7RGVXX-46-46.png",
+                selectedImage: "http://gtms04.alicdn.com/tps/i4/TB1NxY5MpXXXXcrXpXX9t7RGVXX-46-46.png",
+				src:'',
+				visibility:'hidden'
+			}
+			],
+			scrollerHeight:500,
+		},
+		created:function(){
+			var self=this;
+			self.$on('taBar.onClick',function(e){
+				var detail=e.detail;
+				modal.toast({'message':detail,'doation':1});
+			})
+		},
+		ready:function(){
+			 // 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+            var AppInfo = require('@weex-module/measureModule');
+            if (this.$getConfig().env.platform != "iOS") {
+              // 适配 Android
+              this.mainExtra = "mainExtraAndroid";
+              AppInfo.getContainerHeight(function(params) {
+              	modal.toast({'message':params,'doation':1});
+              	require('@weex-module/myModule').printLog(params);
+              	require('@weex-module/myModule').printLog(params.height);
+               var ratio = this.$getConfig().env.deviceWidth / 750;
+                this.scrollerHeight = params.height / ratio - 200;
+              }.bind(this));
+            } else {
+              // 适配 iPhone 4S
+              if (this.$getConfig().env.deviceHeight < 1000) {
+                this.scrollerHeight = 700;
+              }
+            }
+		},
+
+	}
+</script>

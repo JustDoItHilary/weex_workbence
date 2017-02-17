@@ -1,0 +1,252 @@
+<template>
+	<div style="height:{{devHeight}};position: absolute;width:750;">
+		<div class="div_titBar" data-role="none">
+			<img class="img_back" src="">
+			<text class="text_save">关闭</text>
+			<text class="text_titBar">工作汇报</text>
+			<text class="text_save">保存草稿</text>
+		</div>
+		<div class="type">
+			<text class="text_black" style="flex:1;">汇报类型</text>
+			<div class="div_rad_border select_{{isSelected}}" onclick="clickDately">
+				<text class="txt_rad_border">日报</text>
+			</div>
+			<div class="div_rad_border select_{{!isSelected}}" onclick="clickWeekly">
+				<text class="txt_rad_border">周报</text>
+			</div>
+		</div>
+
+		<div class="date">
+			<div class="div_to_txt">
+				<text class="text_black" style="flex:1;">周报日期</text>
+				<text class="text_grey">02月06日-02月12日</text>
+			</div>
+			<div class="div_rad_border select_{{timeType==1}}">
+				<text class="txt_rad_border">上周</text>
+			</div>
+			<div class="div_rad_border select_{{timeType==2}}">
+				<text class="txt_rad_border">本周</text>
+			</div>
+			<div class="div_rad_border select_{{timeType==3}}">
+				<text class="txt_rad_border">下周</text>
+			</div>
+		</div>
+		<text class="txt_tit">本周工作计划</text>
+		<textarea class="textarea" autofocus="true" rows="4" value="计划一"></textarea>
+		<text class="txt_tit">上周工作总结</text>
+		<textarea class="textarea" rows="4" value="计划二"></textarea>
+
+		<div class="div_grey">
+				<img class="img_28" src="">
+			<text class="txt_time">最近保存时间</text>
+		</div>
+		<div class="div_txt_img div_pic">
+			<text class="text_black">选择图片</text>
+			<text class="text_grey" style="text-align: left;">已添加{{selectPic}}张</text>
+			<img class="img_32" src="">
+		</div>
+		<div class="div_txt_img div_else">
+			<text class="text_black">选择附件</text>
+			<text class="text_grey" >已添加{{selectAttach}}个</text>
+			<img class="img_32" src="">
+		</div>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		height:100;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		border-width: 1;
+		margin-left: 10;
+	}
+	.text_titBar{
+		flex:1;
+		text-align: center;
+		font-size: 30;
+		color: #ffffff;
+	}
+	.text_save{
+		font-size: 28;
+		margin-right: 20;
+		margin-left: 20;
+		color: #ffffff;
+
+	}
+	.type{
+		flex-direction: row;
+		height: 100;
+		border-bottom-width: 1;
+		border-color: #ebedef;
+		align-items: center;
+		justify-content: center;
+	}
+	.select_true{
+		background-color :#58D68D;
+	}
+	.select_false{
+		background-color: #aaaaaa;
+	}
+	.div_rad_border{
+		height: 50;
+		width:90;
+		margin-left: 10;
+		border-radius: 60;
+		align-items: center;
+		justify-content: center;
+	}
+	.txt_rad_border{
+		text-align: center;
+		font-size: 26;
+		color: #fafafa;
+		font-weight: normal(10);
+	}
+	.date{
+		height: 140;
+		flex-direction: row;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_to_txt{
+		height: 100;
+		flex:1;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.text_black{
+		margin-left: 20;
+		font-size: 30;
+		justify-content: center;
+	}
+	.txt_tit{
+		height: 60;
+		margin-top: 20;
+		margin-left: 30;
+		margin-right: 30;
+		font-size: 28;
+	}
+	.textarea{
+		margin-left:20;
+		margin-right: 20;
+		padding-left:10;
+		padding-right: 10;
+		font-size: 28;
+	}
+	.text_grey{
+		color: #aaaaaa;
+		flex:1;
+		font-size: 26;
+		font-weight: bold;
+		margin-left: 20;
+		justify-content: center;
+	}
+	.div_grey{
+		position: absolute;
+		bottom: 160;
+		height: 70;
+		width: 750;
+		flex-direction: row;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		align-items: center;
+	}
+	.img_28{
+		height: 28;
+		width: 28;
+		margin-left: 20;
+		background-color: #aaaaaa;
+	}
+	.txt_time{
+		font-size: 26;
+		color: #cccccc;
+		margin-left: 20;
+	}
+	.div_txt_img{
+		height: 80;
+		width: 750;
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_32{
+		height: 32;
+		width: 32;
+		margin-right: 20;
+		background-color: #aaaaaa;
+	}
+	.div_pic{
+		position: absolute;
+		bottom:80;
+		border-bottom-width:1;
+		border-color: #ebedef;
+	}
+	.div_else{
+		position: absolute;
+		border-bottom-width:6;
+		border-color: #ebedef;
+		bottom:0;
+	}
+</style>
+
+<script>
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	module.exports={
+		data:{
+			isSelected:true,
+			devHeight:960,
+			areaHeight:170,
+			scrollerHeight:560,
+			selectPic:0,
+			selectAttach:0,
+			timeType:1,
+			weekly_true:[
+			'上周','本周','下周',
+			],
+			weekly_false:[
+			'昨天','今天','明天',
+			],
+		},
+		methods:{
+			clickDately:function(e){
+				this.isSelected=true;
+			},
+			clickWeekly:function(e){
+				this.isSelected=false;
+			},
+		},
+		created:function(e){
+			var self=this;
+
+		},
+		ready:function(e){
+			// 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+            if (this.$getConfig().env.platform != "iOS") {
+              // 适配 Android
+            	this.mainExtra = "mainExtraAndroid";
+                configModule.getDevHeight(function(params) {
+              	// modal.toast({'message':params,'doation':1});
+                // require('@weex-module/myModule').printLog(params);
+                require('@weex-module/myModule').printLog(params.height);
+                	var ratio = this.$getConfig().env.deviceWidth / 750;
+                	this.devHeight = params.height / ratio ;
+                	// this.areaHeight=(this.devHeight-600)/2;//620
+              	}.bind(this));
+            } else {
+              // 适配 iPhone 4S
+              if (this.$getConfig().env.deviceHeight < 1000) {
+                this.scrollerHeight = 700;
+              }
+            }
+		},
+	}
+</script>
