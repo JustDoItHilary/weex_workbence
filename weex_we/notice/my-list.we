@@ -101,125 +101,6 @@
 	module.exports={
 		data:{
 			navpageHeight:112,
-			list:[
-				{	"id":"216",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'}],},
-				{	"id":"217",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
-                		{'type':3,'tab':'放假了','background_color':'#ffaaff'}],},
-				{	"id":"218",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
-                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
-                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
-				{	"id":"219",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
-                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
-                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
-				{	"id":"220",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
-                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
-                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],},
-				{	"id":"220",
-					"time":"2016-12-20",
-                    "type":2,
-                    "content":{
-                        "id":"217",
-                        "serial_id":"35",
-                        "number":"10",
-                        "title":"灰猫奇异事务所·坚果大劫案（二）",
-                        "excerpt":"真是意外，和灰猫住了这么久，现在才知道这家伙还有大名。",
-                        "read_num":"16900",
-                        "maketime":"2016-12-20 21:00:00",
-                        "start_video":"",
-                        "author":"康夫",
-                        "web_url":"http://v3.wufazhuce.com:8000/api/serialcontent/217"
-                        },
-					tab_items:[
-                		{'type':1,'tab':'有通知','background_color':'#66ddff'},
-                		{'type':2,'tab':'有消息','background_color':'#ffdd66'},
-                		{'type':3,'tab':'放假了','background_color':'#ffaaff'},
-                		{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}],}
-                		],
 			mylist:[],
 			pagerUrl:'http://romenscd.cn:6240/api/v1/user/paper/8?isPractice=false',
 			isShowRefresh:'hide',
@@ -232,14 +113,6 @@
 		},
 		created:function(){
 			var self=this;
-			// this.$on('naviBar.rightItem.click',function(e){
-			// 	modal.toast({'message':'naviBar.rightItem.click','doation':1});
-			// 	self.refresh();
-			// });
-			// this.$on('naviBar.leftItem.click',function(e){
-			// 	modal.toast({'message':'naviBar.leftItem.click','doation':1});
-			// 	// require('@weex-module/backModule').onBack('BACK');
-			// });
 			self.getData(self.noticeUrl,function(retdata){
 				self.getList(retdata);
 			});
@@ -268,24 +141,16 @@
 		methods:{
 			getData:function(url,callback){
 				console.log('ret:',url);
-				require('@weex-module/myModule').printLog('getData');
-				// stream.fetch({method:'GET',url:url,type:'json'},function(ret){
-				// 	// var retData=JSON.parse(ret);
-				// 	console.log('ret:',ret.data);
-				// 	callback(ret.data);
-				// });
 				// var body='QueryType=GetNotice&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
 				var body='';
 				var handleName='';
 				configModule.getRequestBody(function(ret){
 					body=ret.body;
 					handleName=ret.handleName;
-					require('@weex-module/myModule').printLog('body');
+					// require('@weex-module/myModule').printLog('body');
 					stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
-						require('@weex-module/myModule').printLog('callback');
 						console.log('ret:',ret);
 						callback(ret.data);
-					// require('@weex-module/myModule').printLog(ret);
 					});
 				});
 					
@@ -296,26 +161,24 @@
 				console.log('ret:',retdata.length);
 				for (var i = 0; i <retdata.length; i++) {
 					var item=retdata[i];
-					// var tabs=item.tab_items;
-					// if (!tabs) {
-					// 	tabs=[{'type':1,'tab':'有通知','background_color':'#66ddff'},{'type':2,'tab':'有消息','background_color':'#ffdd66'},{'type':3,'tab':'放假了','background_color':'#ffaaff'},{'type':4,'tab':'嗨皮了','background_color':'#99cc00'}];
-					// }
 					var web_url=item.web_url;
 					if (!web_url) {
 						var config=this.$getConfig();
 						var bundleUrl=config.bundleUrl;
-						// web_url=bundleUrl.split('/').slice(0,-1).join('/')+'/newRep.js';
-						web_url='http://weex.yy365.cn/notice-item.js';
+						// var base='http://weex.yy365.cn/my-list.js';
+						// var base2=base.split('/').slice(0,-1).join('/')+'/notice-item.js';
+				// require('@weex-module/myModule').printLog(base2);
+						web_url=bundleUrl.split('/').slice(0,-1).join('/')+'/notice-item.js';
+						// web_url='http://weex.yy365.cn/notice-item.js';
 					}
 					item.tab_items=[];
 					item.web_url=web_url;
 					self.mylist.push(item);
-				require('@weex-module/myModule').printLog(item);
+				// require('@weex-module/myModule').printLog(item.web_url);
 				}
 			},
 			itemClick:function(e){
 				var self=this;
-				// var url=self.processUrl(e.target.attr.url);
 				var webUrl=e.target.attr.web_url
 				var url=e.target.attr.url;
 				var title=e.target.attr.title;
@@ -323,15 +186,15 @@
 				var date=e.target.attr.date;
 				var nextPageUrl='';
 			
-				// configModule.getUrl(url, function(ret){
-				// 	nextPageUrl='key='+ret;
-				// 	webUrl=webUrl+'?'+nextPageUrl+'&title='+title+'&author='+author+'&date='+date;
-				// 	require('@weex-module/myModule').printLog("url : "+ webUrl);
-				// 	console.log('URL:',e.target.attr.URL);
+					// require('@weex-module/myModule').printLog("url : "+ "itemClick");
+				configModule.getUrl(url, function(ret){
+					nextPageUrl='key='+ret;
+					webUrl=webUrl+'?'+nextPageUrl+'&title='+title+'&author='+author+'&date='+date;
+					// require('@weex-module/myModule').printLog("url : "+ webUrl);
 					var params = {'url':webUrl,'animated':'true'};
         			navigator.push(params, function(e) {
 					});
-				// });
+				});
 			},
 			refresh:function(){
 				var self=this;
