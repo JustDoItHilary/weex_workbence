@@ -176,8 +176,8 @@
             },
             setUrl:function(){
 
-            var bundleUrl = this.$getConfig().bundleUrl || '';
-            // var bundleUrl='http://192.168.100.140:8080/test_yn/ui/zhy/js/my-item.js?key=http://im.yiyao365.cn/Appnotice?GUID=589929229a0581486432546&token=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--&title=2017_%E9%9B%A8%E8%AF%BA%E5%B7%A5%E4%BD%9C%E5%9C%88&author=%E5%86%AF%E5%BC%A0%E9%BE%99&date=2017-02-07%2009:55:46';
+            // var bundleUrl = this.$getConfig().bundleUrl || '';
+            var bundleUrl='http://weex.yy365.cn/notice-item.js?key=http://im.yiyao365.cn/Appnotice?GUID=589929229a0581486432546&token=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--&title=2017_%E9%9B%A8%E8%AF%BA%E5%B7%A5%E4%BD%9C%E5%9C%88&author=%E5%86%AF%E5%BC%A0%E9%BE%99&date=2017-02-07%2009:55:46';
             var bundleUrlParams = this.getParams(bundleUrl);
             console.log('bundleUrlParams:',bundleUrlParams);
             var webUrl = bundleUrlParams.key+'&token='+bundleUrlParams.token || 'http%3A%2F%2Fromenscd.cn%3A4740%2F%3F';
@@ -266,7 +266,8 @@
             },
 
             errorEvt:function(e){
-            	modal.alert({'message':'error','doation':1});
+                require('@weex-module/myModule').printLog(JSON.stringify(e));
+            	// modal.alert({'message':JSON.stringify(e),'doation':1});
             	var self=this;
             	var txtError=JSON.stringify(e);
             	console.log('error',txtError);

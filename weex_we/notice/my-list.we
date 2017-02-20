@@ -232,7 +232,6 @@
 		},
 		created:function(){
 			var self=this;
-			// require('@weex-module/myModule').printLog("oncreated");
 			// this.$on('naviBar.rightItem.click',function(e){
 			// 	modal.toast({'message':'naviBar.rightItem.click','doation':1});
 			// 	self.refresh();
@@ -282,7 +281,6 @@
 					body=ret.body;
 					handleName=ret.handleName;
 					require('@weex-module/myModule').printLog('body');
-					// require('@weex-module/myModule').printLog(handleName);
 					stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
 						require('@weex-module/myModule').printLog('callback');
 						console.log('ret:',ret);
@@ -313,7 +311,6 @@
 					item.web_url=web_url;
 					self.mylist.push(item);
 				require('@weex-module/myModule').printLog(item);
-				// console.log('ret:',item.content.web_url);
 				}
 			},
 			itemClick:function(e){
