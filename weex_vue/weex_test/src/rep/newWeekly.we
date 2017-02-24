@@ -1,0 +1,360 @@
+<template>
+	<div style="height:{{devHeight}};position:absolute;width:750;">
+		<div class="div_titBar" data-role="none">
+			<!-- <img class="img_back" src=""> -->
+			<text class="text_save">关闭</text>
+			<text class="text_titBar">工作汇报</text>
+			<text class="text_save">保存草稿</text>
+		</div>
+		<div class="type">
+			<text class="text_black" style="flex:1;">汇报类型</text>
+			<div class="div_rad_border select_{{isSelected}}" onclick="clickDately">
+				<text class="txt_rad_border">日报</text>
+			</div>
+			<div class="div_rad_border select_{{!isSelected}}" onclick="clickWeekly">
+				<text class="txt_rad_border">周报</text>
+			</div>
+		</div>
+		<div class="date">
+			<div class="div_to_txt">
+				<text class="text_black" style="flex:1;">{{selectedType}}日期</text>
+				<text class="text_grey">02月06日-02月12日</text>
+			</div >
+			<div class="div_rad_border select_{{timeType==4}}">
+				<text class="txt_rad_border ">{{repDateList[0]}}</text>
+			</div>
+			<div class="div_rad_border select_{{timeType==5}}">
+				<text class="txt_rad_border">{{repDateList[1]}}</text>
+			</div>
+			<div class="div_rad_border select_{{timeType==6}}">
+				<text class="txt_rad_border">{{repDateList[2]}}</text>
+			</div>
+		</div>
+		<text class="txt_tit">{{rep_Tit[0]}}工作计划</text>
+		<textarea  class="textarea" oninput ="inputPlan" autofocus="true" rows="3" value=""></textarea>
+		<text class="txt_tit">{{rep_Tit[1]}}工作总结</text>
+		<textarea  class="textarea" rows="3" oninput="inputSum" value=""></textarea>
+		
+		<div class="div_grey">
+				<img class="img_28" src="">
+			<text class="txt_time">最近保存时间</text>
+		</div>
+		<div class="div_txt_img div_pic">
+			<text class="text_black">选择图片</text>
+			<text class="text_grey" style="text-align: left;">已添加{{selectPic}}张</text>
+			<img class="img_add" src="">
+		</div>
+		<div class="div_txt_img div_else">
+			<text class="text_black">选择附件</text>
+			<text class="text_grey" >已添加{{selectAttach}}个</text>
+			<img class="img_add" src="">
+		</div>
+		<div class="div_bottom">
+			<text class="select_color_true" onclick="sub">提交</text>
+		</div>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		height:100;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		border-width: 1;
+		margin-left: 10;
+	}
+	.text_titBar{
+		flex:1;
+		text-align: center;
+		font-size: 30;
+		color: #ffffff;
+	}
+	.text_save{
+		font-size: 28;
+		margin-right: 20;
+		margin-left: 20;
+		color: #ffffff;
+
+	}
+	.type{
+		flex-direction: row;
+		height: 100;
+		border-bottom-width: 1;
+		border-color: #ebedef;
+		align-items: center;
+		justify-content: center;
+	}
+	.select_true{
+		background-color :#58D68D;
+	}
+	.select_false{
+		background-color: #aaaaaa;
+	}
+	.div_rad_border{
+		height: 50;
+		width:90;
+		margin-right: 10;
+		border-radius: 60;
+		align-items: center;
+		justify-content: center;
+	}
+	.txt_rad_border{
+		text-align: center;
+		font-size: 26;
+		color: #fafafa;
+		font-weight: normal(10);
+	}
+	.date{
+		height: 140;
+		flex-direction: row;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_to_txt{
+		height: 100;
+		flex:1;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.text_black{
+		margin-left: 20;
+		font-size: 30;
+		justify-content: center;
+	}
+	.txt_tit{
+		height: 60;
+		margin-top: 20;
+		margin-left: 30;
+		margin-right: 30;
+		font-size: 28;
+	}
+	.textarea{
+		margin-left:20;
+		margin-right: 20;
+		padding-left:10;
+		padding-right: 10;
+		font-size: 28;
+	}
+	.text_grey{
+		color: #aaaaaa;
+		flex:1;
+		font-size: 26;
+		font-weight: bold;
+		margin-left: 20;
+		justify-content: center;
+	}
+	.div_grey{
+		position: absolute;
+		bottom: 260;
+		height: 70;
+		width: 750;
+		flex-direction: row;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		align-items: center;
+	}
+	.img_28{
+		height: 28;
+		width: 28;
+		margin-left: 20;
+		background-color: #aaaaaa;
+	}
+	.txt_time{
+		font-size: 26;
+		color: #cccccc;
+		margin-left: 20;
+	}
+	.div_txt_img{
+		height: 80;
+		width: 750;
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_add{
+		height: 36;
+		width: 36;
+		margin-right: 20;
+		background-color: #aaaaaa;
+	}
+	.div_pic{
+		position: absolute;
+		bottom:180;
+		border-bottom-width:1;
+		border-color: #ebedef;
+	}
+	.div_else{
+		position: absolute;
+		border-bottom-width:6;
+		border-color: #ebedef;
+		bottom:100;
+	}
+	.select_color_true{
+		color:#58D68D;
+	}
+	.select_color_false{
+		color: #aaaaaa;
+	}
+	.div_bottom{
+		position: absolute;
+		width: 750;
+		height:100;
+		align-items:center;
+		bottom: 0;
+		border-top-width: 20;
+		border-color: #ebedef;
+		padding-top: 20;
+		padding-bottom: 20;
+	}
+</style>
+
+<script>
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var storage=require('@weex-module/storage');
+	module.exports={
+		data:{
+			navpageHeight:112,
+			isSelected:true,
+			selectedType:'日报',
+			rep_Tit:[],
+			dately_Tit:['今日','昨日'],
+			weekly_Tit:['本周','上周'],
+			devHeight:990,
+			selectPic:0,
+			selectAttach:0,
+			rep_type:2,
+			repDateList:[],
+			rep_false:[
+			'上周','本周','下周',
+			],
+			rep_true:[
+			'昨天','今天','明天'
+			],
+			rep_plan:'',
+			rep_sum:'',
+			rep_list:[],
+		},
+		methods:{
+			clickDately:function(e){
+				if (!this.isSelected) {
+				this.isSelected=true;
+				this.repDateList=this.rep_true;
+				this.selectedType='日报';
+				this.rep_Tit=this.dately_Tit;
+				}
+			},
+			clickWeekly:function(e){
+				if (this.isSelected) {
+					this.isSelected=false;
+					this.repDateList=this.rep_false;
+					this.selectedType='周报';
+					this.rep_Tit=this.weekly_Tit;
+				}
+			},
+			inputPlan:function(el){
+				var self=this;
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('input');  
+				self.rep_plan=el.value;
+				// modal.toast({'message':self.rep_plan,'doation':1});
+			},
+			inputSum:function(el){
+				var self=this;
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('input');  
+				self.rep_sum=el.value;
+				// modal.toast({'message':self.his_item,'doation':1});
+			},
+
+			sub:function(){
+				var self=this;
+				if (!self.rep_type||!self.rep_plan||!self.rep_sum) {
+					modal.toast({'message':'不能为空','doation':1});
+					return;
+				};
+				// if (!self.rep_plan)  {
+				// 	modal.toast({'message':'plan 不能为空','doation':1});
+				// 	re
+				// };
+				// if (!self.rep_sum)  {
+				// 	modal.toast({'message':'sum 不能为空','doation':1});
+				// };
+				var date=new Date();
+				var time=date.getTime();
+				// modal.toast({'message':time,'doation':1});
+				var obj={
+					id:time,
+					rep_type:self.rep_type,
+					rep_plan:self.rep_plan,
+					rep_sum:self.rep_sum,
+				};
+				// modal.toast({'message':obj.rep_type,'doation':1});
+				storage.setItem('weekly_'+time,obj,function(e){
+					self.rep_list.push(obj);
+					modal.toast({'message':self.rep_list.length,'doation':1});
+					var params={'animated':'true'};
+					navigator.pop(params,function(ret){
+						// require('@weex-module/myModule').printLog('params');
+					});
+				});
+			},
+			getUrlParams:function(e){
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://192.168.100.140:8080/test_yn/ui/zhy/js/myRep.js'+'?devHeight=1160';
+				var params=bundleUrl.split('?')[1];
+				var parArr=params.split('&');
+				this.devHeight=parArr[0].split('=')[1]-120;
+				// modal.toast({'message':this.devHeight,'doation':1});
+			},
+		},
+		created:function(e){
+			var self=this;
+			self.repDateList=self.rep_true;
+			self.rep_Tit=self.dately_Tit;
+			//方法区分大小写，大小写出错可导致页面无法正常渲染
+			storage.getAllKeys(function(e){
+				if (e.result=='success'&&e.data.length) {
+					e.data.forEach(function(item){
+						if (item.indexOf('weekly_')>-1) {
+							// modal.toast({'message':self.rep_list.length,'doation':1});
+						}
+					});
+				}
+			});
+
+		},
+		ready:function(e){
+			this.getUrlParams();
+			// modal.toast({'message':'ready','doation':1});
+			// // 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+   //          if (this.$getConfig().env.platform != "iOS") {
+   //            // 适配 Android
+   //          	this.mainExtra = "mainExtraAndroid";
+   //              configModule.getDevHeight(function(params) {
+   //            	// modal.toast({'message':params,'doation':1});
+   //              // require('@weex-module/myModule').printLog(params);
+   //              require('@weex-module/myModule').printLog(params.height);
+   //              	var ratio = this.$getConfig().env.deviceWidth / 750;
+   //              	this.devHeight = params.height / ratio ;
+   //              	// this.scrollerHeight=this.devHeight-320;
+   //            	}.bind(this));
+   //          } else {
+   //            // 适配 iPhone 4S
+   //            if (this.$getConfig().env.deviceHeight < 1000) {
+   //              this.scrollerHeight = 700;
+   //            }
+   //          }
+		},
+	}
+</script>

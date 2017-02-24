@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/zhanghaiyue/StudioProjects/weex_workbence/weex_vue/weexpack_test/platforms/android/app/build/intermediates/res/merged/release/menu/main.xml",
+        "source": "/Users/zhanghaiyue/StudioProjects/weex_workbence/weex_vue/weexpack_test/platforms/android/app/src/main/res/menu/main.xml"
+    },
+    {
+        "merged": "/Users/zhanghaiyue/StudioProjects/weex_workbence/weex_vue/weexpack_test/platforms/android/app/build/intermediates/res/merged/release/menu/main_scan.xml",
+        "source": "/Users/zhanghaiyue/StudioProjects/weex_workbence/weex_vue/weexpack_test/platforms/android/app/src/main/res/menu/main_scan.xml"
+    }
+]

@@ -1,0 +1,305 @@
+<template>
+	<div style="background-color:#ebedef;height:{{devHeight}};position: absolute;">
+		<div class="div_titBar" data-role="none">
+			<img class="img_back" src="">
+			<text class="text_titBar">工作汇报</text>
+		</div>
+
+		<div class="border_bottom">
+			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;">
+				<text class="text_center select_{{isSelected}}">我的汇报</text>
+			</div>
+			<div class="flex_center">
+				<text class="text_center select_{{!isSelected}}">团队汇报</text>
+			</div>
+		</div>
+		<list style="margin-bottom:80;">
+		<cell repeat="item in list" if="{{(item.type==1)}}">
+		<div class="border_bottom" style="height:160;" type="{{item.type}}" repid="{{item.repId}}" logo_src="{{item.logo_src}}" tit="{{item.tit}}" time="{{item.time}}" content="{{item.content}}" obj="{{item}}" onclick="myRep">
+			<!-- <div class="logo"> -->
+				<img class="img_center" src="">
+			<!-- </div> -->
+			<div class="flex_left">
+				<div>
+					<text>{{item.tit}}</text>
+					<img src="">
+				</div>
+				<text class="text_content">{{item.time}}</text>
+			</div>
+			<text class="rad_border text_content" repid="{{item.repId}}" onclick="delete">删除</text>
+		</div>
+		</cell>
+		<cell class="sec_cell" repeat="item in list" if="{{(item.type==2)}}" onclick="myRep">
+		<div style="flex-direction:row;min-height:160;justify-content:center;align-items:center;" type="{{item.type}}" repid="{{item.repId}}" logo_src="{{item.logo_src}}" tit="{{item.tit}}" time="{{item.time}}" content="{{item.content}}" onclick="myRep">
+			<div class="logo">
+				<img class="img_center" src="">
+			</div>
+			<div class="flex_left">
+				<text class="text_title">{{item.tit}}</text>
+				<text class="text_content">{{item.time}}</text>
+			</div>
+		</div>
+		<text class="text_tit">今日工作计划：</text>
+		<text class="text_mulit">{{item.content}}</text>
+		</cell>
+		<cell repeat="item in list" if="{{(item.type==3)}}">
+			<text class="else">{{item.tit}}</text>
+		</cell>
+		<!-- <loading style="justify-content:center;background-color#ebedef;" onloading="loading" display="{{loading_display}}">
+			<text class=" select_false" style="margin-top: 20;margin-bottom: 20;text-align: center;">正在加载。。。</text>
+		</loading> -->
+		</list>
+		<text class="select_true text_new" style="" onclick="newRep">新建</text>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		height:100;
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		border-width: 1;
+		margin-left: 10;
+	}
+	.text_titBar{
+		flex:1;
+		text-align: center;
+		font-size: 30;
+		padding-right: 68;
+		color: #ffffff;
+	}
+	.border_bottom{
+		height: 120;
+		width: 750;
+		border-bottom-width: 20;
+		border-color: #eeeeee;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color: #ffffff;
+	}
+	.flex_center{
+		flex: 1;
+		align-items: center;
+		margin-top: 20;
+		margin-bottom: 20;
+	}
+	.text_center{
+		font-size: 32;
+
+	}
+	.select_true{
+		color:#58D68D;
+	}
+	.select_false{
+		color: #aaaaaa;
+	}
+	.img_center{
+		width: 80;
+		height: 80;
+		background-color: #58D68D;
+		border-radius: 100;
+		margin-left: 20;
+	}
+	.flex_left{
+		padding: 10;
+		flex: 1;
+		align-items: flex-start;
+		margin-left: 20;
+	}
+	.rad_border{
+		border-width: 2;
+		border-color: #ebedef;
+		border-radius: 10;
+		text-align: center;
+		height: 50;
+		width:90;
+		margin:20;
+	}
+	.text_content{
+		color:#bbbbbb;
+		font-weight: normal;
+		font-size: 24
+		text-align:center;
+		align-items: center;
+	}
+	.sec_cell{
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		background-color:#ffffff;
+		width: 750;
+		height: 360;
+	}
+	.text_tit{
+		width: 720;
+		height: 50;
+		margin-left: 30;
+		font-size: 32;
+	}
+	.text_mulit{
+		height: 120;
+		font-size: 28;
+		lines:3;
+		margin-left: 30;
+		margin-right: 30;
+	}
+	.else{
+		text-align: center;
+		font-size: 32;
+		color: #bbbbbb;
+		padding: 20;
+	}
+	.text_new{
+		position: absolute;
+		height:80;
+		width: 750;
+		padding-top: 20;
+		padding-bottom: 20;
+		margin-bottom: 0;
+		bottom:0;
+		text-align: center;
+		background-color:#ffffff;
+		font-size:32;
+	}
+</style>
+
+<script>
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var storage=require('@weex-module/storage');
+	module.exports={
+		data:{
+			navpageHeight:112,
+			isSelected:true,
+			devHeight:990,
+			scrollerHeight:560,
+			loading_display:'show',
+			refresh_display:'show',
+			baseUrl:'file://assets/',
+			weekly_list:[],
+			list:[
+			{repId:1,type:1,logo_src:'',tit:'我的工作日报',time:'星期二',sign_src:'',content:''},
+			{repId:2,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandfLKFKSJHFLSKHFJLASKDFHAHLKSJDFHLAKSDJHFLASKDJHFLASKDJFHAKSLDJHFLKASJDHFALKSJDHFLKASJDHFLKASJDHFLKASDHFLKASDJHFLAKSJDHFLAKSJDFHLASKDFH;ASLDKFJA;SLDKGJAS;LDKGJSKGHKFJ;LFKAS'},
+			{repId:3,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
+			{repId:4,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
+			{repId:5,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
+			{repId:6,type:3,logo_src:'',tit:'没有更多了哦~',time:'',sign_src:'',content:''},
+		],
+		},
+		methods:{
+			refresh: function (e) {
+                var self = this;
+                self.refresh_display = 'show';
+                self.currentIndex = 0;
+                // self.getCarouselData();
+                // self.getReadingIndex(self.currentIndex, false);
+                self.refresh_display = 'hide';
+
+            },
+            loading: function (e) {
+                var self = this;
+                this.loading_display = "show";
+                self.refresh_display = 'show';
+
+                // self.getReadingIndex(++self.currentIndex, true);
+                self.loading_display = "hide";
+                self.refresh_display = 'hide';
+            },
+			newRep:function(e){
+				var config=this.$getConfig();
+				var bundleUrl=config.bundleUrl;
+				// var url=bundleUrl.split('/').slice(0,-1).join('/')+'/newRep.js';
+				// var url='file:///assets/dist/newRep.js';
+				// var url='http://127.0.0.1:8081/newRep.js';
+				var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/newWeekly.js'+'?devHeight='+this.devHeight;
+                // require('@weex-module/myModule').printLog(url);
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){
+					modal.toast({'message':'newRep','doation':1});
+				});
+			},
+			myRep:function(e){
+				var self=this;
+				var tit=e.target.attr.tit||'';
+				var repid=e.target.attr.repid||'';
+				var type=e.target.attr.type||'';
+				var logo_src=e.target.attr.logo_src||'';
+				var time=e.target.attr.time||'';
+				var content=e.target.attr.content||'';
+				var obj=e.target.attr.obj;
+				modal.toast({'message':'REPID: '+obj,'doation':1});
+				// var url=this.baseUrl+'myRep.js';
+				var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/myRep.js';
+				url=url+'?devHeight='+self.devHeight+'&repid='+repid+'&type='+type+'&logo_src='+logo_src+'&time='+time+'&tit='+tit+'&content='+content;
+				var params={'url':url,'animated':'true'};
+				// navigator.push(params,function(ret){
+				// 	// modal.alert({'message':'myRep','doation':1});
+				// });
+			},
+			getList:function(e){
+				var self=this;
+			},
+			delete:function(e){
+				var self=this;
+				modal.confirm({'message':'确定删除?','doation':0.3},function(ret){
+					if (ret=='OK') {
+				var repid=e.target.attr.repid;
+				var index;
+				self.list.forEach(function(item,index){
+			    	if (repid==item.repId) {
+						self.list.splice(index,1);
+			    	// modal.toast({'message':self.list.length,'doation':1});
+			    	}
+
+				});}
+				});
+			 //    for (var i = 0; i<self.list.length; i++) {
+			 //    	
+			 //    }
+			},
+		},
+		created:function(e){
+			var self=this;
+			//方法区分大小写，大小写出错可导致页面无法正常渲染
+			storage.getAllKeys(function(e){
+				if (e.result=='success'&&e.data.length) {
+					e.data.forEach(function(item){
+						if (item.indexOf('weekly_')>-1) {
+							self.weekly_list.push(item);
+						}
+					});
+					modal.toast({'message':self.weekly_list.length,'doation':1});
+				}
+			});
+
+		},
+		ready:function(e){
+			// 引入外部注册的 Native Module；Android 和 iOS 各有其实现
+            if (this.$getConfig().env.platform != "iOS") {
+              // 适配 Android
+            	this.mainExtra = "mainExtraAndroid";
+                configModule.getDevHeight(function(params) {
+              	// modal.toast({'message':params,'doation':1});
+                // require('@weex-module/myModule').printLog(params);
+                	var ratio = this.$getConfig().env.deviceWidth / 750;
+                	this.devHeight = params.height / ratio ;
+                	require('@weex-module/myModule').printLog(this.devHeight);
+                	// this.scrollerHeight=this.devHeight-320;
+              	}.bind(this));
+            } else {
+              // 适配 iPhone 4S
+              if (this.$getConfig().env.deviceHeight < 1000) {
+                this.scrollerHeight = 700;
+              }
+            }
+		},
+	}
+</script>
