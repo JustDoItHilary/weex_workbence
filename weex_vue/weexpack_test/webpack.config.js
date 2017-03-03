@@ -24,8 +24,7 @@ function walk(dir, root) {
   module.exports = {
     entry: entry
     , output: {
-      path: 'dist'
-      , filename: '[name].js'
+      path: 'dist/', filename: '[name].js'
     }
     , devtool: 'inline-source-map'
     , module: {

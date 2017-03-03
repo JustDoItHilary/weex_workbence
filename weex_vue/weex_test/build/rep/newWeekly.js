@@ -45,9 +45,9 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	var __weex_template__ = __webpack_require__(107)
-	var __weex_style__ = __webpack_require__(108)
-	var __weex_script__ = __webpack_require__(109)
+	var __weex_template__ = __webpack_require__(118)
+	var __weex_style__ = __webpack_require__(119)
+	var __weex_script__ = __webpack_require__(120)
 
 	__weex_define__('@weex-component/28f353385ffe6446c56461877e63a112', [], function(__weex_require__, __weex_exports__, __weex_module__) {
 
@@ -66,7 +66,7 @@
 
 /***/ },
 
-/***/ 107:
+/***/ 118:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -208,7 +208,7 @@
 	        },
 	        {
 	          "type": "div",
-	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType==4)]},
+	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType) + '==4']},
 	          "children": [
 	            {
 	              "type": "text",
@@ -216,14 +216,14 @@
 	                "txt_rad_border"
 	              ],
 	              "attr": {
-	                "value": function () {return this.repDateList[0]}
+	                "value": function () {return (this.repDateList) + '[0]'}
 	              }
 	            }
 	          ]
 	        },
 	        {
 	          "type": "div",
-	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType==5)]},
+	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType) + '==5}']},
 	          "children": [
 	            {
 	              "type": "text",
@@ -231,14 +231,14 @@
 	                "txt_rad_border"
 	              ],
 	              "attr": {
-	                "value": function () {return this.repDateList[1]}
+	                "value": function () {return (this.repDateList) + '[1]'}
 	              }
 	            }
 	          ]
 	        },
 	        {
 	          "type": "div",
-	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType==6)]},
+	          "classList": function () {return ['div_rad_border', 'select_' + (this.timeType) + '==6']},
 	          "children": [
 	            {
 	              "type": "text",
@@ -246,10 +246,71 @@
 	                "txt_rad_border"
 	              ],
 	              "attr": {
-	                "value": function () {return this.repDateList[2]}
+	                "value": function () {return (this.repDateList) + '[2]'}
 	              }
 	            }
 	          ]
+	        }
+	      ]
+	    },
+	    {
+	      "type": "div",
+	      "classList": [
+	        "reader"
+	      ],
+	      "children": [
+	        {
+	          "type": "text",
+	          "classList": [
+	            "text_black"
+	          ],
+	          "attr": {
+	            "value": "审阅者"
+	          }
+	        },
+	        {
+	          "type": "scroller",
+	          "attr": {
+	            "scrollDirection": "horizontal"
+	          },
+	          "children": [
+	            {
+	              "type": "div",
+	              "repeat": {
+	                "expression": function () {return this.readerList},
+	                "value": "item"
+	              },
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "classList": [
+	                    "readerName"
+	                  ],
+	                  "attr": {
+	                    "value": function () {return this.item}
+	                  }
+	                },
+	                {
+	                  "type": "image",
+	                  "classList": [
+	                    "delReader"
+	                  ],
+	                  "attr": {
+	                    "src": ""
+	                  }
+	                }
+	              ]
+	            }
+	          ]
+	        },
+	        {
+	          "type": "text",
+	          "classList": [
+	            "txt_rad_border"
+	          ],
+	          "attr": {
+	            "value": "添加"
+	          }
 	        }
 	      ]
 	    },
@@ -259,7 +320,7 @@
 	        "txt_tit"
 	      ],
 	      "attr": {
-	        "value": function () {return (this.rep_Tit[0]) + '工作计划'}
+	        "value": function () {return (this.rep_Tit) + '[0]工作计划'}
 	      }
 	    },
 	    {
@@ -273,7 +334,8 @@
 	      "attr": {
 	        "autofocus": "true",
 	        "rows": "3",
-	        "value": ""
+	        "value": "",
+	        "placeholder": function () {return this.hintPlan}
 	      }
 	    },
 	    {
@@ -282,7 +344,7 @@
 	        "txt_tit"
 	      ],
 	      "attr": {
-	        "value": function () {return (this.rep_Tit[1]) + '工作总结'}
+	        "value": function () {return (this.rep_Tit) + '[1]工作总结'}
 	      }
 	    },
 	    {
@@ -292,7 +354,8 @@
 	      ],
 	      "attr": {
 	        "rows": "3",
-	        "value": ""
+	        "value": "",
+	        "placeholder": function () {return this.hintSum}
 	      },
 	      "events": {
 	        "input": "inputSum"
@@ -424,7 +487,7 @@
 
 /***/ },
 
-/***/ 108:
+/***/ 119:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -481,9 +544,9 @@
 	    "color": "#fafafa"
 	  },
 	  "date": {
-	    "height": 140,
+	    "height": 120,
 	    "flexDirection": "row",
-	    "borderBottomWidth": 20,
+	    "borderBottomWidth": 1,
 	    "borderColor": "#ebedef",
 	    "justifyContent": "center",
 	    "alignItems": "center"
@@ -582,12 +645,23 @@
 	    "borderColor": "#ebedef",
 	    "paddingTop": 20,
 	    "paddingBottom": 20
+	  },
+	  "reader": {
+	    "flexDirection": "row",
+	    "height": 100,
+	    "borderBottomWidth": 20,
+	    "borderColor": "#ebedef",
+	    "alignItems": "center",
+	    "justifyContent": "center"
+	  },
+	  "readerName": {
+	    "flex": 1
 	  }
 	}
 
 /***/ },
 
-/***/ 109:
+/***/ 120:
 /***/ function(module, exports) {
 
 	module.exports = function(module, exports, __weex_require__){'use strict';
@@ -613,7 +687,10 @@
 			rep_true: ['昨天', '今天', '明天'],
 			rep_plan: '',
 			rep_sum: '',
-			rep_list: []
+			rep_list: [],
+			hintPlan: '请输入工作计划',
+			hintSum: '请输入工作总结',
+			readerList: [{ name: '周立思' }]
 		}},
 		methods: {
 			clickDately: function clickDately(e) {

@@ -1,5 +1,5 @@
 <template>
-	<div style="height:{{devHeight}};position:absolute;width:750;">
+	<div style="height: {{devHeight}};position:absolute;width:750;border-width:1;">
 		<div class="div_titBar" data-role="none">
 			<!-- <img class="img_back" src=""> -->
 			<text class="text_save">关闭</text>
@@ -20,42 +20,62 @@
 				<text class="text_black" style="flex:1;">{{selectedType}}日期</text>
 				<text class="text_grey">02月06日-02月12日</text>
 			</div >
-			<div class="div_rad_border select_{{timeType==4}}">
-				<text class="txt_rad_border ">{{repDateList[0]}}</text>
+			<div class="div_rad_border select_{{select_dateCode==0}}" onclick="clickDateLast" >
+				<text class="txt_rad_border ">{{repDateList[0].obj}}</text>
 			</div>
-			<div class="div_rad_border select_{{timeType==5}}">
-				<text class="txt_rad_border">{{repDateList[1]}}</text>
+			<div class="div_rad_border select_{{select_dateCode==1}}" onclick="clickDateThis">
+				<text class="txt_rad_border">{{repDateList[1].obj}}</text>
 			</div>
-			<div class="div_rad_border select_{{timeType==6}}">
-				<text class="txt_rad_border">{{repDateList[2]}}</text>
+			<!-- <div class="div_rad_border select_{{select_dateCode==2}}" onclick="clickDateAfter">
+				<text class="txt_rad_border">{{repDateList[2].obj}}</text>
+			</div> -->
+		</div>
+		<div class="reader border_bottom">
+		    <text class="text_black">审阅者</text>
+		    <scroller class="readerList"  scroll-direction="horizontal">
+		        <div repeat="item in readerList">
+		            <text class="text_black">{{item.name}}</text>
+		            <img class="delReader" src=""/>
+		        </div>
+		    </scroller>
+			<div class="div_rad_border select_true" onclick="addReader">
+				<text class="txt_rad_border">添加</text>
 			</div>
 		</div>
-		<text class="txt_tit">{{rep_Tit[0]}}工作计划</text>
-		<textarea  class="textarea" oninput ="inputPlan" autofocus="true" rows="3" value=""></textarea>
-		<text class="txt_tit">{{rep_Tit[1]}}工作总结</text>
-		<textarea  class="textarea" rows="3" oninput="inputSum" value=""></textarea>
-		
-		<div class="div_grey">
-				<img class="img_28" src="">
-			<text class="txt_time">最近保存时间</text>
+		<scroller >
+		<div style="flex-direction:column;">
+			<text class="txt_tit">{{rep_Tit[0]}}工作总结</text>
+			<textarea  class="textarea" disabled="{{isChecked}}" oninput ="inputSum" rows="3" value="{{sum}}" placeholder="{{hintSum}}"></textarea>
+			<text class="txt_tit">{{rep_Tit[1]}}工作计划</text>
+			<textarea  class="textarea" disabled="{{isChecked}}" rows="3" oninput="inputPlan" value="{{plan}}" placeholder="{{hintPlan}}"></textarea>
 		</div>
-		<div class="div_txt_img div_pic">
+		</scroller>
+		<div class="div_grey border_bottom">
+			<img class="img_28" src="">
+			<text class="txt_time">最近保存时间 {{saveTime}}</text>
+		</div>
+		<!-- <div class="div_txt_img div_pic">
 			<text class="text_black">选择图片</text>
 			<text class="text_grey" style="text-align: left;">已添加{{selectPic}}张</text>
-			<img class="img_add" src="">
+			<img class="img_add" src="" onclick="addPic">
 		</div>
-		<div class="div_txt_img div_else">
+		<div class="div_txt_img div_else border_bottom">
 			<text class="text_black">选择附件</text>
 			<text class="text_grey" >已添加{{selectAttach}}个</text>
 			<img class="img_add" src="">
-		</div>
+		</div> -->
 		<div class="div_bottom">
-			<text class="select_color_true" onclick="sub">提交</text>
+			<text class="select_color_true text_bottom" onclick="saveRep">保存</text>
+			<text class="select_color_true text_bottom" onclick="subRep">提交</text>
 		</div>
 	</div>
 </template>
 
 <style>
+	.border_bottom{
+		border-bottom-width: 20;
+		border-color: #ebedef;
+	}
 	.div_titBar{
 		height:100;
 		background-color: #58D68D;
@@ -111,9 +131,9 @@
 		font-weight: normal(10);
 	}
 	.date{
-		height: 140;
+		height: 120;
 		flex-direction: row;
-		border-bottom-width: 20;
+		border-bottom-width:1;
 		border-color: #ebedef;
 		justify-content: center;
 		align-items: center;
@@ -137,11 +157,12 @@
 		font-size: 28;
 	}
 	.textarea{
+		height: 120;
 		margin-left:20;
 		margin-right: 20;
-		padding-left:10;
-		padding-right: 10;
+		padding:10;
 		font-size: 28;
+		background-color: #efefef;
 	}
 	.text_grey{
 		color: #aaaaaa;
@@ -152,13 +173,10 @@
 		justify-content: center;
 	}
 	.div_grey{
-		position: absolute;
-		bottom: 260;
+		/*position: absolute;*/
+		/*bottom: 260;*/
 		height: 70;
-		width: 750;
 		flex-direction: row;
-		border-bottom-width: 20;
-		border-color: #ebedef;
 		align-items: center;
 	}
 	.img_28{
@@ -173,8 +191,6 @@
 		margin-left: 20;
 	}
 	.div_txt_img{
-		height: 80;
-		width: 750;
 		flex-direction: row;
 		align-items: center;
 	}
@@ -185,16 +201,18 @@
 		background-color: #aaaaaa;
 	}
 	.div_pic{
-		position: absolute;
-		bottom:180;
+		/*position: absolute;*/
+		/*bottom:180;*/
+		height: 80;
 		border-bottom-width:1;
 		border-color: #ebedef;
 	}
 	.div_else{
-		position: absolute;
+		/*position: absolute;*/
+		height: 100;
 		border-bottom-width:6;
 		border-color: #ebedef;
-		bottom:100;
+		/*bottom:100;*/
 	}
 	.select_color_true{
 		color:#58D68D;
@@ -203,15 +221,29 @@
 		color: #aaaaaa;
 	}
 	.div_bottom{
-		position: absolute;
-		width: 750;
+		/*position: absolute;*/
+		flex-direction: row;
+		justify-content: center;
 		height:100;
 		align-items:center;
 		bottom: 0;
-		border-top-width: 20;
-		border-color: #ebedef;
 		padding-top: 20;
 		padding-bottom: 20;
+	}
+	.text_bottom{
+		width: 200;
+		text-align: center;
+	}
+	.reader{
+		flex-direction: row;
+		height: 120;
+		align-items: center;
+		justify-content: center;
+	}
+	.readerList{
+	    flex: 1;
+	    justify-content: flex-start;
+	    padding: 10;
 	}
 </style>
 
@@ -219,22 +251,26 @@
 	var navigator=require('@weex-module/navigator');
 	var modal=require('@weex-module/modal');
 	var configModule=require('@weex-module/configModule');
+	var repModule=require('@weex-module/repModule');
 	var storage=require('@weex-module/storage');
+	var stream=require('@weex-module/stream');
 	module.exports={
 		data:{
 			navpageHeight:112,
-			isSelected:true,
-			selectedType:'日报',
+			isSelected:false,
+			selectedType:'周报',
 			rep_Tit:[],
-			dately_Tit:['今日','昨日'],
-			weekly_Tit:['本周','上周'],
-			devHeight:990,
+			dately_Tit:[],
+			weekly_Tit:[],
+			dately_TitList:[['今日','昨日'],['今日','昨日']],
+			weekly_TitList:[['上周','本周'],['本周','下周']],
+			devHeight:1190,
 			selectPic:0,
 			selectAttach:0,
 			rep_type:2,
 			repDateList:[],
 			rep_false:[
-			'上周','本周','下周',
+			{'obj':'上周','code':0},{'obj':'本周','code':1},{'obj':'下周','code':2}
 			],
 			rep_true:[
 			'昨天','今天','明天'
@@ -242,15 +278,29 @@
 			rep_plan:'',
 			rep_sum:'',
 			rep_list:[],
+			hintPlan:'请输入工作计划',
+			hintSum:'请输入工作总结',
+			isChecked:false,
+			readerList:[{name:'周立思'},{name:'冯张龙'}],
+			select_dateCode:1,
+			sum:'',
+			plan:'',
+			saveTime:'',
+			lastRep:{'isGeted':false},
+			thisRep:{},
+			testNewUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=UploadReports',
+			testGetUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=GetReports',
+			testData:{'Guid':'1','ReportDate':'报告日期','startTime':'1','endTime':'1','type':'10','ProGuid':'','ProCode':'','funcGuid':'','funcName':'','ProName':'周报','leader':'1','Annex':'1','summary':'1','myPlan':'1','AuditFlag':'1'},
 		},
 		methods:{
 			clickDately:function(e){
-				if (!this.isSelected) {
-				this.isSelected=true;
-				this.repDateList=this.rep_true;
-				this.selectedType='日报';
-				this.rep_Tit=this.dately_Tit;
-				}
+				// if (!this.isSelected) {
+				// this.isSelected=true;
+				// this.repDateList=this.rep_true;
+				// this.selectedType='日报';
+				// this.rep_Tit=this.dately_Tit;
+				// }
+				modal.toast({'message':'暂时不提供日报功能','doation':1});
 			},
 			clickWeekly:function(e){
 				if (this.isSelected) {
@@ -276,8 +326,41 @@
 				self.rep_sum=el.value;
 				// modal.toast({'message':self.his_item,'doation':1});
 			},
-
-			sub:function(){
+			getDate:function(e){
+				var self=this;
+				var time= new Date();
+				var y = time.getFullYear();
+				var m = time.getMonth()+1;
+				var d = time.getDate();
+				var h = time.getHours();
+				var mm = time.getMinutes();
+				return y+'-'+self.add0(m)+'-'+self.add0(d)+' '+self.add0(h)+':'+self.add0(mm);
+			},
+			saveRep:function(e){
+				var self=this;
+				// 设置 最近保存时间
+				self.saveTime=self.getDate();
+				var mbody='code=545e1ced3b364bbabf44bb2b72903862&startTime=2017-02-20&endTime=2017-02-26&isWeek=1&date=2017-02-26&ProGuid=&leader=&module=&type=10&summary='+self.sum+'&plan='+self.plan+'&ispost=1&annex=&guid=&autitors=&cros=&version=1';
+				// var header = {'Content-Type': 'application/json'};
+				// modal.toast({'message':time,'doation':1});
+				stream.fetch({
+					method:'POST',
+					url:self.testNewUrl,
+					type:'json',
+					body:mbody
+				},function(ret){
+						console.log('CALLBACK: ',ret);
+				// modal.toast({'message':time,'doation':1});
+						// require('@weex-module/myModule').printLog(params);
+					},function(progress){
+						console.log('PROGRESSCALLBACK: ',JSON.stringify(progress.data));
+					});
+			},
+			// 时间格式化：补全时间中的 0 
+			add0:function(e){
+				return e<10?'0'+e:e;
+			},
+			subRep:function(e){
 				var self=this;
 				if (!self.rep_type||!self.rep_plan||!self.rep_sum) {
 					modal.toast({'message':'不能为空','doation':1});
@@ -317,21 +400,93 @@
 				this.devHeight=parArr[0].split('=')[1]-120;
 				// modal.toast({'message':this.devHeight,'doation':1});
 			},
+			getLastRep:function(e){
+				var self=this;
+				var code ='545e1ced3b364bbabf44bb2b72903862';
+				var startDate='2017-02-20';
+				var endDate='2017-02-26';
+
+				startDate=encodeURIComponent(startDate);
+				endDate=encodeURIComponent(endDate);
+
+				var body='code='+code+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				var options={method:'POST',url:self.testGetUrl,type:'json',body:body};
+				stream.fetch(options,function(ret){
+					console.log('CALLBACK: ',JSON.stringify(ret));
+					if (ret.ok) {
+						self.lastRep.isGeted=true;
+						if (ret.data!=null&&ret.data.length>0) {
+							self.lastRep=ret.data[0];
+						}
+					}
+					},function(progress){});
+				self.sum=self.lastRep.summary;
+				self.plan=self.lastRep.myPlan;
+			},
+			clickDateLast:function(e){
+				var self=this;
+				if (self.select_dateCode!=0) {
+					self.select_dateCode=0;
+					self.rep_Tit=self.weekly_TitList[0];
+				}
+				if (self.testData.AuditFlag==1) {
+					self.isChecked=true;
+				}
+				if (!self.lastRep.isGeted) {
+					self.getLastRep();
+				}
+			},
+			clickDateThis:function(e){
+				var self=this;
+				if (self.select_dateCode!=1) {
+					self.select_dateCode=1;
+					self.rep_Tit=self.weekly_TitList[1];
+				}
+				if (self.testData.AuditFlag==1) {
+					self.isChecked=true;
+				}
+				self.sum='';
+				self.plan='';
+				
+			},
+			clickDateAfter:function(e){
+				var self=this;
+				if (self.select_dateCode!=2) {
+					self.select_dateCode=2;
+				}
+				// stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
+				// 		console.log('ret:',ret);
+				// 		callback(ret.data);
+				// 	},function(progress){});
+				
+			},
+			addReader:function(e){
+				var self=this;
+				self.readerList=repModule.getReaders(self.testData.guid,self.readerList,function(ret){
+					self.readerList=ret;
+				});
+			},
+			addPic:function(e){
+				modal.toast({'message':'骚瑞~~暂时不能添加图片','doation':1});
+			},
 		},
 		created:function(e){
 			var self=this;
-			self.repDateList=self.rep_true;
-			self.rep_Tit=self.dately_Tit;
-			//方法区分大小写，大小写出错可导致页面无法正常渲染
-			storage.getAllKeys(function(e){
-				if (e.result=='success'&&e.data.length) {
-					e.data.forEach(function(item){
-						if (item.indexOf('weekly_')>-1) {
-							// modal.toast({'message':self.rep_list.length,'doation':1});
-						}
-					});
-				}
-			});
+			this.isSelected=false;
+			this.selectedType='周报';
+			self.repDateList=self.rep_false;
+			self.rep_Tit=self.weekly_TitList[1];
+			self.saveTime=self.getDate();
+			// //方法区分大小写，大小写出错可导致页面无法正常渲染
+			// storage.getAllKeys(function(e){
+			// 	if (e.result=='success'&&e.data.length) {
+			// 		e.data.forEach(function(item){
+			// 			if (item.indexOf('weekly_')>-1) {
+			// 				// modal.toast({'message':self.rep_list.length,'doation':1});
+			// 			}
+			// 		});
+			// 	}
+			// });
 
 		},
 		ready:function(e){

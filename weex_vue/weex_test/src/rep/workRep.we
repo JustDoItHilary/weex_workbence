@@ -7,7 +7,7 @@
 
 		<div class="border_bottom">
 			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;">
-				<text class="text_center select_{{isSelected}}">我的汇报</text>
+				<text class="text_center select_{{isSelected}}" onclick>我的汇报</text>
 			</div>
 			<div class="flex_center">
 				<text class="text_center select_{{!isSelected}}">团队汇报</text>

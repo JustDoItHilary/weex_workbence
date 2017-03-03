@@ -6,43 +6,43 @@
 		</div>
 
 		<div class="border_bottom">
-			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;">
+			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;" onclick="clickMyself">
 				<text class="text_center select_{{isSelected}}">我的汇报</text>
 			</div>
-			<div class="flex_center">
+			<div class="flex_center" onclick="clickTeam">
 				<text class="text_center select_{{!isSelected}}">团队汇报</text>
 			</div>
 		</div>
 		<list style="margin-bottom:80;">
-		<cell repeat="item in list" if="{{(item.type==1)}}">
+		<cell repeat="item in repList" if="{{(item.type==1)}}">
 		<div class="border_bottom" style="height:160;" type="{{item.type}}" repid="{{item.repId}}" logo_src="{{item.logo_src}}" tit="{{item.tit}}" time="{{item.time}}" content="{{item.content}}" obj="{{item}}" onclick="myRep">
 			<!-- <div class="logo"> -->
 				<img class="img_center" src="">
 			<!-- </div> -->
 			<div class="flex_left">
 				<div>
-					<text>{{item.tit}}</text>
+					<text>我的工作{{item.ProName}}</text>
 					<img src="">
 				</div>
-				<text class="text_content">{{item.time}}</text>
+				<text class="text_content">{{item.startTime}}</text>
 			</div>
 			<text class="rad_border text_content" repid="{{item.repId}}" onclick="delete">删除</text>
 		</div>
 		</cell>
-		<cell class="sec_cell" repeat="item in list" if="{{(item.type==2)}}" onclick="myRep">
+		<cell class="sec_cell" repeat="item in repList" if="{{(item.type==2)}}" onclick="myRep">
 		<div style="flex-direction:row;min-height:160;justify-content:center;align-items:center;" type="{{item.type}}" repid="{{item.repId}}" logo_src="{{item.logo_src}}" tit="{{item.tit}}" time="{{item.time}}" content="{{item.content}}" onclick="myRep">
 			<div class="logo">
 				<img class="img_center" src="">
 			</div>
 			<div class="flex_left">
-				<text class="text_title">{{item.tit}}</text>
-				<text class="text_content">{{item.time}}</text>
+				<text class="text_title">我的工作{{item.ProName}}</text>
+				<text class="text_content">{{item.startTime}}</text>
 			</div>
 		</div>
-		<text class="text_tit">今日工作计划：</text>
-		<text class="text_mulit">{{item.content}}</text>
+		<text class="text_tit">本周工作计划：</text>
+		<text class="text_mulit">{{item.myPlan}}</text>
 		</cell>
-		<cell repeat="item in list" if="{{(item.type==3)}}">
+		<cell repeat="item in repList" if="{{(item.type==3)}}">
 			<text class="else">{{item.tit}}</text>
 		</cell>
 		<!-- <loading style="justify-content:center;background-color#ebedef;" onloading="loading" display="{{loading_display}}">
@@ -175,6 +175,7 @@
 	var modal=require('@weex-module/modal');
 	var configModule=require('@weex-module/configModule');
 	var storage=require('@weex-module/storage');
+	var stream=require('@weex-module/stream');
 	module.exports={
 		data:{
 			navpageHeight:112,
@@ -184,7 +185,10 @@
 			loading_display:'show',
 			refresh_display:'show',
 			baseUrl:'file://assets/',
+			testUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=GetReports',
 			weekly_list:[],
+			repList:[],
+			hintRep:{type:3,tit:'没有更多了哦~',time:''},
 			list:[
 			{repId:1,type:1,logo_src:'',tit:'我的工作日报',time:'星期二',sign_src:'',content:''},
 			{repId:2,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandfLKFKSJHFLSKHFJLASKDFHAHLKSJDFHLAKSDJHFLASKDJHFLASKDJFHAKSLDJHFLKASJDHFALKSJDHFLKASJDHFLKASJDHFLKASDHFLKASDJHFLAKSJDHFLAKSJDFHLASKDFH;ASLDKFJA;SLDKGJAS;LDKGJSKGHKFJ;LFKAS'},
@@ -216,10 +220,10 @@
 			newRep:function(e){
 				var config=this.$getConfig();
 				var bundleUrl=config.bundleUrl;
-				// var url=bundleUrl.split('/').slice(0,-1).join('/')+'/newRep.js';
+				var url=bundleUrl.split('/').slice(0,-1).join('/')+'/newWeekly.js'+'?devHeight='+this.devHeight;
 				// var url='file:///assets/dist/newRep.js';
 				// var url='http://127.0.0.1:8081/newRep.js';
-				var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/newWeekly.js'+'?devHeight='+this.devHeight;
+				// var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/newWeekly.js'+'?devHeight='+this.devHeight;
                 // require('@weex-module/myModule').printLog(url);
 				var params={'url':url,'animated':'true'};
 				navigator.push(params,function(ret){
@@ -244,8 +248,18 @@
 				// 	// modal.alert({'message':'myRep','doation':1});
 				// });
 			},
-			getList:function(e){
+			getList:function(retdata){
 				var self=this;
+				//将列表清空
+				self.repList=[];
+				if (retdata!=null&&retdata.length>0) {
+					for (var i = 0; i < retdata.length; i++) {
+						var item=retdata[i];
+						item.type=2;
+						self.repList.push(item);
+					}
+				}
+				self.repList.push(self.hintRep);
 			},
 			delete:function(e){
 				var self=this;
@@ -261,24 +275,51 @@
 
 				});}
 				});
-			 //    for (var i = 0; i<self.list.length; i++) {
-			 //    	
-			 //    }
+			},
+			clickMyself:function(e){
+
+			},
+			clickTeam:function(e){
+				modal.toast({'message':'骚瑞~~暂时不提供团队汇报功能','doation':1});
+			},
+			getMyRep:function(){
+				var self=this;
+				var code ='545e1ced3b364bbabf44bb2b72903862';
+				var startDate='2017-02-20';
+				var endDate='2017-02-26';
+
+				startDate=encodeURIComponent(startDate);
+				endDate=encodeURIComponent(endDate);
+
+				var body='code='+code+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				var options={method:'POST',url:self.testUrl,type:'json',body:body};
+				// require('@weex-module/myModule').printLog('STREAM: '+body);
+				stream.fetch(options,function(ret){
+					console.log('CALLBACK: ',JSON.stringify(ret));
+					if (ret.ok) {
+						self.getList(ret.data);
+					}
+					// require('@weex-module/myModule').printLog('CALLBACK: '+ret.data);
+				},function(progress){
+					console.log('PROGRESSCALLBACK: ',progress);
+					require('@weex-module/myModule').printLog('PROGRESSCALLBACK: '+ret);
+				});
 			},
 		},
 		created:function(e){
 			var self=this;
-			//方法区分大小写，大小写出错可导致页面无法正常渲染
-			storage.getAllKeys(function(e){
-				if (e.result=='success'&&e.data.length) {
-					e.data.forEach(function(item){
-						if (item.indexOf('weekly_')>-1) {
-							self.weekly_list.push(item);
-						}
-					});
-					modal.toast({'message':self.weekly_list.length,'doation':1});
-				}
-			});
+			self.getMyRep();
+			// //方法区分大小写，大小写出错可导致页面无法正常渲染
+			// storage.getAllKeys(function(e){
+			// 	if (e.result=='success'&&e.data.length) {
+			// 		e.data.forEach(function(item){
+			// 			if (item.indexOf('weekly_')>-1) {
+			// 				self.weekly_list.push(item);
+			// 			}
+			// 		});
+			// 		modal.toast({'message':self.weekly_list.length,'doation':1});
+			// 	}
+			// });
 
 		},
 		ready:function(e){

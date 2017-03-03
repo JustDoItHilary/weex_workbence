@@ -188,6 +188,7 @@
 	  },
 	  "webStyle": {
 	    "position": "absolute",
+	    "width":750,
 	    "left": 0,
 	    "right": 0,
 	    "bottom": 0

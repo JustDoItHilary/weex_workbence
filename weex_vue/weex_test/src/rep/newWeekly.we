@@ -20,20 +20,30 @@
 				<text class="text_black" style="flex:1;">{{selectedType}}日期</text>
 				<text class="text_grey">02月06日-02月12日</text>
 			</div >
-			<div class="div_rad_border select_{{timeType==4}}">
-				<text class="txt_rad_border ">{{repDateList[0]}}</text>
+			<div class="div_rad_border select_{{timeType}}==4">
+				<text class="txt_rad_border ">{{repDateList}}[0]</text>
 			</div>
-			<div class="div_rad_border select_{{timeType==5}}">
-				<text class="txt_rad_border">{{repDateList[1]}}</text>
+			<div class="div_rad_border select_{{timeType}}==5}">
+				<text class="txt_rad_border">{{repDateList}}[1]</text>
 			</div>
-			<div class="div_rad_border select_{{timeType==6}}">
-				<text class="txt_rad_border">{{repDateList[2]}}</text>
+			<div class="div_rad_border select_{{timeType}}==6">
+				<text class="txt_rad_border">{{repDateList}}[2]</text>
 			</div>
 		</div>
-		<text class="txt_tit">{{rep_Tit[0]}}工作计划</text>
-		<textarea  class="textarea" oninput ="inputPlan" autofocus="true" rows="3" value=""></textarea>
-		<text class="txt_tit">{{rep_Tit[1]}}工作总结</text>
-		<textarea  class="textarea" rows="3" oninput="inputSum" value=""></textarea>
+		<div class="reader">
+		    <text class="text_black">审阅者</text>
+		    <scroller scroll-direction="horizontal">
+		        <div repeat="item in readerList">
+		            <text class="readerName">{{item}}</text>
+		            <img class="delReader" src=""/>
+		        </div>
+		    </scroller>
+		    <text class="txt_rad_border">添加</text>
+		</div>
+		<text class="txt_tit">{{rep_Tit}}[0]工作计划</text>
+		<textarea  class="textarea" oninput ="inputPlan" autofocus="true" rows="3" value="" placeholder="{{hintPlan}}"></textarea>
+		<text class="txt_tit">{{rep_Tit}}[1]工作总结</text>
+		<textarea  class="textarea" rows="3" oninput="inputSum" value="" placeholder="{{hintSum}}"></textarea>
 		
 		<div class="div_grey">
 				<img class="img_28" src="">
@@ -111,9 +121,9 @@
 		font-weight: normal(10);
 	}
 	.date{
-		height: 140;
+		height: 120;
 		flex-direction: row;
-		border-bottom-width: 20;
+		border-bottom-width: 1;
 		border-color: #ebedef;
 		justify-content: center;
 		align-items: center;
@@ -213,6 +223,18 @@
 		padding-top: 20;
 		padding-bottom: 20;
 	}
+	.reader{
+		flex-direction: row;
+		height: 100;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		align-items: center;
+		justify-content: center;
+	}
+	.readerName{
+	    flex: 1;
+
+	}
 </style>
 
 <script>
@@ -242,6 +264,9 @@
 			rep_plan:'',
 			rep_sum:'',
 			rep_list:[],
+			hintPlan:'请输入工作计划',
+			hintSum:'请输入工作总结',
+			readerList:[{name:'周立思'}],
 		},
 		methods:{
 			clickDately:function(e){
