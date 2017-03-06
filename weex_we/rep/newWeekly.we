@@ -326,16 +326,6 @@
 				self.rep_sum=el.value;
 				// modal.toast({'message':self.his_item,'doation':1});
 			},
-			getDate:function(e){
-				var self=this;
-				var time= new Date();
-				var y = time.getFullYear();
-				var m = time.getMonth()+1;
-				var d = time.getDate();
-				var h = time.getHours();
-				var mm = time.getMinutes();
-				return y+'-'+self.add0(m)+'-'+self.add0(d)+' '+self.add0(h)+':'+self.add0(mm);
-			},
 			saveRep:function(e){
 				var self=this;
 				// 设置 最近保存时间
@@ -356,8 +346,31 @@
 						console.log('PROGRESSCALLBACK: ',JSON.stringify(progress.data));
 					});
 			},
+			//格式化日期：yyyy-MM-dd 
+			formatDate:function(date){
+				var myyear = date.getFullYear();   
+    			var mymonth = date.getMonth() + 1;   
+    			var myweekday = date.getDate();   
+    			if (mymonth < 10) {   
+        			mymonth = "0" + mymonth;   
+    			}   
+    			if (myweekday < 10) {   
+        			myweekday = "0" + myweekday;   
+  	  			}   
+  				return (myyear + "-" + mymonth + "-" + myweekday);
+			},
+			getDate:function(e){
+				var self=this;
+				var time= new Date();
+				var y = time.getFullYear();
+				var m = time.getMonth()+1;
+				var d = time.getDate();
+				var h = time.getHours();
+				var mm = time.getMinutes();
+				return y+'-'+self.formatTime(m)+'-'+self.formatTime(d)+' '+self.formatTime(h)+':'+self.formatTime(mm);
+			},
 			// 时间格式化：补全时间中的 0 
-			add0:function(e){
+			formatTime:function(e){
 				return e<10?'0'+e:e;
 			},
 			subRep:function(e){
@@ -392,7 +405,7 @@
 					});
 				});
 			},
-			getUrlParams:function(e){
+			getUrlParams:function(){
 				var bundleUrl=this.$getConfig().bundleUrl||'';
 				// var bundleUrl='http://192.168.100.140:8080/test_yn/ui/zhy/js/myRep.js'+'?devHeight=1160';
 				var params=bundleUrl.split('?')[1];
@@ -400,7 +413,7 @@
 				this.devHeight=parArr[0].split('=')[1]-120;
 				// modal.toast({'message':this.devHeight,'doation':1});
 			},
-			getLastRep:function(e){
+			getLastRep:function(){
 				var self=this;
 				var code ='545e1ced3b364bbabf44bb2b72903862';
 				var startDate='2017-02-20';
@@ -496,7 +509,7 @@
    //          if (this.$getConfig().env.platform != "iOS") {
    //            // 适配 Android
    //          	this.mainExtra = "mainExtraAndroid";
-   //              configModule.getDevHeight(function(params) {
+   //              configModule.getContainerHeight(function(params) {
    //            	// modal.toast({'message':params,'doation':1});
    //              // require('@weex-module/myModule').printLog(params);
    //              require('@weex-module/myModule').printLog(params.height);

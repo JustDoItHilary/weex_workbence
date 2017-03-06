@@ -7,21 +7,21 @@
 		<div class="div_tit">
 			<img class="img_logo" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRQN7u7KyphdPdCFUdk4S-V1nEvGMtjNVnZpDSaWgD8R6fY6qit">
 			<div class="div_txt">
-				<text class="txt_black">{{tit}}</text>
-				<text class="txt_grey">12月11日</text>
+				<text class="txt_black">我的工作{{tit}}</text>
+				<text class="txt_grey">{{weekDate}}</text>
 			</div>
 			<img src="">
 		</div>
 		<text class="txt_tit">今日工作计划</text>
-		<textarea class="textarea" rows="3" value="{{rep_this}}"></textarea>
+		<textarea class="textarea" rows="3" value="{{repDetails.myPlan}}"></textarea>
 		<text class="txt_tit">昨日工作总结</text>
-		<textarea class="textarea" rows="3"></textarea>
+		<textarea class="textarea" rows="3" value="{{repDetails.summary}}"></textarea>
 		<text class="txt_tit">需要的协助</text>
 		<textarea class="textarea" value="aldjfalskdjflsdjflsadjfsl
 		dkfsdkjflaskdjfksajdhfakl
 		sdfhalksjdhfaklsjdhfaksdfaklsjdfhaklsdjhfklajsdhfkalsjdhfkl"></textarea>
 
-		<text class="txt_time">提交时间</text>
+		<text class="txt_time">提交时间： {{repDetails.ReportDate}}</text>
 		<text class=" txt_flex">还没有评论喔~</text>
 		<list if=false></list>
 		<div class="div_act">
@@ -146,54 +146,88 @@
 	var navigator=require('@weex-module/navigator');
 	var modal=require('@weex-module/modal');
 	var configModule=require('@weex-module/configModule');
+	var stream=require('@weex-module/stream');
+
 	module.exports={
 		data:{
 			navpageHeight:112,
 			devHeight:1090,
-			tit:'我的工作计划',
+			tit:'周报',
+			weekDate:'',
 			rep_this:'二二',
 			rep_before:'',
+			testUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=GetReports',
+			repDetails:{"Annex":"","AuditFlag":"0","Auditors":"","Guid":"57267D78-B082-4E0F-B50E-65D45CC62F79","ProCode":"","ProGuid":"","ProName":"周报","ReportDate":"2017/2/20 0:00:00","endTime":"2017-02-26","funcGuid":"","funcName":"","leader":"","myPlan":"啦啦","startTime":"2017-02-20","summary":"叮咚","type":"10"},
 		},
 		methods:{
-			getUrlParams:function(e){
+			setDate:function(){
+				var self=this;
+				var date=new Date();
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(date-86400000)).getDay();
+				//本周的开始日期
+				var startDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()-todayOfWeek);
+				//本周的结束日期
+				var endDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()+6-todayOfWeek);
+				self.weekDate=self.formatDate(startDate)+' ~ '+self.formatDate(endDate);
+				console.log('STARTDATE: ',self.weekDate);
+			},
+			getUrlParams:function(){
+				var self=this;
 				var bundleUrl=this.$getConfig().bundleUrl||'';
-				// var bundleUrl='http://192.168.100.140:8080/test_yn/ui/zhy/js/myRep.js'+'?devHeight=1160&repid=1&type=1&logo_src=1&time=12&tit=嘟嘟&content=众人划桨开大船';
-				modal.toast({'message':bundleUrl,'doation':1});
+				// var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=545e1ced3b364bbabf44bb2b72903862&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
 				var params=bundleUrl.split('?')[1];
-				var parArr=params.split('&');
-				var str_tit='';
-				var str_content='';
-				parArr.forEach(function(item,index){
-					var mess=item.split('=');
-					console.log(mess[0],mess[1]);
-					if (mess[0]=='tit') {
-						str_tit=mess[1];
+
+				var index=params.indexOf('&');
+				var heightMap=params.substring(0,index);
+				self.devHeight=heightMap.split('=')[1];
+				// console.log('REPDETAILS: ',params.substring(index+1));
+				//返回获取周报详情的 body
+				return params.substring(index+1);
+			},
+			getRepDetails:function(body){
+				var self=this;
+				var options={method:'POST',url:self.testUrl,type:'json',body:body};
+				stream.fetch(options,function(ret){
+					console.log('REPDETAILS: ',JSON.stringify(ret));
+					if (ret.ok&&ret.data!=null) {
+						self.repDetails=ret.data[ret.data.length-2];
+						console.log('REPDETAILS: ',JSON.stringify(self.repDetails));
+					}else{
+						require('@weex-module/myModule').printLog('网络请求失败');
 					}
-					if(mess[0]=='content'){
-						str_content=mess[1];
-					}
-				});
-				this.tit=str_tit?str_tit:this.tit;
-				this.rep_this=str_content?str_content:this.rep;
-				this.devHeight=parArr[0].split('=')[1]-120;
-				// modal.toast({'message':this.devHeight,'doation':1});
+				},function(progresscallback){});
+			},
+			//格式化日期：yyyy-MM-dd 
+			formatDate:function(date){
+				var myyear = date.getFullYear();   
+    			var mymonth = date.getMonth() + 1;   
+    			var myweekday = date.getDate();   
+    			if (mymonth < 10) {   
+        			mymonth = "0" + mymonth;   
+    			}   
+    			if (myweekday < 10) {   
+        			myweekday = "0" + myweekday;   
+  	  			}   
+  				return (myyear + "-" + mymonth + "-" + myweekday);
 			},
 		},
 		
 		created:function(e){
 			var self=this;
-
+			self.setDate();
 		},
 		ready:function(e){
 			var self=this;
-			self.getUrlParams();
+			var body= self.getUrlParams();
+			self.getRepDetails(body);
 			// // modal.toast({'message':'ready','doation':1});
 			// // 引入外部注册的 Native Module；Android 和 iOS 各有其实现
    //          if (this.$getConfig().env.platform != "iOS") {
    //            // 适配 Android
    //          	this.mainExtra = "mainExtraAndroid";
    //              require('@weex-module/myModule').printLog('getDevHeight');
-   //              configModule.getDevHeight(function(params) {
+   //              configModule.getContainerHeight(function(params) {
    //              // require('@weex-module/myModule').printLog(params);
    //              require('@weex-module/myModule').printLog(params.height);
    //              	var ratio = this.$getConfig().env.deviceWidth / 750;

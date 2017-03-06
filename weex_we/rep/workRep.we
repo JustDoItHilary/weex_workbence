@@ -1,8 +1,8 @@
 <template>
 	<div style="background-color:#ebedef;height:{{devHeight}};position: absolute;">
-		<div class="div_titBar" data-role="none">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
 			<img class="img_back" src="">
-			<text class="text_titBar">工作汇报</text>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
 		</div>
 
 		<div class="border_bottom">
@@ -49,13 +49,16 @@
 			<text class=" select_false" style="margin-top: 20;margin-bottom: 20;text-align: center;">正在加载。。。</text>
 		</loading> -->
 		</list>
-		<text class="select_true text_new" style="" onclick="newRep">新建</text>
+		<div class="div_bottom">
+			<text class="select_true text_bottom" style="" onclick="newRep">新建</text>
+			<text class="select_true text_bottom" style="margin-right: 16;" onclick="clickCheck">审批</text>
+		</div>
+		
 	</div>
 </template>
 
 <style>
 	.div_titBar{
-		height:100;
 		width: 750;
 		background-color: #58D68D;
 		flex-direction: row;
@@ -69,10 +72,8 @@
 		margin-left: 10;
 	}
 	.text_titBar{
-		flex:1;
 		text-align: center;
-		font-size: 30;
-		padding-right: 68;
+		font-size: 36;
 		color: #ffffff;
 	}
 	.border_bottom{
@@ -109,7 +110,7 @@
 		margin-left: 20;
 	}
 	.flex_left{
-		padding: 10;
+		margin: 10;
 		flex: 1;
 		align-items: flex-start;
 		margin-left: 20;
@@ -154,19 +155,25 @@
 		text-align: center;
 		font-size: 32;
 		color: #bbbbbb;
-		padding: 20;
+		margin: 20;
 	}
-	.text_new{
+	.div_bottom{
 		position: absolute;
-		height:80;
+		height:100;
 		width: 750;
-		padding-top: 20;
-		padding-bottom: 20;
-		margin-bottom: 0;
+		flex-direction: row;
+		margin-top: 20;
+		margin-bottom: 20;
+		justify-content: center;
+		align-items: center;
 		bottom:0;
-		text-align: center;
 		background-color:#ffffff;
-		font-size:32;
+		border-width: 1;
+	}
+	.text_bottom{
+		font-size: 32;
+		text-align: center;
+		flex:1;
 	}
 </style>
 
@@ -176,26 +183,28 @@
 	var configModule=require('@weex-module/configModule');
 	var storage=require('@weex-module/storage');
 	var stream=require('@weex-module/stream');
+
 	module.exports={
 		data:{
 			navpageHeight:112,
 			isSelected:true,
 			devHeight:990,
+			actionBarHeight:100,
 			scrollerHeight:560,
 			loading_display:'show',
 			refresh_display:'show',
+			bundleUrl:'http://weex.yy365.cn/workRep.js',
 			baseUrl:'file://assets/',
 			testUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=GetReports',
 			weekly_list:[],
-			repList:[],
 			hintRep:{type:3,tit:'没有更多了哦~',time:''},
-			list:[
-			{repId:1,type:1,logo_src:'',tit:'我的工作日报',time:'星期二',sign_src:'',content:''},
-			{repId:2,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandfLKFKSJHFLSKHFJLASKDFHAHLKSJDFHLAKSDJHFLASKDJHFLASKDJFHAKSLDJHFLKASJDHFALKSJDHFLKASJDHFLKASJDHFLKASDHFLKASDJHFLAKSJDHFLAKSJDFHLASKDFH;ASLDKFJA;SLDKGJAS;LDKGJSKGHKFJ;LFKAS'},
-			{repId:3,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
-			{repId:4,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
-			{repId:5,type:2,logo_src:'',tit:'我的工作日报',time:'星期五',sign_src:'',content:',mdfngs,gns,gnd,sandf'},
-			{repId:6,type:3,logo_src:'',tit:'没有更多了哦~',time:'',sign_src:'',content:''},
+			repList:[
+			{repId:1,type:1,logo_src:'',ProName:'周报',time:'星期二',sign_src:'',myPlan:''},
+			{repId:2,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandfLKFKSJHFLSKHFJLASKDFHAHLKSJDFHLAKSDJHFLASKDJHFLASKDJFHAKSLDJHFLKASJDHFALKSJDHFLKASJDHFLKASJDHFLKASDHFLKASDJHFLAKSJDHFLAKSJDFHLASKDFH;ASLDKFJA;SLDKGJAS;LDKGJSKGHKFJ;LFKAS'},
+			{repId:3,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandf'},
+			{repId:4,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandf'},
+			{repId:5,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandf'},
+			{repId:6,type:3,logo_src:'',tit:'没有更多了哦~',time:'',sign_src:'',myPlan:''},
 		],
 		},
 		methods:{
@@ -203,31 +212,37 @@
                 var self = this;
                 self.refresh_display = 'show';
                 self.currentIndex = 0;
-                // self.getCarouselData();
-                // self.getReadingIndex(self.currentIndex, false);
-                self.refresh_display = 'hide';
 
+                self.refresh_display = 'hide';
             },
             loading: function (e) {
                 var self = this;
                 this.loading_display = "show";
                 self.refresh_display = 'show';
 
-                // self.getReadingIndex(++self.currentIndex, true);
                 self.loading_display = "hide";
                 self.refresh_display = 'hide';
             },
-			newRep:function(e){
-				var config=this.$getConfig();
-				var bundleUrl=config.bundleUrl;
-				var url=bundleUrl.split('/').slice(0,-1).join('/')+'/newWeekly.js'+'?devHeight='+this.devHeight;
-				// var url='file:///assets/dist/newRep.js';
-				// var url='http://127.0.0.1:8081/newRep.js';
-				// var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/newWeekly.js'+'?devHeight='+this.devHeight;
-                // require('@weex-module/myModule').printLog(url);
+			clickCheck:function(e){
+				var self=this;
+				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/checkRep.js'+'?devHeight='+this.devHeight;
 				var params={'url':url,'animated':'true'};
 				navigator.push(params,function(ret){
-					modal.toast({'message':'newRep','doation':1});
+				});
+			},
+			clickMyself:function(e){
+			},
+			clickTeam:function(e){
+				modal.toast({'message':'骚瑞~~暂时不提供团队汇报功能','doation':1});
+			},
+			newRep:function(e){
+				var self=this;
+				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/newWeekly.js'+'?devHeight='+this.devHeight;
+				console.log('REPCALLBACK: ',url);
+                require('@weex-module/myModule').printLog(url);
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){
+					// modal.toast({'message':'newRep','doation':1});
 				});
 			},
 			myRep:function(e){
@@ -239,27 +254,12 @@
 				var time=e.target.attr.time||'';
 				var content=e.target.attr.content||'';
 				var obj=e.target.attr.obj;
-				modal.toast({'message':'REPID: '+obj,'doation':1});
-				// var url=this.baseUrl+'myRep.js';
-				var url='http://192.168.100.140:8080/test_yn/ui/zhy/js/myRep.js';
+				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/myRep.js'+'?devHeight='+this.devHeight;
 				url=url+'?devHeight='+self.devHeight+'&repid='+repid+'&type='+type+'&logo_src='+logo_src+'&time='+time+'&tit='+tit+'&content='+content;
 				var params={'url':url,'animated':'true'};
-				// navigator.push(params,function(ret){
-				// 	// modal.alert({'message':'myRep','doation':1});
-				// });
-			},
-			getList:function(retdata){
-				var self=this;
-				//将列表清空
-				self.repList=[];
-				if (retdata!=null&&retdata.length>0) {
-					for (var i = 0; i < retdata.length; i++) {
-						var item=retdata[i];
-						item.type=2;
-						self.repList.push(item);
-					}
-				}
-				self.repList.push(self.hintRep);
+				navigator.push(params,function(ret){
+					// modal.alert({'message':'myRep','doation':1});
+				});
 			},
 			delete:function(e){
 				var self=this;
@@ -270,44 +270,71 @@
 				self.list.forEach(function(item,index){
 			    	if (repid==item.repId) {
 						self.list.splice(index,1);
-			    	// modal.toast({'message':self.list.length,'doation':1});
 			    	}
 
 				});}
 				});
 			},
-			clickMyself:function(e){
-
-			},
-			clickTeam:function(e){
-				modal.toast({'message':'骚瑞~~暂时不提供团队汇报功能','doation':1});
+			getList:function(retdata){
+				var self=this;
+				//将列表清空
+				self.repList=[];
+				if (retdata!=null&&retdata.length>0) {
+					for (var i = 0; i < retdata.length; i++) {
+						var item=retdata[i];
+						item.type=2;
+						for (var i = 0; i < self.repList.length; i++) {
+							if (item.ReportDate==self.repList[i].ReportDate||item.startTime==self.repList[i].startTime||item.endTime==self.repList[i].endTime) {
+								self.repList.splice(i,1,item);
+							}
+						}
+						self.repList.push(item);
+					}
+				}
+				self.repList.push(self.hintRep);
 			},
 			getMyRep:function(){
 				var self=this;
 				var code ='545e1ced3b364bbabf44bb2b72903862';
-				var startDate='2017-02-20';
-				var endDate='2017-02-26';
+				// var startDate='2017-02-01';
+				// var endDate='2017-02-28';
+				var date=new Date();
+				var year=date.getFullYear();
+				var month=date.getMonth();
 
+				var startDate=self.formatDate(new Date(year,month-2,1));
+				var endDate=self.formatDate(date);
+				console.log('REPCALLBACK: ',startDate+' : '+endDate);
 				startDate=encodeURIComponent(startDate);
 				endDate=encodeURIComponent(endDate);
-
 				var body='code='+code+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
 				var options={method:'POST',url:self.testUrl,type:'json',body:body};
-				// require('@weex-module/myModule').printLog('STREAM: '+body);
 				stream.fetch(options,function(ret){
-					console.log('CALLBACK: ',JSON.stringify(ret));
-					if (ret.ok) {
+					console.log('REPCALLBACK: ',JSON.stringify(ret));
+					if (ret.ok&&ret.data!=null) {
 						self.getList(ret.data);
 					}
-					// require('@weex-module/myModule').printLog('CALLBACK: '+ret.data);
 				},function(progress){
-					console.log('PROGRESSCALLBACK: ',progress);
-					require('@weex-module/myModule').printLog('PROGRESSCALLBACK: '+ret);
+					// console.log('PROGRESSCALLBACK: ',progress);
 				});
+			},
+			//格式化日期：yyyy-MM-dd 
+			formatDate:function(date){
+				var myyear = date.getFullYear();   
+    			var mymonth = date.getMonth() + 1;   
+    			var myweekday = date.getDate();   
+    			if (mymonth < 10) {   
+        			mymonth = "0" + mymonth;   
+    			}   
+    			if (myweekday < 10) {   
+        			myweekday = "0" + myweekday;   
+  	  			}   
+  				return (myyear + "-" + mymonth + "-" + myweekday);
 			},
 		},
 		created:function(e){
 			var self=this;
+			self.bundleUrl=self.$getConfig().bundleUrl||'';
 			self.getMyRep();
 			// //方法区分大小写，大小写出错可导致页面无法正常渲染
 			// storage.getAllKeys(function(e){
@@ -323,24 +350,18 @@
 
 		},
 		ready:function(e){
-			// 引入外部注册的 Native Module；Android 和 iOS 各有其实现
-            if (this.$getConfig().env.platform != "iOS") {
-              // 适配 Android
-            	this.mainExtra = "mainExtraAndroid";
-                configModule.getDevHeight(function(params) {
-              	// modal.toast({'message':params,'doation':1});
-                // require('@weex-module/myModule').printLog(params);
-                	var ratio = this.$getConfig().env.deviceWidth / 750;
-                	this.devHeight = params.height / ratio ;
-                	require('@weex-module/myModule').printLog(this.devHeight);
-                	// this.scrollerHeight=this.devHeight-320;
+            configModule.getContainerHeight(function(params) {
+                	// var ratio = this.$getConfig().env.deviceWidth / 750;
+                var ratio=params.width/750;
+                this.devHeight = params.height / ratio ;
+                require('@weex-module/myModule').printLog(this.devHeight);
               	}.bind(this));
-            } else {
-              // 适配 iPhone 4S
-              if (this.$getConfig().env.deviceHeight < 1000) {
-                this.scrollerHeight = 700;
-              }
-            }
+            //获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+			});	
 		},
 	}
 </script>

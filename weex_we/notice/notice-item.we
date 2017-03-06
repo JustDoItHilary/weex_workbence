@@ -1,10 +1,10 @@
 <template>
-	<div class="browserStyle">
+	<div class="browserStyle" style="height:{{devHeight}}">
 		<!-- <div class="actionbar" style="height:{{actionBarHeight}};background-color:{{actionbarColor}}">
 			<div class="img">
 				<img src="">
 			</div> -->
-        <actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar> 
+        <!-- <actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar>  -->
 		<div class="title" >
 			<text class="firtit">{{firTxt}}</text>
 			<text class="sectit">{{secTxt}}</text>
@@ -25,6 +25,7 @@
     	right: 0;
     	bottom: 0;
     	left: 0;
+        /*border-width: 1;*/
   	}
 	.actionbar{
 		width: 750;
@@ -101,6 +102,7 @@
 			// isClose:false,
 			// isShowExam:true,
             actionBarHeight:112,
+            devHeight:960,
             // actionbarColor:'#a0a0a0',
             firTxt:'大标题',
             secTxt:'小标题',
@@ -223,10 +225,16 @@
 		},
 		created:function(){
 			var self=this;
-            configModule.getActionBarHeight(function(params){
-                self.actionBarHeight=params.height;
-                require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
-            });
+            // configModule.getActionBarHeight(function(params){
+            //     self.actionBarHeight=params.height;
+            //     require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+            // }.bind(this));
+             configModule.getContainerHeight(function(params) {
+                // var ratio = self.$getConfig().env.deviceWidth / 750;
+                var ratio = params.width / 750;
+                self.devHeight = params.height / ratio;
+                }.bind(this));
+            require('@weex-module/actionBarModule').setTitle('公告');
 		},
 		ready:function(){
             this.setUrl();
