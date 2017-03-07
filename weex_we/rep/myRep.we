@@ -1,6 +1,6 @@
 <template>
 	<div style="height:{{devHeight}};position: absolute;width:750;">
-		<div class="div_titBar" data-role="none">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
 			<!-- <img class="img_back" src=""> -->
 			<text class="text_titBar">工作汇报</text>
 		</div>
@@ -8,7 +8,7 @@
 			<img class="img_logo" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRQN7u7KyphdPdCFUdk4S-V1nEvGMtjNVnZpDSaWgD8R6fY6qit">
 			<div class="div_txt">
 				<text class="txt_black">我的工作{{tit}}</text>
-				<text class="txt_grey">{{weekDate}}</text>
+				<text class="txt_grey">{{repDetails.startTime}} ~ {{repDetails.endTime}}</text>
 			</div>
 			<img src="">
 		</div>
@@ -17,9 +17,7 @@
 		<text class="txt_tit">昨日工作总结</text>
 		<textarea class="textarea" rows="3" value="{{repDetails.summary}}"></textarea>
 		<text class="txt_tit">需要的协助</text>
-		<textarea class="textarea" value="aldjfalskdjflsdjflsadjfsl
-		dkfsdkjflaskdjfksajdhfakl
-		sdfhalksjdhfaklsjdhfaksdfaklsjdfhaklsdjhfklajsdhfkalsjdhfkl"></textarea>
+		<textarea class="textarea" value="无"></textarea>
 
 		<text class="txt_time">提交时间： {{repDetails.ReportDate}}</text>
 		<text class=" txt_flex">还没有评论喔~</text>
@@ -150,7 +148,7 @@
 
 	module.exports={
 		data:{
-			navpageHeight:112,
+			actionBarHeight:112,
 			devHeight:1090,
 			tit:'周报',
 			weekDate:'',
@@ -174,16 +172,16 @@
 			},
 			getUrlParams:function(){
 				var self=this;
-				var bundleUrl=this.$getConfig().bundleUrl||'';
-				// var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=545e1ced3b364bbabf44bb2b72903862&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
+				// var bundleUrl=this.$getConfig().bundleUrl||'';
+				var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=545e1ced3b364bbabf44bb2b72903862&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
 				var params=bundleUrl.split('?')[1];
 
 				var index=params.indexOf('&');
 				var heightMap=params.substring(0,index);
 				self.devHeight=heightMap.split('=')[1];
-				// console.log('REPDETAILS: ',params.substring(index+1));
 				//返回获取周报详情的 body
-				return params.substring(index+1);
+				var body=params.substring(index+1);
+				return body;
 			},
 			getRepDetails:function(body){
 				var self=this;
@@ -191,7 +189,7 @@
 				stream.fetch(options,function(ret){
 					console.log('REPDETAILS: ',JSON.stringify(ret));
 					if (ret.ok&&ret.data!=null) {
-						self.repDetails=ret.data[ret.data.length-2];
+						self.repDetails=ret.data[ret.data.length-1];
 						console.log('REPDETAILS: ',JSON.stringify(self.repDetails));
 					}else{
 						require('@weex-module/myModule').printLog('网络请求失败');
@@ -215,12 +213,23 @@
 		
 		created:function(e){
 			var self=this;
-			self.setDate();
+			var body= self.getUrlParams();
+			self.getRepDetails(body);
 		},
 		ready:function(e){
 			var self=this;
-			var body= self.getUrlParams();
-			self.getRepDetails(body);
+			configModule.getContainerHeight(function(params) {
+                	// var ratio = this.$getConfig().env.deviceWidth / 750;
+                var ratio=params.width/750;
+                this.devHeight = params.height / ratio ;
+                require('@weex-module/myModule').printLog(this.devHeight);
+              	}.bind(this));
+            //获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+			}.bind(this));	
 			// // modal.toast({'message':'ready','doation':1});
 			// // 引入外部注册的 Native Module；Android 和 iOS 各有其实现
    //          if (this.$getConfig().env.platform != "iOS") {

@@ -1,7 +1,7 @@
 <template>
 	<div style="background-color:#ebedef;height:{{devHeight}};position: absolute;">
 		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
-			<img class="img_back" src="">
+			<text class="text_close" onclick="clickClose">关闭</text>
 			<text class="text_titBar" style="flex:1;">工作汇报</text>
 		</div>
 
@@ -21,12 +21,14 @@
 			<!-- </div> -->
 			<div class="flex_left">
 				<div>
-					<text>我的工作{{item.ProName}}</text>
+					<text class="text_tit">我的工作{{item.ProName}}</text>
 					<img src="">
 				</div>
 				<text class="text_content">{{item.startTime}}</text>
 			</div>
-			<text class="rad_border text_content" repid="{{item.repId}}" onclick="delete">删除</text>
+			<div class="rad_border">
+				<text style="font-weight:normal;font-size:24;text-align:center;align-items:center;" repid="{{item.repId}}" onclick="delete">删除</text>
+			</div>
 		</div>
 		</cell>
 		<cell class="sec_cell" repeat="item in repList" if="{{(item.type==2)}}" onclick="myRep">
@@ -35,7 +37,7 @@
 				<img class="img_center" src="">
 			</div>
 			<div class="flex_left">
-				<text class="text_title">我的工作{{item.ProName}}</text>
+				<text class="text_tit">我的工作{{item.ProName}}</text>
 				<text class="text_content">{{item.startTime}}</text>
 			</div>
 		</div>
@@ -65,11 +67,12 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.img_back{
-		height: 48;
-		width: 48;
-		border-width: 1;
-		margin-left: 10;
+	.text_close{
+		font-size: 28;
+		margin-right: 20;
+		margin-left: 20;
+		color: #ffffff;
+
 	}
 	.text_titBar{
 		text-align: center;
@@ -94,7 +97,7 @@
 	}
 	.text_center{
 		font-size: 32;
-
+		text-align: center;
 	}
 	.select_true{
 		color:#58D68D;
@@ -119,7 +122,8 @@
 		border-width: 2;
 		border-color: #ebedef;
 		border-radius: 10;
-		text-align: center;
+		align-items: center;
+		justify-content: center;
 		height: 50;
 		width:90;
 		margin:20;
@@ -127,9 +131,10 @@
 	.text_content{
 		color:#bbbbbb;
 		font-weight: normal;
-		font-size: 24
-		text-align:center;
-		align-items: center;
+		font-size: 24;
+		text-align: left;
+		align-items: flex-start;
+		margin-left: 30;
 	}
 	.sec_cell{
 		border-bottom-width: 20;
@@ -163,12 +168,10 @@
 		width: 750;
 		flex-direction: row;
 		margin-top: 20;
-		margin-bottom: 20;
 		justify-content: center;
 		align-items: center;
 		bottom:0;
 		background-color:#ffffff;
-		border-width: 1;
 	}
 	.text_bottom{
 		font-size: 32;
@@ -199,7 +202,7 @@
 			weekly_list:[],
 			hintRep:{type:3,tit:'没有更多了哦~',time:''},
 			repList:[
-			{repId:1,type:1,logo_src:'',ProName:'周报',time:'星期二',sign_src:'',myPlan:''},
+			{repId:1,type:1,logo_src:'',ProName:'周报',time:'星期二',sign_src:'',myPlan:'',startTime:'2017-03'},
 			{repId:2,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandfLKFKSJHFLSKHFJLASKDFHAHLKSJDFHLAKSDJHFLASKDJHFLASKDJFHAKSLDJHFLKASJDHFALKSJDHFLKASJDHFLKASJDHFLKASDHFLKASDJHFLAKSJDHFLAKSJDFHLASKDFH;ASLDKFJA;SLDKGJAS;LDKGJSKGHKFJ;LFKAS'},
 			{repId:3,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandf'},
 			{repId:4,type:2,logo_src:'',ProName:'周报',time:'星期五',sign_src:'',myPlan:',mdfngs,gns,gnd,sandf'},
@@ -223,9 +226,12 @@
                 self.loading_display = "hide";
                 self.refresh_display = 'hide';
             },
+            clickClose:function(e){
+            	configModule.finish();
+            },
 			clickCheck:function(e){
 				var self=this;
-				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/checkRep.js'+'?devHeight='+this.devHeight;
+				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/repMemberList.js'+'?devHeight='+this.devHeight;
 				var params={'url':url,'animated':'true'};
 				navigator.push(params,function(ret){
 				});
@@ -350,6 +356,7 @@
 
 		},
 		ready:function(e){
+			var self=this;
             configModule.getContainerHeight(function(params) {
                 	// var ratio = this.$getConfig().env.deviceWidth / 750;
                 var ratio=params.width/750;
@@ -361,7 +368,7 @@
 				var ratio = self.$getConfig().env.deviceWidth / 750;
 				self.actionBarHeight=params.height/ratio;
 				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
-			});	
+			}.bind(this));	
 		},
 	}
 </script>

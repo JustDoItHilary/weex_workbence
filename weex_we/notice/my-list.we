@@ -1,7 +1,7 @@
 <template>
-	<div style="height: {{devHeight}}">
+	<div >
 		<!-- <wxc-navpage if="false" height="{{actionBarHeight}}" title="MyList" background-color="#ffffff" title-color="#000000" left-item-src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2192841312,1420710418&fm=116&gp=0.jpg" right-item-title="刷新" right-item-color="#33aaff"></wxc-navpage> -->
-		<!-- <actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar>  -->
+		<actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar>
 		<list class="list">
 			<!-- <header if="false">
 				<text style="text-align:center;color:#66ff99;font-weight:bold;">HEAD</text>
@@ -78,7 +78,7 @@
 	module.exports={
 		data:{
 			actionBarHeight:0,
-			devHeight:960,
+			// scrollerHeight:1190,
 			mylist:[],
 			// pagerUrl:'http://romenscd.cn:6240/api/v1/user/paper/8?isPractice=false',
 			isShowRefresh:'hide',
@@ -104,7 +104,7 @@
 						if (ret.ok) {
 							self.getList(ret.data);
 						}
-					}.bind(this),function(progress){});
+					},function(progress){});
 				});
 			},
 			getList:function(retdata){
@@ -146,7 +146,7 @@
 					var params = {'url':webUrl,'animated':'true'};
         			navigator.push(params, function(e) {
 					});
-				}.bind(this));
+				});
 			},
 			refresh:function(){
 				var self=this;
@@ -164,22 +164,30 @@
 		created:function(){
 			var self=this;
 			self.getData(self.noticeUrl);
-			// //获取 actionbar height
-			// configModule.getActionBarHeight(function(params){
-			// 	var ratio = self.$getConfig().env.deviceWidth / 750;
-			// 	self.actionBarHeight=params.height/ratio;
-			// 	require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
-			// });	
+			//获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+			});
 		},
 		ready:function(){
-			var self=this;
-			 // 引入外部注册的 Native Module--获取 weex root height；
-            configModule.getContainerHeight(function(params) {
-                // var ratio = self.$getConfig().env.deviceWidth/750;
-                var ratio = params.width / 750;
-                self.devHeight = params.height / ratio;
-              	}.bind(this));
-            require('@weex-module/actionBarModule').setTitle('公告');
+			 // // 引入外部注册的 Native Module--获取 weex root height；Android 和 iOS 各有其实现
+    //         if (this.$getConfig().env.platform != "iOS") {
+    //           // 适配 Android
+    //         	this.mainExtra = "mainExtraAndroid";
+    //             configModule.getContainerHeight(function(params) {
+    //           	// modal.toast({'message':params,'doation':1});
+    //             // require('@weex-module/myModule').printLog(params);
+    //             	var ratio = this.$getConfig().env.deviceWidth / 750;
+    //             	this.scrollerHeight = params.height / ratio ;
+    //           	}.bind(this));
+            // } else {
+            //   // 适配 iPhone 4S
+            //   if (this.$getConfig().env.deviceHeight < 1000) {
+            //     this.scrollerHeight = 700;
+            //   }
+            // }
 		},
 	}
 </script>
