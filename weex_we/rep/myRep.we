@@ -1,20 +1,22 @@
 <template>
-	<div style="height:{{devHeight}};position: absolute;width:750;">
+	<div style="height:{{devHeight}};position:absolute;width:750;">
 		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
-			<!-- <img class="img_back" src=""> -->
-			<text class="text_titBar">工作汇报</text>
+			<div class="div_close">
+				<text class="text_close" onclick="clickClose">关闭</text>
+			</div>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
 		</div>
 		<div class="div_tit">
-			<img class="img_logo" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRQN7u7KyphdPdCFUdk4S-V1nEvGMtjNVnZpDSaWgD8R6fY6qit">
+			<img class="img_logo" src="">
 			<div class="div_txt">
 				<text class="txt_black">我的工作{{tit}}</text>
 				<text class="txt_grey">{{repDetails.startTime}} ~ {{repDetails.endTime}}</text>
 			</div>
 			<img src="">
 		</div>
-		<text class="txt_tit">今日工作计划</text>
+		<text class="txt_tit">本周工作总结</text>
 		<textarea class="textarea" rows="3" value="{{repDetails.myPlan}}"></textarea>
-		<text class="txt_tit">昨日工作总结</text>
+		<text class="txt_tit">下周工作计划</text>
 		<textarea class="textarea" rows="3" value="{{repDetails.summary}}"></textarea>
 		<text class="txt_tit">需要的协助</text>
 		<textarea class="textarea" value="无"></textarea>
@@ -41,24 +43,29 @@
 
 <style>
 	.div_titBar{
-		height:100;
+		width: 750;
 		background-color: #58D68D;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 	}
-	.img_back{
-		height: 48;
-		width: 48;
-		border-width: 1;
-		margin-left: 10;
+	.div_close{
+		width:100;
+		justify-content: center;
+		align-items: center;
+		margin-right: 20;
+		margin-left: 20;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
 	}
 	.text_titBar{
-		flex:1;
 		text-align: center;
-		font-size: 30;
-		padding-right: 68;
+		font-size: 36;
 		color: #ffffff;
+		margin-right: 140;
 	}
 	.div_tit{
 		height: 180;
@@ -72,8 +79,8 @@
 		margin-left: 40;
 		height: 64;
 		width: 64;
-		border-width: 1;
 		border-radius: 50;
+		background-color: #58D68D;
 	}
 	.div_txt{
 		height: 100;
@@ -172,8 +179,8 @@
 			},
 			getUrlParams:function(){
 				var self=this;
-				// var bundleUrl=this.$getConfig().bundleUrl||'';
-				var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=545e1ced3b364bbabf44bb2b72903862&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=545e1ced3b364bbabf44bb2b72903862&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
 				var params=bundleUrl.split('?')[1];
 
 				var index=params.indexOf('&');
@@ -209,6 +216,11 @@
   	  			}   
   				return (myyear + "-" + mymonth + "-" + myweekday);
 			},
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
 		},
 		
 		created:function(e){
@@ -218,12 +230,12 @@
 		},
 		ready:function(e){
 			var self=this;
-			configModule.getContainerHeight(function(params) {
-                	// var ratio = this.$getConfig().env.deviceWidth / 750;
-                var ratio=params.width/750;
-                this.devHeight = params.height / ratio ;
-                require('@weex-module/myModule').printLog(this.devHeight);
-              	}.bind(this));
+			// configModule.getContainerHeight(function(params) {
+   //              	// var ratio = this.$getConfig().env.deviceWidth / 750;
+   //              var ratio=params.width/750;
+   //              this.devHeight = params.height / ratio ;
+   //              require('@weex-module/myModule').printLog(this.devHeight);
+   //            	}.bind(this));
             //获取 actionbar height
 			configModule.getActionBarHeight(function(params){
 				var ratio = self.$getConfig().env.deviceWidth / 750;

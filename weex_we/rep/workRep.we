@@ -1,7 +1,9 @@
 <template>
 	<div style="background-color:#ebedef;height:{{devHeight}};position: absolute;">
 		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
-			<text class="text_close" onclick="clickClose">关闭</text>
+			<div class="div_close">
+				<text class="text_close" onclick="clickClose">关闭</text>
+			</div>
 			<text class="text_titBar" style="flex:1;">工作汇报</text>
 		</div>
 
@@ -13,7 +15,7 @@
 				<text class="text_center select_{{!isSelected}}">团队汇报</text>
 			</div>
 		</div>
-		<list style="margin-bottom:80;">
+		<list style="margin-bottom:100;margin-left: 36;margin-right: 36;">
 		<cell repeat="item in repList" if="{{(item.type==1)}}">
 		<div class="border_bottom" style="height:160;" type="{{item.type}}" repid="{{item.repId}}" logo_src="{{item.logo_src}}" tit="{{item.tit}}" time="{{item.time}}" content="{{item.content}}" obj="{{item}}" onclick="myRep">
 			<!-- <div class="logo"> -->
@@ -45,15 +47,21 @@
 		<text class="text_mulit">{{item.myPlan}}</text>
 		</cell>
 		<cell repeat="item in repList" if="{{(item.type==3)}}">
-			<text class="else">{{item.tit}}</text>
+			<div class="else">
+				<text class="text_else">{{item.tit}}</text>
+			</div>
 		</cell>
 		<!-- <loading style="justify-content:center;background-color#ebedef;" onloading="loading" display="{{loading_display}}">
 			<text class=" select_false" style="margin-top: 20;margin-bottom: 20;text-align: center;">正在加载。。。</text>
 		</loading> -->
 		</list>
 		<div class="div_bottom">
-			<text class="select_true text_bottom" style="" onclick="newRep">新建</text>
-			<text class="select_true text_bottom" style="margin-right: 16;" onclick="clickCheck">审批</text>
+			<div class="div_item_bottom">
+				<text class="select_true text_bottom" style="" onclick="newRep">新建</text>
+			</div>
+			<div class="div_item_bottom">
+				<text class="select_true text_bottom" style="margin-right: 16;" onclick="clickCheck">审批</text>
+			</div>
 		</div>
 		
 	</div>
@@ -67,21 +75,26 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.text_close{
-		font-size: 28;
+	.div_close{
+		width:100;
+		justify-content: center;
+		align-items: center;
 		margin-right: 20;
 		margin-left: 20;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
 		color: #ffffff;
-
 	}
 	.text_titBar{
 		text-align: center;
 		font-size: 36;
 		color: #ffffff;
+		margin-right: 140;
 	}
 	.border_bottom{
 		height: 120;
-		width: 750;
 		border-bottom-width: 20;
 		border-color: #eeeeee;
 		flex-direction: row;
@@ -126,7 +139,7 @@
 		justify-content: center;
 		height: 50;
 		width:90;
-		margin:20;
+		margin-right: 20;
 	}
 	.text_content{
 		color:#bbbbbb;
@@ -140,11 +153,9 @@
 		border-bottom-width: 20;
 		border-color: #ebedef;
 		background-color:#ffffff;
-		width: 750;
 		height: 360;
 	}
 	.text_tit{
-		width: 720;
 		height: 50;
 		margin-left: 30;
 		font-size: 32;
@@ -157,10 +168,14 @@
 		margin-right: 30;
 	}
 	.else{
+		justify-content: center;
+		align-items: center;
+	}
+	.text_else{
 		text-align: center;
 		font-size: 32;
 		color: #bbbbbb;
-		margin: 20;
+		margin-bottom:20;
 	}
 	.div_bottom{
 		position: absolute;
@@ -173,10 +188,20 @@
 		bottom:0;
 		background-color:#ffffff;
 	}
-	.text_bottom{
-		font-size: 32;
-		text-align: center;
+	.div_item_bottom{
+		justify-content: center;
+		align-items: center;
+		height: 60;
 		flex:1;
+		border-radius: 50;
+		border-width: 2;
+		border-color: #58D68D;
+		margin:20;
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 32;
+		margin:20;
 	}
 </style>
 
@@ -196,6 +221,7 @@
 			scrollerHeight:560,
 			loading_display:'show',
 			refresh_display:'show',
+			userPlatformCode:'545e1ced3b364bbabf44bb2b72903862',
 			bundleUrl:'http://weex.yy365.cn/workRep.js',
 			baseUrl:'file://assets/',
 			testUrl:'http://192.168.100.117:8090/Handler/DailyReportHandler.ashx?action=GetReports',
@@ -231,7 +257,8 @@
             },
 			clickCheck:function(e){
 				var self=this;
-				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/repMemberList.js'+'?devHeight='+this.devHeight;
+				// modal.toast({'message':'敬请期待。。','doation':1});
+				var url=self.bundleUrl.split('/').slice(0,-1).join('/')+'/repMemberList.js'+'?devHeight='+this.devHeight+'&userPlatformCode='+self.userPlatformCode;
 				var params={'url':url,'animated':'true'};
 				navigator.push(params,function(ret){
 				});
@@ -239,7 +266,7 @@
 			clickMyself:function(e){
 			},
 			clickTeam:function(e){
-				modal.toast({'message':'骚瑞~~暂时不提供团队汇报功能','doation':1});
+				modal.toast({'message':'敬请期待。。','doation':1});
 			},
 			newRep:function(e){
 				var self=this;
@@ -281,6 +308,9 @@
 				});}
 				});
 			},
+			sortArr:function(m,n){
+				return m-n;
+			},
 			getList:function(retdata){
 				var self=this;
 				//将列表清空
@@ -297,11 +327,12 @@
 						self.repList.push(item);
 					}
 				}
+				// self.repList.sort(self.sortArr()).reverse();//先排序后倒叙
+				self.repList.reverse();//直接倒叙
 				self.repList.push(self.hintRep);
 			},
 			getMyRep:function(){
 				var self=this;
-				var code ='545e1ced3b364bbabf44bb2b72903862';
 				// var startDate='2017-02-01';
 				// var endDate='2017-02-28';
 				var date=new Date();
@@ -313,7 +344,7 @@
 				console.log('REPCALLBACK: ',startDate+' : '+endDate);
 				startDate=encodeURIComponent(startDate);
 				endDate=encodeURIComponent(endDate);
-				var body='code='+code+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
 				var options={method:'POST',url:self.testUrl,type:'json',body:body};
 				stream.fetch(options,function(ret){
 					console.log('REPCALLBACK: ',JSON.stringify(ret));
