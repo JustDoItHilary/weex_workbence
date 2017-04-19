@@ -1,0 +1,224 @@
+<template>
+	<div append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <text class="text_close">关闭</text> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">{{userName}}的{{repDetails.ProName}}</text>
+		</div>
+		<scroller >
+			<div style="flex-direction:column;margin-left: 20;margin-right: 20;">
+				<text class="txt_tit">{{rep_Tit[0]}}工作总结</text>
+				<text  class="textarea" >{{repDetails.summary}}</text>
+				<text class="txt_tit">{{rep_Tit[1]}}工作计划</text>
+				<text class="textarea">{{repDetails.myPlan}}</text>
+				<text class="txt_tit ">审核评价</text>
+				<textarea  class="textarea" disabled="false" oninput="inputPlan" value="{{rep_plan}}" rows="6" placeholder="请输入评价（非必需）"></textarea>
+			</div>
+		</scroller>
+		<div class="div_bottom" onclick="clickCheck">
+			<text class="text_bottom">审核</text>
+		</div>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+	}
+	.txt_tit{
+		height: 60;
+		margin-top: 20;
+		margin-left: 30;
+		margin-right: 30;
+		font-size: 28;
+	}
+	.textarea{
+		margin-left:20;
+		margin-right: 20;
+		margin-bottom:10;
+		font-size: 28;
+		padding: 10;
+		background-color: #efefef;
+	}
+	.text_grey{
+		color: #aaaaaa;
+		flex:1;
+		font-size: 26;
+		font-weight: bold;
+		margin-left: 20;
+		justify-content: center;
+	}
+	.div_bottom{
+		height:64;
+		flex-direction: row;
+		margin-top: 20;
+		margin-bottom: 20;
+		margin-left: 32;
+		margin-right: 32;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50;
+		border-width: 2;
+		border-color: #58D68D;
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 32;
+		color: #58D68D;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var stream =require('@weex-module/stream');
+	var navigator=require('@weex-module/navigator');
+	var configModule=require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+
+	module.exports={
+		data:{
+			devHeight:960,
+			actionBarHeight:112,
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			baseUrl:'',
+			userName:'',
+			rep_Tit:[],
+			repDetails:'',
+			rep_common:'',
+			userPlatformCode:'',
+			empGuid:'',
+			dately_TitList:['今日','明日'],
+			weekly_TitList:['本周','下周'],
+		},
+		methods:{
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=self.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/repCheck.js?userPlatformCode=545e1ced3b364bbabf44bb2b72903862&name=哈哈&code=58ba8990f0e2467ab167b5a002fb13cd&startDate=2017-02-20&endDate=2017-02-26';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0];
+				var paramsArr=params[1].split('&');
+				// self.devHeight=paramsArr.splice(0,1)[0].split('=')[1];
+				self.userPlatformCode=paramsArr.splice(0,1)[0].split('=')[1];
+				self.userName=paramsArr.splice(0,1)[0].split('=')[1];
+				self.empGuid=paramsArr[0].split('=')[1];
+				var body=paramsArr.join('&')+'&type=1&cros=';
+				// console.log('REPCALLBACK: ',self.empGuid);
+				return body;
+			},
+			getRepDetails:function(body){
+				var self=this;
+				apis.getReports(body,function(retdata){
+					if (retdata!=null) {
+						if (retdata.length>1) {
+							self.repDetails=self.getMax(retdata);
+						}else{
+							self.repDetails=retdata[0];
+						}
+						var date=new Date(self.repDetails.ReportDate);
+						self.repDetails.ReportDate=apis.formatDate(date,'yy-MM-dd');
+						self.repDetails.summary=apis.replaceTransfer(self.repDetails.summary);
+						self.repDetails.myPlan=apis.replaceTransfer(self.repDetails.myPlan);
+						// self.checked=self.repDetails.IsPost==1?'已提交':'未提交';
+						// self.posted=self.repDetails.IsPost==1;
+						// self.disabled=self.repDetails.AuditFlag==1;
+					}
+				},function(progress){});
+			},
+			getMax:function(retdata){
+				var max=retdata[0];
+				max.sortTime=new Date(Date.parse(max.UpdateTime)); 
+				for (var i = 1; i < retdata.length; i++) {
+					retdata[i].sortTime=new Date(Date.parse(retdata[i].UpdateTime));
+					if(retdata[i].sortTime>max.sortTime){
+						max=retdata[i];
+					}
+				}
+				return max;
+			},
+			clickCheck:function(e){
+					var self=this;
+					var body='code='+self.userPlatformCode+'&reportguid='+self.repDetails.Guid+'&reportdate='+self.repDetails.ReportDate+'&empGuid='+self.empGuid+'&comment='+self.rep_common+'&type=1&cros=';
+						console.log('REPCALLBACK: ',body);
+					apis.auditReport(body,function(retdata){
+						if (retdata!=null) {
+							if (retdata) {
+								modal.toast({'message':'审核成功','doation':1});
+								navigator.pop({'animated':'true'},function(ret){});
+							}
+						}
+					},function(progress){});
+			},
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
+			inputCommon:function(e){
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('input');  
+				self.rep_common=el.value;
+				// modal.toast({'message':self.his_item,'doation':1});
+			},
+			setMeasure:function(){
+				var self=this;
+   //              configModule.getContainerHeight(function(params) {
+   //              	var ratio = params.width / 750;
+   //              	this.devHeight = params.height / ratio ;
+   //              	// this.scrollerHeight=this.devHeight-320;
+   //            	}.bind(this));
+              	//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.$getConfig().env.platform=='iOS') {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio;
+					require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+				}.bind(this));
+			},
+		},
+		created:function(e){
+			var self=this;
+			self.setMeasure();
+			self.rep_Tit=self.weekly_TitList;
+			var body=self.getUrlParams();
+			self.getRepDetails(body);
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

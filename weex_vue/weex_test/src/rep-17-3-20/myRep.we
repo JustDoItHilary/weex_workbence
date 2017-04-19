@@ -1,0 +1,290 @@
+<template>
+	<div style="height:{{devHeight}};position:absolute;width:750;" append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<text class="text_close">关闭</text>
+			</div>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
+		</div>
+		<div class="div_tit">
+			<img class="img_logo" src="{{baseUrl+imgUrl}}">
+			<div class="div_txt">
+				<text class="txt_black">{{repDetails.startTime}} ~ {{repDetails.endTime}}</text>
+				<text>{{repDetails.checked}}</text>
+				<text class="txt_grey_28 select_{{posted}}">{{checked}}</text>
+			</div>
+		</div>
+		<scroller style="flex:1;">
+			<text class="txt_tit">本周工作总结</text>
+			<div class="div_content">
+				<text class="textarea" >{{repDetails.summary}}</text>
+			</div>
+			<text class="txt_tit">下周工作计划</text>
+			<div class="div_content">
+				<text class="textarea">{{repDetails.myPlan}}</text>
+			</div>
+		<!-- <text class="txt_tit">需要的协助</text>
+		<textarea class="textarea" value="无" disabled="{{disabled}}"></textarea> -->
+		<div class="div_time">
+			<text class="txt_time">提交时间： {{repDetails.UpdateTime}}</text>
+		</div>
+		<text class=" txt_flex">还没有评论喔~</text>
+		<div style="flex:1;"></div>
+		</scroller>
+		<div class="div_act">
+			<div class="div_act_item">
+				<!-- <img ></img> -->
+				<text class="txt_grey">评论</text>
+			</div>
+			<div class="div_act_item">
+				<!-- <img ></img> -->
+				<text class="txt_grey">赞</text>
+			</div>
+			<div class="div_act_item">
+				<!-- <img ></img> -->
+				<text class="txt_grey">收藏</text>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		width:100;
+		justify-content: center;
+		align-items: center;
+		margin-right: 20;
+		margin-left: 20;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: center;
+		font-size: 42;
+		color: #ffffff;
+		margin-right: 140;
+	}
+	.div_tit{
+		height: 180;
+		flex-direction: row;
+		border-top-width: 20;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		align-items: center;
+	}
+	.img_logo{
+		margin-left: 40;
+		height: 96;
+		width: 96;
+		align-items: center;justify-content: center;
+		border-radius: 50;
+		/*background-color: #58D68D;*/
+	}
+	.div_txt{
+		height: 100;
+		flex:1;
+		margin-left: 20;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.txt_black{
+		flex:1;
+		text-align:left;
+		font-size: 32;
+	}
+	.txt_grey_28{
+		flex:1;
+		text-align: left;
+		font-size: 28;
+		color: #aaaaaa;
+	}
+	.txt_grey{
+		flex:1;
+		text-align: left;
+		font-size: 32;
+		color: #aaaaaa;
+	}
+	.txt_tit{
+		margin-left: 40;
+		font-size: 32;
+		font-weight: 800;
+		margin-top: 30;
+	}
+	.div_content{
+		margin-left: 20;
+		margin-right: 20;
+		margin-top: 20;
+		background-color: #efefef;
+	}
+	.textarea{
+		font-size: 28;
+		margin:10;
+	}
+	.div_time{
+		border-bottom-width: 1;
+		border-color: #ebedef;
+		margin-top: 40;
+		margin-left: 20;
+		margin-right: 20;
+	}
+	.txt_time{
+		font-size: 28;
+		color: #aaaaaa;
+		font-weight: blod;
+		margin-bottom: 20;
+		margin-left: 20;
+		margin-right: 20;
+		
+	}
+	.txt_flex{
+		height: 160;
+		font-size: 28;
+		color: #aaaaaa;
+		text-align: center;
+		margin-top: 40;
+	}
+	.div_act{
+		position: absolute;
+		bottom: 0;
+		height: 80;
+		width: 750;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		border-top-width: 1;
+		border-color: #ebedef;
+	}
+	.div_act_item{
+		flex:1;
+		align-items: center;
+		border-color: #ebedef;
+		border-right-width: 1;
+	}
+	.select_false{
+		color: #ff0000;
+	}
+	.select_true{
+		color:#58D68D;
+	}
+</style>
+
+<script >
+	var apis=require('./common/api');
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var stream=require('@weex-module/stream');
+
+	module.exports={
+		data:{
+			actionBarHeight:112,
+			devHeight:1090,
+			tit:'周报',
+			weekDate:'',
+			rep_this:'二二',
+			rep_before:'',
+			disabled:true,
+			posted:false,
+			checked:'',
+			imgUrl:'/drawable/ic_calendar_black_48dp.png',
+			baseUrl:'',
+			// baseUrl:'http://192.168.2.161:8888/weex',
+			repDetails:{
+				// "Annex":"","AuditFlag":"0","Auditors":"","Guid":"57267D78-B082-4E0F-B50E-65D45CC62F79","ProCode":"","ProGuid":"","ProName":"周报","ReportDate":"2017/2/20 0:00:00","endTime":"2017-02-26","funcGuid":"","funcName":"","leader":"","myPlan":"啦啦","startTime":"2017-02-20","summary":"叮咚lskdfjlskdjf;laskjdfl;kajsdlkfjal;sdkjf;lasdjflkajsldkfjalskdfjalksjdhfkasjdfhlaskdfjlaksdflaksdjf;alskdfaslkdfjlfasf;sdflsldkfsfoslddlfk;s'dfkas;ldfas'kdfdflksjdflksdjfsldkfja;lskdfja;lksdfjalsdkfja;lsdkfjsflkjasdf;l","type":"10"
+			},
+		},
+		methods:{
+			setDate:function(){
+				var self=this;
+				var date=new Date();
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(date-86400000)).getDay();
+				//本周的开始日期
+				var startDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()-todayOfWeek);
+				//本周的结束日期
+				var endDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()+6-todayOfWeek);
+				self.weekDate=apis.formatDate(startDate,'yyy-MM-dd')+' ~ '+apis.formatDate(endDate,'yyy-MM-dd');
+				console.log('STARTDATE: ',self.weekDate);
+			},
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/myRep.js?devHeight=1160&code=0b746d1651c04b569471db9bc18117cc&startDate=2017-02-20&endDate=2017-02-26&type=1&cros=';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+				var index=params[1].indexOf('&');
+				var heightMap=params[1].substring(0,index);
+				self.devHeight=heightMap.split('=')[1];
+				//返回获取周报详情的 body
+				var body=params[1].substring(index+1);
+				return body;
+			},
+			getRepDetails:function(body){
+				var self=this;
+				apis.getReports(body,function(retdata){
+					if (retdata!=null) {
+						if (retdata.length>1) {
+							self.repDetails=self.getMax(retdata);
+						}else{
+							self.repDetails=retdata[0];
+						}
+						self.checked=self.repDetails.IsPost==1?'已提交':'未提交';
+						self.posted=self.repDetails.IsPost==1;
+						self.disabled=self.repDetails.AuditFlag==1;
+						self.repDetails.summary=unescape(self.repDetails.summary);
+						self.repDetails.summary=apis.replaceTransfer(self.repDetails.summary);
+						self.repDetails.myPlan=apis.replaceTransfer(self.repDetails.myPlan);
+					}else{
+							modal.toast({'message':'无数据','doation':1});
+						}
+				},function(progress){});
+			},
+			getMax:function(retdata){
+				var max=retdata[0];
+				max.sortTime=new Date(Date.parse(max.UpdateTime)); 
+				for (var i = 1; i < retdata.length; i++) {
+					retdata[i].sortTime=new Date(Date.parse(retdata[i].UpdateTime));
+					if(retdata[i].sortTime>max.sortTime){
+						max=retdata[i];
+					}
+				}
+				return max;
+			},
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
+		},
+		created:function(e){
+			var self=this;
+			var body= self.getUrlParams();
+			self.getRepDetails(body);
+		},
+		ready:function(e){
+			var self=this;
+			// configModule.getContainerHeight(function(params) {
+   //              	// var ratio = this.$getConfig().env.deviceWidth / 750;
+   //              var ratio=params.width/750;
+   //              this.devHeight = params.height / ratio ;
+   //              require('@weex-module/myModule').printLog(this.devHeight);
+   //            	}.bind(this));
+            //获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+			}.bind(this));	
+		},
+	}
+</script>

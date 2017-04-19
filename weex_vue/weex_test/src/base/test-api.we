@@ -1,0 +1,49 @@
+<template>
+	<div>
+		<text style="margin: 20;" onclick="click">{{test}}</text>
+		<foo title="test" imgSrc="http://192.168.2.161:8888/weex/drawable/ic_calendar_black_48dp.png" ></foo>
+	</div>
+</template>
+
+<script >
+	var modal=require('@weex-module/modal');
+	var apis=require('./common/api');
+	// require('mimi/foo.we');
+	// require('http://192.168.2.161:8888/test/api.js');
+
+	module.exports={
+		data:{
+			list:['A','b','C'],
+			memberList:[
+			{Name:'小平',Code:'110',fir:'小'},{Name:'哈哈',Code:'110',fir:'哈'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'111'}
+			],
+			test:'a点击a测试a',
+		},
+		methods:{
+			click:function(e){
+				// console.log('CLICK: ','ceshi');
+				// this.test+=this.test;
+				var str='ABCDEFG'
+				var str2=str.replace("A","Z");
+				console.log('CLICK: ',JSON.stringify(this.list));
+				this.list.remove(0);
+				console.log('CLICK: ',JSON.stringify(this.list));
+				// getMess(function(ret){
+					// console.log('CLICK: ',str2);
+
+				// modal.toast({'message':ret,'doation':1});
+				// });
+				
+			},
+		},
+		created:function(){
+			var self=this;
+			var str=apis.getTestMess();
+			// console.log('TEST-API: ',str);
+			modal.toast({'message':str,'doation':1});
+			// console.log('TEST: ',self.$getConfig().bundleUrl);
+			// console.log('TEST: ',self.$inArray('A',self.list));
+			// console.log('TEST: ',self.memberList.indexOf({Name:'小平',Code:'110',fir:'小'}));
+		},
+	}
+</script>

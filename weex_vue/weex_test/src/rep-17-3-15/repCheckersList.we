@@ -1,0 +1,275 @@
+<template>
+	<div append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <text class="text_close">关闭</text> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">添加审核人员</text>
+			<div class="div_close" onclick="clickComplete">
+				<img class="img_back" src="{{baseUrl+imgUrl}}">
+				<!-- <text class="text_close">完成</text> -->
+			</div>
+			<!-- <div class="div_close">
+				<text class="text_close" onclick="clickClear">清空</text>
+			</div> -->
+		</div>
+		<list class="list">
+			<cell id="itemId" repeat="item in memberList" class="cell" onclick="clickMember" item="{{item}}">
+				<div class="div_logo">
+					<text class="text_logo">{{item.fir}}</text>
+				</div>
+				<div class=" div_member">
+					<div style="flex:1;">
+					<text class="text_member" guid="{{item.Guid}}">{{item.Name}}</text>
+					<text class="text_code">{{item.Code}}</text>
+					</div>
+					<div class="div_select" if="{{item.selected}}">
+						<img class="img_select"  src="{{baseUrl+imgUrl}}">
+					</div>
+				</div>
+			</cell>
+		</list>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+	}
+	.list{
+		width: 670;
+		margin-left: 40;margin-right: 40;
+		justify-content: center;
+		margin-top: 20;
+	}
+	.cell{
+		height: 120;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_logo{
+		height: 80;width: 80;
+		align-items: center;
+		justify-content: center;
+		background-color: #58D68D;
+		border-radius: 50;
+	}
+	.text_logo{
+		font-size: 48;
+		color:#ffffff;
+	}
+	.text_member{
+		font-size: 36;
+	}
+	.text_code{
+		font-size: 28;
+		color: #898989;
+		margin-top: 10;
+	}
+	.div_member{
+		flex:1;
+		flex-direction: row;
+		margin-left: 24;
+		border-bottom-width: 1;
+		border-color: #bbbbbb;
+	}
+	.div_select{
+		align-items: center;
+		justify-content: center;
+	}
+	.img_select{
+		width: 48;
+		height: 48;
+		border-radius: 50;
+		background-color: #58D68D;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var stream =require('@weex-module/stream');
+	var navigator=require('@weex-module/navigator');
+	var configModule=require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+	var storage=require('@weex-module/storage');
+
+	module.exports={
+		data:{
+			devHeight:960,
+			actionBarHeight:112,
+			userPlatformCode:'',
+			// userPlatformCode:'8b107c27c2b84630b5d12cad65d6e13b',
+			baseUrl:'',
+			imgUrl:'/drawable/ic_done_white_48dp.png',
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			memberMess:'',
+			memberList:[],
+			selectedList:[],
+		},
+		methods:{
+				getMemberList:function(){
+					var self=this;
+					var date=new Date();
+					var year=date.getFullYear();
+					var month=date.getMonth();
+					var startDate=apis.formatDate(new Date(year,month,1),'yyy-MM-dd');
+					var endDate=apis.formatDate(date,'yyy-MM-dd');
+					startDate=encodeURIComponent(startDate);
+					endDate=encodeURIComponent(endDate);
+					var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+					apis.getEmpList(body,function(retdata){
+						if (retdata!=null) {
+							self.getList(retdata);
+						}
+					},function(progress){});
+				},
+				getList:function(retdata){
+					var self=this;
+					self.memberList=[];
+					for(var i=0;i<retdata.length;i++){
+						var item=retdata[i];
+						item.selected=false;
+						for (var j= 0; j < self.selectedList.length; j++) {
+							var other=self.selectedList[j];
+							// 从服务器获取到的数据属性为：Guid,
+							// 从内存中获取到的选中数据属性为：guid
+							if (other.guid==item.Guid){
+								item.selected=true;
+								console.log('selected; ',JSON.stringify(item));
+								break;
+							}
+						}
+						if (item.Name.length>0 ){
+							item.fir=item.Name.slice(0,1);
+						}
+						self.memberList.push(item);
+					}
+				},
+				clickMember:function(e){
+					var self=this;
+					// require('@weex-module/myModule').printLog('clickMember: '+JSON.stringify(self.selectedList));
+					var item=e.target.attr.item;
+					var selected=item.selected;
+					item.selected=!selected;
+					if (selected) {
+						for (var i = 0; i < self.selectedList.length; i++) {
+							if (item.Guid==self.selectedList[i].guid) {
+								self.selectedList.splice(i,1);
+								break;
+							}
+						}
+					}else{
+						var reader={};
+						reader.guid=item.Guid;
+						reader.name=item.Name;
+						reader.phone=item.Code;
+						self.selectedList.push(reader);
+					}
+				},
+				clickClose:function(e){
+					var self=this;
+					var params={'animated':'true'};
+					navigator.pop(params,function(ret){});
+				},
+				clickComplete:function(e){
+					var self=this;
+					if (self.selectedList!==null&&self.selectedList.length>0) {
+						storage.setItem('rep_checkers',JSON.stringify(self.selectedList),function(e){
+						});
+					}else{
+						storage.removeItem('rep_checkers',function(ret){
+						});
+					}
+					var params={'animated':'true'};
+					navigator.pop(params,function(ret){});
+				},
+				// clickClear:function(e){
+				// 	storage.removeItem('rep_checkers',function(ret){
+				// 			storage.getItem('rep_checkers',function(ret){
+				// 				console.log('REPCALL: ',ret.data);
+				// 			});
+				// 		});
+				// },
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/repCheck.js?userPlatformCode=58ba8990f0e2467ab167b5a002fb13cd';
+				// var bundleUrl='http://192.168.2.161:8888/weex/repCheck.js?userPlatformCode=58ba8990f0e2467ab167b5a002fb13cd';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+				self.userPlatformCode=params[1].split('=')[1];
+				// var paramsArr=params[1].split('&');
+				// self.devHeight=paramsArr[0].split('=')[1];
+				// self.userPlatformCode=paramsArr[1].split('=')[1];
+				// console.log('REPCALLBACK: ',self.baseUrl);
+			},
+			getSelectedList:function(){
+				var self=this;
+				// self.selectedList=[];
+				storage.getItem('rep_checkers',function(ret){
+					require('@weex-module/myModule').printLog('getSelectedList: '+ret.data);
+					if (ret.result=='success'&&ret.data!=null) {
+						console.log('ret.data: ',ret.data);
+						self.selectedList=JSON.parse(ret.data);
+						// require('@weex-module/myModule').printLog('SELECTEDLIST: '+self.selectedList.length);
+						// console.log('REPCALLBACK: ',self.selectedList.length);
+					}
+					self.getMemberList();
+				});
+			},
+			setMeasure:function(){
+				var self=this;
+				//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.$getConfig().env.platform=='iOS') {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio;
+					require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+				}.bind(this));	
+			},
+		},
+		created:function(){
+			var self=this;
+			self.setMeasure();
+			self.getUrlParams();
+			self.getSelectedList();
+			// self.getMemberList();
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

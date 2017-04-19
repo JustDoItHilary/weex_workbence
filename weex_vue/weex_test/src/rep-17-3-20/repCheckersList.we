@@ -1,0 +1,273 @@
+<template>
+	<div style="height:{{devHeight}}" append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<text class="text_close">关闭</text>
+			</div>
+			<text class="text_titBar" style="flex:1;">添加审核人员</text>
+			<div class="div_close" onclick="clickComplete">
+				<text class="text_close">完成</text>
+			</div>
+			<!-- <div class="div_close">
+				<text class="text_close" onclick="clickClear">清空</text>
+			</div> -->
+		</div>
+		<list class="list">
+			<cell id="itemId" repeat="item in memberList" class="cell" onclick="clickMember" item="{{item}}">
+				<div class="div_logo">
+					<text class="text_logo">{{item.fir}}</text>
+				</div>
+				<div class=" div_member">
+					<div style="flex:1;">
+					<text class="text_member" guid="{{item.Guid}}">{{item.Name}}</text>
+					<text class="text_code">{{item.Code}}</text>
+					</div>
+					<div class="div_select" if="{{item.selected}}">
+						<img class="img_select"  src="{{baseUrl+imgUrl}}">
+					</div>
+				</div>
+			</cell>
+		</list>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.div_close{
+		width:100;
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+	}
+	.text_close{
+		margin:20;
+		font-size: 30;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 36;
+		color: #ffffff;
+		margin-left: 20;
+	}
+	.list{
+		width: 670;
+		margin-left: 40;margin-right: 40;
+		justify-content: center;
+		margin-top: 20;
+	}
+	.cell{
+		height: 120;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_logo{
+		height: 80;width: 80;
+		align-items: center;
+		justify-content: center;
+		background-color: #58D68D;
+		border-radius: 50;
+	}
+	.text_logo{
+		font-size: 48;
+		color:#ffffff;
+	}
+	.text_member{
+		font-size: 36;
+	}
+	.text_code{
+		font-size: 28;
+		color: #898989;
+		margin-top: 10;
+	}
+	.div_member{
+		flex:1;
+		flex-direction: row;
+		margin-left: 24;
+		border-bottom-width: 1;
+		border-color: #bbbbbb;
+	}
+	.div_select{
+		align-items: center;
+		justify-content: center;
+	}
+	.img_select{
+		width: 48;
+		height: 48;
+		border-radius: 50;
+		background-color: #58D68D;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var stream =require('@weex-module/stream');
+	var navigator=require('@weex-module/navigator');
+	var configModule=require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+	var storage=require('@weex-module/storage');
+
+	module.exports={
+		data:{
+			devHeight:960,
+			actionBarHeight:112,
+			userPlatformCode:'',
+			// userPlatformCode:'8b107c27c2b84630b5d12cad65d6e13b',
+			baseUrl:'',
+			imgUrl:'/drawable/ic_done_white_48dp.png',
+			memberMess:'',
+			memberList:[],
+			selectedList:[],
+		},
+		methods:{
+				getMemberList:function(){
+					var self=this;
+					var date=new Date();
+					var year=date.getFullYear();
+					var month=date.getMonth();
+					var startDate=apis.formatDate(new Date(year,month,1),'yyy-MM-dd');
+					var endDate=apis.formatDate(date,'yyy-MM-dd');
+					startDate=encodeURIComponent(startDate);
+					endDate=encodeURIComponent(endDate);
+					var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+					apis.getEmpList(body,function(retdata){
+						if (retdata!=null) {
+							self.getList(retdata);
+						}
+					},function(progress){});
+				},
+				getList:function(retdata){
+					var self=this;
+					self.memberList=[];
+					for(var i=0;i<retdata.length;i++){
+						var item=retdata[i];
+						item.selected=false;
+						for (var j= 0; j < self.selectedList.length; j++) {
+							var other=self.selectedList[j];
+							if (other.Guid==item.Guid){
+								item.selected=true;
+								break;
+							}
+						}
+						if (item.Name.length>0 ){
+							item.fir=item.Name.slice(0,1);
+						}
+						self.memberList.push(item);
+					}
+				},
+				clickMember:function(e){
+					var self=this;
+					// require('@weex-module/myModule').printLog('clickMember: '+JSON.stringify(self.selectedList));
+					var item=e.target.attr.item;
+					var selected=item.selected;
+					item.selected=!selected;
+					if (selected) {
+						var index='';
+						for (var i = 0; i < self.selectedList.length; i++) {
+							if (item.Guid==self.selectedList[i].Guid) {
+								index=i;
+								break;
+							}
+						}
+						self.selectedList.splice(index,1);
+					}else{
+						self.selectedList.push(item);
+					}
+				},
+				clickClose:function(e){
+					var self=this;
+					var params={'animated':'true'};
+					navigator.pop(params,function(ret){});
+				},
+				clickComplete:function(e){
+					var self=this;
+					var autitors='';
+					for(var i=0;i<self.selectedList.length;i++){
+						var item=self.selectedList[i];
+						autitors=autitors+',,'+item.Guid+'/*/'+item.Name+'/*/'+item.Code;
+					}
+					autitors=autitors.substring(2);
+					// console.log('REPCALLBACK: ',autitors);
+					if (autitors!=null&&autitors!='') {
+						storage.setItem('rep_checkers',autitors,function(e){
+						});
+					}else{
+						storage.removeItem('rep_checkers',function(ret){
+						});
+					}
+					var params={'animated':'true'};
+					navigator.pop(params,function(ret){});
+				},
+				// clickClear:function(e){
+				// 	storage.removeItem('rep_checkers',function(ret){
+				// 			storage.getItem('rep_checkers',function(ret){
+				// 				console.log('REPCALL: ',ret.data);
+				// 			});
+				// 		});
+				// },
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/repCheck.js?devHeight=1090&userPlatformCode=545e1ced3b364bbabf44bb2b72903862';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+				var paramsArr=params[1].split('&');
+				self.devHeight=paramsArr[0].split('=')[1];
+				self.userPlatformCode=paramsArr[1].split('=')[1];
+				// console.log('REPCALLBACK: ',self.userPlatformCode);
+			},
+			getSelectedList:function(){
+				var self=this;
+				// self.selectedList=[];
+				storage.getItem('rep_checkers',function(ret){
+					console.log('REPCALLBACK: ',ret.data);
+					require('@weex-module/myModule').printLog('getSelectedList: '+ret.data);
+					if (ret.result=='success'&&ret.data!=null) {
+						// self.autitors=ret.data;
+						// self.autitors='E296606E-C816-4DF3-B23B-E8831A289E84/*/Admin/*/Administrator,,45dc189ea3d84ac592b87855b738a8d8/*/毕恺/*/18661717782';
+						var arr=ret.data.split(',,');
+						for(var str of arr){
+							if (str!=null&&str!="") {
+							var headerArr=str.split('/*/');
+							var item={};
+							item.Guid=headerArr[0];
+							item.Name=headerArr[1];
+							item.Code=headerArr[2];
+							self.selectedList.push(item);
+						}}
+						require('@weex-module/myModule').printLog('SELECTEDLIST: '+JSON.stringify(self.selectedList));
+						// console.log('REPCALLBACK: ',self.selectedList.length);
+					}
+					self.getMemberList();
+				});
+			},
+		},
+		created:function(){
+			var self=this;
+			// self.getMemberList();
+		},
+		ready:function(e){
+			var self=this;
+			self.getUrlParams();
+			self.getSelectedList();
+   //              configModule.getContainerHeight(function(params) {
+   //              	var ratio = params.width / 750;
+   //              	this.devHeight = params.height / ratio ;
+   //              	// this.scrollerHeight=this.devHeight-320;
+   //            	}.bind(this));
+              	//获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				// require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+			}.bind(this));	
+		},
+	}
+</script>

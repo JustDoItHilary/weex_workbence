@@ -1,0 +1,312 @@
+<template>
+	<div  append="node">
+		<header tit="公告"></header>
+		<!-- <div class="div_titBar bg-color-ios-{{!isiOS}}" style="height:{{actionBarHeight}}" data-role="none" if="{{!isiOS}}">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+			</div>
+			<text class="text_titBar" style="flex:1;">公告</text>
+		</div> -->
+		<div class="div_border_bottom" if="false">
+			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;" onclick="clickNoRead">
+				<text class="text_center select_{{isSelected}}">未读</text>
+			</div>
+			<div class="flex_center" onclick="clickHaveRead">
+				<text class="text_center select_{{!isSelected}}">已读</text>
+			</div>
+		</div>
+		<list class="list">
+			<!-- <header if="false">
+				<text style="text-align:center;color:#66ff99;font-weight:bold;">HEAD</text>
+			</header> -->
+			<refresh style="width:750;margin:30;flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{isShowRefresh}}">
+				<loading-indicator style="width:50;height:50;color:#3192e1"></loading-indicator>
+			</refresh>
+			<cell repeat="item in mylist" class="div_item" onclick="itemClick" item="{{item}}">
+				<div style="flex:1;margin-left: 16;">
+					<text class="text_title">{{item.TITLE}}</text>
+					<text class="text_author">发布人 / {{item.AUTHOR}}</text>
+					<text class="text_excerpt">{{item.DESC}}</text>
+					<div class="div-tab" if="false">
+						<div repeat="tab in item.tab_items">
+        					<text class="text-tab" style="background-color:{{tab.background_color}};">{{tab.tab}}</text>
+        				</div>
+        			</div>
+					<text class="text_time">{{item.CREATEDATE}}</text>
+				</div>
+				<div class="div_img_cover">
+					<img class="img_cover" src="{{item.COVER}}">
+				</div>
+			</cell>
+			<!-- <loading style="width:750;margin:30;justify-content:center;" onloading="loading" display="{{isSHowLoading}}">
+				<text style="text-align:center;color:#3192e1;">正在加载。。。</text>
+			</loading> -->
+		</list>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+		/*border-width: 1;*/
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+		/*border-width: 1;*/
+	}
+	.div_tit{
+		flex-direction: row;
+		border-top-width: 20;
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		align-items: center;
+	}
+	.list{
+		margin:10;
+		/*border-width: 1;*/
+	}
+	.text_time{
+		font-size: 24;
+		color: #888888;
+		margin-top: 10;
+	}
+	.text_title{
+		font-size: 32;
+		font-weight: bold;
+		margin-top: 10;
+	}
+	.text_author{
+		font-size: 24;
+		margin-top: 10;
+		margin-left: 20;
+	}
+	.text_excerpt{
+		color: black;
+		font-size: 28;
+		margin-top: 10;
+	}
+    .text-tab{
+        margin: 6;
+        margin-right: 20;
+        /*background-color: #66ddff;*/
+        color: #ff5555;
+        font-size: 25;
+        text-align: center;
+    }
+    .div-tab{
+        margin: 20;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+	.div_border_bottom{
+		height: 100;
+		border-bottom-width: 20;
+		border-color: #eeeeee;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color: #ffffff;
+	}
+	.flex_center{
+		flex: 1;
+		align-items: center;
+		margin-top: 20;
+		margin-bottom: 20;
+	}
+	.text_center{
+		font-size: 32;
+		text-align: center;
+	}
+	.select_true{
+		color:#58D68D;
+	}
+	.select_false{
+		color: #aaaaaa;
+	}
+	.div_item{
+		height: 190;
+		flex-direction: row;
+		border-bottom-width:1;
+		border-color:#cccccc;
+		justify-content: center;
+		align-items: center;
+	}
+	.img_cover{
+		width: 150;
+		height: 150;
+		margin-right: 16;
+		/*border-radius: 5;*/
+	}
+</style>
+
+<script>
+    require('weex-components');
+	var modal=require('@weex-module/modal');
+  	var navigator = require('@weex-module/navigator');
+	var stream=require('@weex-module/stream');
+	var configModule= require('@weex-module/configModule');
+	// var api=require('../common/api');
+	module.exports={
+		data:{
+			actionBarHeight:112,
+			mylist:[],
+			// pagerUrl:'http://romenscd.cn:6240/api/v1/user/paper/8?isPractice=false',
+			isShowRefresh:'hide',
+			isSHowLoading:'hide',
+			notice_item_url:'',
+			noticeUrl:'http://im.yiyao365.cn/',
+			baseUrl:'http://192.168.2.161:8888/weex',
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			imgBackUrl_iOS:'/drawable/ic_arrow_left_white_48pt_ios.png',
+			imgBackUrl_iOS_true:'/drawable/ic_arrow_left_white_48pt_ios.png',
+			imgBackUrl_iOS_false:'/drawable/ic_back_white_48dp.png',
+			time:0,
+			loading:true,
+			isSelected:true,
+			isiOS:false,
+		},
+		methods:{
+			getData:function(url){
+				var self=this;
+				console.log('ret:',url);
+				var body='';
+				var handleName='';
+				// body='QueryType=GetNotice&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+				// body='QueryType=GetNotice&Params=%7B%7D&UserGuid=MjU5NTgxfEA1OGVkZGU0MDY5NDJjfEBhOGNkYzY3Nzc3YWQxNjJkOWJjM2I4YzJhMjBkMjMxMg--';
+				// handleName='handle';
+				configModule.getRequestBody(function(ret){
+					body=ret.body;
+					handleName=ret.handleName;
+					// require('@weex-module/myModule').printLog('body');
+					stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
+						// require('@weex-module/myModule').printLog(JSON.stringify(ret));
+						if (ret.ok) {
+							self.getList(ret.data);
+						}
+					},function(progress){});
+				});
+			},
+			getList:function(retdata){
+				var self=this;
+				console.log('RETDATA',JSON.stringify(retdata));
+				self.mylist=[];
+				if (retdata!=null&&retdata.length>0) {
+				for (var i = 0; i <retdata.length; i++) {
+					var item=retdata[i];
+					var web_url=item.web_url;
+					if (!web_url) {
+						var config=this.$getConfig();
+						var bundleUrl=config.bundleUrl;
+						// var base='http://weex.yy365.cn/my-list.js';
+						web_url=bundleUrl.split('/').slice(0,-1).join('/')+'/notice-item.js';
+					}
+					item.tab_items=[];
+					item.web_url=web_url;
+					self.mylist.push(item);
+				}
+				}
+			},
+			itemClick:function(e){
+				var self=this;
+				var item=e.target.attr.item;
+				var webUrl=item.web_url;
+				var url=item.URL;
+				var title=item.TITLE;
+				var author=item.AUTHOR;
+				var date=item.CREATEDATE;
+				var nextPageUrl='';
+
+				//进行编码
+				title=encodeURIComponent(title);
+				author=encodeURIComponent(author);
+				date=encodeURIComponent(date);
+			console.log('CLICK','item');
+				configModule.getUrl(url, function(ret){
+					nextPageUrl='key='+ret;
+					webUrl=webUrl+'?'+nextPageUrl+'&title='+title+'&author='+author+'&date='+date;
+					var params = {'url':webUrl,'animated':'true'};
+        			navigator.push(params, function(e) {
+					});
+				});
+			},
+			refresh:function(){
+				var self=this;
+				self.isShowRefresh='show';
+				self.getData(self.noticeUrl);
+				self.isShowRefresh='hide';
+			},
+			loading:function(){
+				var self=this;
+				self.isSHowLoading='show';
+				//获取下一页
+				self.isSHowLoading='hide';
+			},
+            //关闭界面，退出
+            clickClose:function(e){
+            	configModule.finish();
+            },
+			clickNoRead:function(e){
+				var self=this;
+				if (!self.isSelected) {
+					self.isSelected=true;
+				}
+			},
+			clickHaveRead:function(e){
+				var self=this;
+				if (self.isSelected) {
+					self.isSelected=false;
+				}
+			},
+			setMeasure:function(){
+				var self=this;
+				// self.isiOS=self.$getConfig().env.platform=='iOS';
+            	//获取 actionbar height
+				// configModule.getActionBarHeight(function(params){
+				// 	var ratio;
+				// 	if (self.isiOS) {
+				// 		ratio=params.width/750;
+				// 	}else{
+				// 		ratio = self.$getConfig().env.deviceWidth / 750;
+				// 	}
+				// 	self.actionBarHeight=params.height/ratio;
+				// 	require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+				// });
+			},
+		},
+		created:function(){
+			var self=this;
+			var bundleUrl=self.$getConfig().bundleUrl||'';
+			// var bundleUrl='http://192.168.2.161:8888/weex/my-list.js';
+			var params=bundleUrl.split('?');
+			self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+			self.getData(self.noticeUrl);
+		},
+		ready:function(){
+			var self=this;
+		},
+	}
+</script>

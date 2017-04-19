@@ -1,0 +1,444 @@
+<template>
+	<div style="background-color:#ebedef;" onviewappear="viewappear" append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <text class="text_close">关闭</text> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
+		</div>
+
+		<div class="border_bottom">
+			<div class="flex_center" style="border-right-width: 2;border-color:#eeeeee;" onclick="clickMyself">
+				<text class="text_center select_{{isSelected}}">我的汇报</text>
+			</div>
+			<div class="flex_center" onclick="clickTeam">
+				<text class="text_center select_{{!isSelected}}">团队汇报</text>
+			</div>
+		</div>
+		<list style="margin-left: 36;margin-right: 36;">
+			<refresh style="flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{refresh_display}}">
+				<loading-indicator style="width:50;height:50;color:#3192e1;" ></loading-indicator>
+			</refresh>
+			<!-- <cell repeat="item in repList" if="{{(item.type==1)}}">
+				<div onclick="myRep" start="{{item.startTime}}" end="{{item.endTime}}">
+					<div class="border_bottom" style="height:160;">
+						<div class="logo">
+							<img class="img_center" src="{{imgUrl}}">
+						</div>
+						<div class="flex_left">
+							<text class="text_tit">{{item.startTime}}</text>
+							<img src="">
+						</div>
+						<text class="text_content">{{item.startTime}}</text>
+					</div>
+					<div class="rad_border">
+						<text style="font-weight:normal;font-size:24;text-align:center;align-items:center;" repid="{{item.repId}}" onclick="delete">删除</text>
+					</div>
+				</div>
+			</cell> -->
+		<cell class="sec_cell" repeat="item in repList" if="{{(item.type==2)}}" >
+			<div onclick="myRep" item="{{item}}">
+			<div style="flex-direction:row;min-height:160;justify-content:center;align-items:center;">
+				<div class="logo">
+					<img class="img_center" src="{{baseUrl+imgUrl}}">
+				</div>
+				<div class="flex_left">
+					<text class="text_tit">{{item.startTime +' - '+item.endTime}}</text>
+					<text class="text_content select_{{item.IsPost}}">{{item.checked}}</text>
+				</div>
+			</div>
+			<text class="text_tit">下周工作计划：</text>
+			<text class="text_mulit">{{item.myPlan}}</text>
+			</div>
+		</cell>
+		<cell repeat="item in repList" if="{{(item.type==3)}}">
+			<div class="else">
+				<text class="text_else">{{item.tit}}</text>
+			</div>
+		</cell>
+		<!-- <loading style="justify-content:center;background-color#ebedef;" onloading="loading" display="{{loading_display}}">
+			<text class=" select_false" style="margin-top: 20;margin-bottom: 20;text-align: center;">正在加载。。。</text>
+		</loading> -->
+		</list>
+		<div class="div_bottom">
+			<div class="div_item_bottom" onclick="newRep">
+				<text class="select_true text_bottom" style="">新建</text>
+			</div>
+			<div class="div_item_bottom" onclick="clickCheck">
+				<text class="select_true text_bottom" style="margin-right: 16;" >审批</text>
+			</div>
+		</div>
+		
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+	}
+	.border_bottom{
+		height: 120;
+		border-bottom-width: 20;
+		border-color: #eeeeee;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-color: #ffffff;
+	}
+	.flex_center{
+		flex: 1;
+		align-items: center;
+		margin-top: 20;
+		margin-bottom: 20;
+	}
+	.text_center{
+		font-size: 32;
+		text-align: center;
+	}
+	.select_true{
+		color:#58D68D;
+	}
+	.select_false{
+		color: #aaaaaa;
+	}
+	.logo{
+		width: 100;
+		height: 100;
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		/*background-color: #58D68D;*/
+	}
+	.img_center{
+		width: 96;
+		height: 96;
+	}
+	.flex_left{
+		margin: 10;
+		flex: 1;
+		align-items: flex-start;
+	}
+	.rad_border{
+		border-width: 2;
+		border-color: #ebedef;
+		border-radius: 10;
+		align-items: center;
+		justify-content: center;
+		height: 50;
+		width:90;
+		margin-right: 20;
+	}
+	.text_content{
+		color:#bbbbbb;
+		font-weight: normal;
+		font-size: 24;
+		text-align: left;
+		align-items: flex-start;
+		margin-left: 20;
+	}
+	.sec_cell{
+		border-bottom-width: 20;
+		border-color: #ebedef;
+		background-color:#ffffff;
+		height: 360;
+	}
+	.text_tit{
+		height: 50;
+		margin-left: 20;
+		font-size: 32;
+	}
+	.text_mulit{
+		height: 120;
+		font-size: 28;
+		lines:3;
+		margin-left: 30;
+		margin-right: 30;
+	}
+	.else{
+		justify-content: center;
+		align-items: center;
+	}
+	.text_else{
+		text-align: center;
+		font-size: 32;
+		color: #bbbbbb;
+		margin-bottom:20;
+	}
+	.div_bottom{
+		/*position: absolute;*/
+		height:100;
+		width: 750;
+		flex-direction: row;
+		/*margin-top: 20;*/
+		justify-content: center;
+		align-items: center;
+		/*bottom:0;*/
+		background-color:#ffffff;
+	}
+	.div_item_bottom{
+		justify-content: center;
+		align-items: center;
+		height: 60;
+		flex:1;
+		border-radius: 50;
+		border-width: 2;
+		border-color: #58D68D;
+		margin:20;
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 32;
+		margin:20;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var storage=require('@weex-module/storage');
+	var stream=require('@weex-module/stream');
+
+	module.exports={
+		data:{
+			isSelected:true,
+			devHeight:990,
+			actionBarHeight:100,
+			loading_display:'show',
+			refresh_display:'show',
+			userPlatformCode:'',
+			// userPlatformCode:'58ba8990f0e2467ab167b5a002fb13cd',
+			// userPlatformCode:'8b107c27c2b84630b5d12cad65d6e13b',
+			// userPlatformCode:'545e1ced3b364bbabf44bb2b72903862',
+			baseUrl:'',
+			imgUrl:'/drawable/ic_calendar_black_48dp.png',
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			weekly_list:[],
+			hintRep:{type:3,tit:'没有更多了哦~',time:''},
+			repList:[],
+		},
+		methods:{
+			refresh: function (e) {
+                var self = this;
+                self.refresh_display = 'show';
+                self.currentIndex = 0;
+                self.getMyRep();
+            },
+            loading: function (e) {
+                var self = this;
+                this.loading_display = "show";
+                self.refresh_display = 'show';
+
+                self.loading_display = "hide";
+                self.refresh_display = 'hide';
+            },
+            //关闭界面，退出
+            clickClose:function(e){
+            	configModule.finish();
+            },
+            //进入审核界面
+			clickCheck:function(e){
+				var self=this;
+				var url=self.baseUrl+'/repMemberList.js'+'?userPlatformCode='+self.userPlatformCode;
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){});
+			},
+			clickMyself:function(e){
+			},
+			clickTeam:function(e){
+				modal.toast({'message':'敬请期待。。','doation':1});
+			},
+			//新建周报
+			newRep:function(e){
+				var self=this;
+				var url=self.baseUrl+'/newWeekly.js'+'?userPlatformCode='+self.userPlatformCode;
+				console.log('REPCALLBACK: ',url);
+                require('@weex-module/myModule').printLog(url);
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){});
+			},//周报详情
+			myRep:function(e){
+				var self=this;
+				var item=e.target.attr.item||'';
+				var params='?code='+self.userPlatformCode+'&startDate='+item.startTime+'&endDate='+item.endTime+'&type=1&cros=';
+				var url='';
+				if (item.AuditFlag==1) {
+					url=self.baseUrl+'/myRep.js'+params;
+				}else{
+					url=self.baseUrl+'/editRep.js'+params;
+				}
+				// url=url+'?devHeight='+self.devHeight+'&repid='+repid+'&type='+type+'&logo_src='+logo_src+'&time='+time+'&tit='+tit+'&content='+content;
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){});
+			},//删除周报
+			delete:function(e){
+				var self=this;
+				modal.confirm({'message':'确定删除?','doation':0.3},function(ret){
+					if (ret=='OK') {
+						var repid=e.target.attr.repid;
+						var index;
+						self.list.forEach(function(item,index){
+			    			if (repid==item.repId) {
+								self.list.splice(index,1);
+			    			}
+
+						});
+					}
+				});
+			},
+			//解析周报信息
+			getList:function(retdata){
+				var self=this;
+				//将列表清空
+				self.repList=[];
+				if (retdata!=null&&retdata.length>0) {
+					// console.log('REPCALLBACK-getList: ',JSON.stringify(retdata));
+					for (var i = 0; i < retdata.length; i++) {
+						var item=retdata[i];
+						item.added=true;
+						item.sortTime=new Date(Date.parse(item.UpdateTime)); 
+						// console.log('REPCALLBACK: ',item.sortTime);
+						for (var j = 0; j < self.repList.length; j++) {
+							var oldItem=self.repList[j];
+							if (item.startTime==oldItem.startTime||item.endTime==oldItem.endTime) {
+								if (item.sortTime>=oldItem.sortTime) {
+									self.repList.splice(j,1);}
+									break;
+								// }else{
+								// 	item.added=false;
+								// }
+							}
+						}
+						if (item.added) {
+							item.type=2;
+							if (item.IsPost==1) {
+								item.checked='已提交';
+								item.IsPost=true;
+							}else{
+								item.IsPost=false;
+								item.checked='未提交';
+							}
+							item.summary=apis.replaceTransfer(item.summary);
+							item.myPlan=apis.replaceTransfer(item.myPlan);
+							self.repList.push(item);
+						}
+					}
+				}
+				apis.sortList('sortTime',self.repList);//排序
+				// self.repList.reverse();//直接倒叙
+				self.repList.push(self.hintRep);
+			},
+			//获取周报信息
+			getMyRep:function(){
+				var self=this;
+				var date=new Date();
+				var year=date.getFullYear();
+				var month=date.getMonth();
+				// var startDate=self.formatDate(new Date(year,month-2,1));
+				var startDate='2016-12-01';
+				// var startDate='2017-03-26';
+				var endDate='2017-04-20';
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(date-86400000)).getDay();
+				//本周的结束日期
+				// var endDate=new Date(year,month,date.getDate()+6-todayOfWeek);
+				// endDate=apis.formatDate(endDate,'yyy-MM-dd');
+				console.log('REPCALLBACK: ',startDate+' : '+endDate);
+				startDate=encodeURIComponent(startDate);
+				endDate=encodeURIComponent(endDate);
+				var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				// var body='params={"code":"8b107c27c2b84630b5d12cad65d6e13b","startDate":"2017-03-01","endDate":"2017-03-26","type":1,"cros":""}';
+				require('@weex-module/myModule').printLog('body: '+body);
+				// modal.alert({'message':body,'oktitle':'OK'});
+				apis.getReports(body,function(retdata){
+					require('@weex-module/myModule').printLog('retdata: '+JSON.stringify(retdata));
+					// console.log('REPCALLBACK-getMyRep: ',JSON.stringify(retdata));
+                	self.refresh_display = 'hide';
+					// require('@weex-module/myModule').printLog('getMyRep: '+JSON.stringify(retdata));
+					if (retdata!=null) {
+						self.getList(retdata);
+					}
+				},function(progress){});
+			},
+			//获取大平台账号
+			getUserPlatformCode:function(){
+				var self=this;
+				// var body='QueryType=getUserPlatFormCode&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+				var handleName='handle';
+				var body='QueryType=getUserPlatFormCode&Params=%7B%7D&UserGuid=';
+				configModule.getUrl('', function(ret){
+					var token=ret.split('=')[1];
+					body=body+token;
+					require('@weex-module/myModule').printLog('getUserPlatformCode: '+body);
+					apis.getUserPlatformCode(handleName,body,function(retdata){
+					require('@weex-module/myModule').printLog('getUserPlatformCode: '+JSON.stringify(retdata));
+						if (retdata!=null) {
+							self.userPlatformCode=retdata.USERPLATFORMCODE;
+							require('@weex-module/myModule').printLog('UserPlatformCode: '+self.userPlatformCode);
+							self.getMyRep();
+						}
+					},function(progress){});
+				});
+			},
+			viewappear:function(e){
+				var self=this;
+				self.getMyRep();
+			},
+			setMeasure:function(){
+				var self=this;
+            	//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.$getConfig().env.platform=='iOS') {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio; 
+				}.bind(this));
+			},
+		},
+		created:function(e){
+			var self=this;
+			self.setMeasure();
+			var url=self.$getConfig().bundleUrl||'';
+			// var url='http://192.168.2.161:8888/weex/workRep.js';
+			self.baseUrl=apis.getBaseUrl(url);
+			console.log('baseUrl: ',self.baseUrl);
+			self.getUserPlatformCode();
+			// self.getMyRep();
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

@@ -1,0 +1,509 @@
+<template>
+	<div style="width:750;" onviewappear="viewappear" append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <text class="text_close">关闭</text> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
+		</div>
+		<scroller style="flex:1;">
+		<div class="type">
+			<text class="text_black" style="flex:1;">汇报类型</text>
+			<!-- <div class="div_rad_border select_{{!isSelected}}"> -->
+			<text class="text_black">{{selectedType}}</text>
+			<!-- </div> -->
+		</div>
+		<div class="type">
+			<text class="text_black" style="flex:1;">{{selectedType}}日期</text>
+			<text class="text_black">{{repDetails.startTime}} -- {{repDetails.endTime}}</text>
+		</div>
+		<div class="type">
+			<text class="text_black" style="flex:1;">{{selectedType}}状态</text>
+			<text class="text_black select_color_{{posted}}">{{checked}}</text>
+		</div>
+		<div class="reader border_bottom">
+		    <text class="text_black">审阅者</text>
+		    <scroller class="readerList" scroll-direction="horizontal">
+		        <div class="div_reader" repeat="item in readerList">
+		            <text class="text_black">{{item.name}}</text>
+		            <!-- <img class="delReader" src=""/> -->
+		        </div>
+		    </scroller>
+			<div class="div_rad_border select_true" onclick="addReader">
+				<text class="txt_rad_border">添加</text>
+			</div>
+		</div>
+		<div style="flex-direction:column;">
+			<text class="txt_tit">{{rep_Tit[0]}}工作总结</text>
+			<text class="textarea" if="{{!isEdited}}">{{rep_sum}}</text>
+			<textarea  class="textarea" if="{{isEdited}}" rows="8" disabled="{{!isEdited}}"  oninput ="inputSum" value="{{rep_sum}}" placeholder="{{hintSum}}"></textarea>
+			<text class="txt_tit">{{rep_Tit[1]}}工作计划</text>
+			<text class="textarea" if="{{!isEdited}}">{{rep_plan}}</text>
+			<textarea  class="textarea" if="{{isEdited}}" rows="8" disabled="{{!isEdited}}" disabled="{{!isEdited}}" oninput="inputPlan" value="{{rep_plan}}" placeholder="{{hintPlan}}"></textarea>
+		</div>
+		</scroller>
+		<div class="div_grey border_bottom">
+			<!-- <img class="img_28" src=""> -->
+			<text class="txt_time">最近保存时间  {{updateTime}}</text>
+		</div>
+		<!-- <div class="div_txt_img div_pic">
+			<text class="text_black">选择图片</text>
+			<text class="text_grey" style="text-align: left;">已添加{{selectPic}}张</text>
+			<img class="img_add" src="" onclick="addPic">
+		</div>
+		<div class="div_txt_img div_else border_bottom">
+			<text class="text_black">选择附件</text>
+			<text class="text_grey" >已添加{{selectAttach}}个</text>
+			<img class="img_add" src="">
+		</div> -->
+		<div class="div_bottom">
+			<div class="div_item_bottom" if="{{!isEdited}}" onclick="editRep">
+				<text class="text_bottom">修改</text>
+			</div>
+			<div class="div_item_bottom" if="{{!isEdited&&false}}" onclick="deleteRep">
+				<text class="text_bottom">删除</text>
+			</div>
+			<div class="div_item_bottom" if="{{isEdited&&!posted}}" onclick="saveRep">
+				<text class="text_bottom">保存</text>
+			</div>
+			<div class="div_item_bottom" if="{{isEdited}}" onclick="subRep">
+				<text class="text_bottom">提交</text>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+	.border_bottom{
+		border-bottom-width: 20;
+		border-color: #ebedef;
+	}
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+	}
+	.type{
+		flex-direction: row;
+		height: 100;
+		border-bottom-width: 1;
+		border-color: #ebedef;
+		align-items: center;
+		justify-content: center;
+	}
+	.select_true{
+		background-color :#58D68D;
+	}
+	.select_false{
+		background-color: #aaaaaa;
+	}
+	.div_rad_border{
+		height: 50;
+		width:90;
+		margin-right: 10;
+		border-radius: 60;
+		align-items: center;
+		justify-content: center;
+	}
+	.txt_rad_border{
+		text-align: center;
+		font-size: 26;
+		color: #fafafa;
+	}
+	.date{
+		height: 120;
+		flex-direction: row;
+		border-bottom-width:1;
+		border-color: #ebedef;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_to_txt{
+		height: 100;
+		flex:1;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.text_black{
+		margin-left: 20;
+		margin-right: 20;
+		font-size: 30;
+		justify-content: center;
+	}
+	.txt_tit{
+		height: 60;
+		margin-top: 20;
+		margin-left: 30;
+		margin-right: 30;
+		font-size: 28;
+	}
+	.textarea{
+		margin-left:20;
+		margin-right: 20;
+		padding:10;
+		font-size: 28;
+		background-color: #efefef;
+	}
+	.text_grey{
+		color: #aaaaaa;
+		font-size: 26;
+		font-weight: bold;
+		margin-left: 20;
+		margin-right: 20;
+		justify-content: center;
+	}
+	.div_grey{
+		/*position: absolute;
+		bottom: 100;*/
+		height: 70;
+		width: 750;
+		margin-top: 20;
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_28{
+		height: 28;
+		width: 28;
+		margin-left: 20;
+		background-color: #aaaaaa;
+	}
+	.txt_time{
+		font-size: 26;
+		color: #cccccc;
+		margin-left: 20;
+	}
+	.div_txt_img{
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_add{
+		height: 36;
+		width: 36;
+		margin-right: 20;
+		background-color: #aaaaaa;
+	}
+	.div_pic{
+		/*position: absolute;*/
+		/*bottom:180;*/
+		height: 80;
+		border-bottom-width:1;
+		border-color: #ebedef;
+	}
+	.div_else{
+		/*position: absolute;*/
+		/*bottom:100;*/
+		height: 100;
+		border-bottom-width:6;
+		border-color: #ebedef;
+	}
+	.div_bottom{
+		/*position: absolute;*/
+		/*bottom:60;*/
+		height:100;
+		width: 750;
+		flex-direction: row;
+		/*margin-top: 20;*/
+		justify-content: center;
+		align-items: center;
+		background-color:#ffffff;
+	}
+	.div_item_bottom{
+		justify-content: center;
+		align-items: center;
+		height: 60;
+		margin-top:20;
+		margin-bottom:20;
+		margin-left: 32;
+		margin-right: 32;
+		flex:1;
+		border-radius: 50;
+		border-width: 2;
+		border-color: #58D68D;
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 32;
+		color:#58D68D;
+	}
+	.reader{
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.readerList{
+	    flex: 1;
+	    flex-direction: row;
+	    justify-content: flex-start;
+	    height: 100;
+	}
+	.div_reader{
+		justify-content: center;
+		align-items: center;
+		margin-top:10;
+		margin-bottom: 10;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var storage=require('@weex-module/storage');
+	var stream=require('@weex-module/stream');
+	module.exports={
+		data:{
+			devHeight:960,
+			actionBarHeight:112,
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			isSelected:false,
+			userPlatformCode:'',
+			selectedType:'周报',
+			rep_Tit:[],
+			dately_Tit:[],
+			weekly_Tit:[],
+			dately_TitList:[['今日','昨日'],['今日','明日']],
+			weekly_TitList:[['上周','本周'],['本周','下周']],
+			selectPic:0,
+			selectAttach:0,
+			rep_plan:'',
+			rep_sum:'',
+			rep_list:[],
+			hintPlan:'请输入工作计划',
+			hintSum:'请输入工作总结',
+			isChecked:false,
+			isEdited:false,
+			readerList:[],
+			checked:'',
+			posted:false,
+			isGetReader:false,
+			updateTime:'',
+			baseUrl:'',
+			repDetails:{},
+		},
+		methods:{
+			inputPlan:function(el){
+				var self=this;
+				if (!el.value) return;  
+				self.rep_plan=el.value;
+			},
+			inputSum:function(el){
+				var self=this;
+				if (!el.value) return; 
+				self.rep_sum=el.value;
+			},
+			editRep:function(e){
+				var self=this;
+				self.isEdited=true;
+			},
+			deleteRep:function(e){
+				var self=this;
+				var body='code='+self.userPlatformCode+'&isWeek=1&guid='+self.repDetails.Guid+'&cros=&version=1';
+				apis.deleteReports(body,function(retdata){},function(progress){});
+			},
+			saveRep:function(e){
+				var self=this;
+				self.sendRep(0);
+			},
+			subRep:function(e){
+				var self=this;
+				if (!self.rep_plan||!self.rep_sum) {
+					modal.toast({'message':'不能为空','doation':1});
+					return;
+				};
+				self.sendRep(1);
+			},
+			// 因为该界面修改周报所以 ispost 字段值为所修改的周报的提交信息
+			sendRep:function(ispost){
+				var self=this;
+				self.rep_plan=apis.escapeHtml(self.rep_plan);
+				self.rep_sum=apis.escapeHtml(self.rep_sum);
+				var selected_autitors='';
+				// for(var i=0;i<self.readerList.length;i++){
+				// 	var item=self.readerList[i];
+				// 	selected_autitors=selected_autitors+item.guid+'/*/'+item.name+'/*/'+item.phone+',,';
+				// }
+				// var body='code='+self.userPlatformCode+'&startTime='+self.repDetails.startTime+'&endTime='+self.repDetails.endTime+'&isWeek=1&date='+self.repDetails.endTime+'&ProGuid=&leader=&module=&type=10&summary='+self.rep_sum+'&plan='+self.rep_plan+'&ispost='+ispost+'&annex=&guid='+self.repDetails.Guid+'&autitors='+selected_autitors+'&version=1';
+				for(var i=0;i<self.readerList.length;i++){
+					var item=self.readerList[i];
+					selected_autitors=selected_autitors+item.guid+'/§/'+item.name+'/§/'+item.phone+',,';
+				}
+				var body='json={"code":"'+self.userPlatformCode+'","startTime":"'+self.repDetails.startTime+'","endTime":"'+self.repDetails.endTime+'","isWeek":"1","date":"'+self.repDetails.endTime+'","ProGuid":"","leader":"","module":"","type":"10","summary":"'+self.rep_sum+'","plan":"'+self.rep_plan+'","ispost":"'+ispost+'","annex":"","guid":"'+self.repDetails.Guid+'","autitors":"'+selected_autitors+'"}&version=1';
+				// require('@weex-module/myModule').printLog('getActionBarHeight: '+body);
+				apis.savereportForJson(body,function(retdata){
+				// apis.uploadReports(body,function(retdata){
+				// console.log('body: ',body);
+				// console.log('retdata: ',JSON.stringify(retdata));
+					if (retdata!=null) {
+						var params={'animated':'true'};
+						navigator.pop(params,function(ret){});
+					}else{
+						modal.toast({'message':'无数据','doation':1});
+					}
+				},function(progress){});
+			},
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				//8b107c27c2b84630b5d12cad65d6e13b  -正式环境测试
+				//545e1ced3b364bbabf44bb2b72903862  -测试环境
+				// var bundleUrl='http://weex.yy365.cn/editRep.js?code=8b107c27c2b84630b5d12cad65d6e13b&startDate=2017-02-01&endDate=2017-03-25&type=1';
+				// var bundleUrl='http://192.168.2.161:8888/weex/editRep.js?code=8b107c27c2b84630b5d12cad65d6e13b&startDate=2017-04-01&endDate=2017-04-27&type=1';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+				var parArr=params[1].split('&');
+				// var index=params[1].indexOf('&');
+				// var heightMap=params[1].substring(0,index);
+				// self.devHeight=parArr[0].split('=')[1];
+				// self.userPlatformCode=parArr[1].split('=')[1];
+				// //返回获取周报详情的 body
+				// var body=params[1].substring(index+1);
+				self.userPlatformCode=parArr[0].split('=')[1];
+				var body=params[1];
+				return body;
+			},
+			getRepDetails:function(body){
+				var self=this;
+				console.log('REP: ',body);
+				apis.getReports(body,function(retdata){
+				// console.log('REP: ',JSON.stringify(retdata));
+					if (retdata!=null) {
+						if (retdata.length>1) {
+							self.repDetails=self.getMax(retdata);
+						}else{
+							self.repDetails=retdata[0];
+						}
+					console.log('REP: ',JSON.stringify(self.repDetails));
+						self.repDetails.summary=apis.replaceTransfer(self.repDetails.summary)
+						self.repDetails.myPlan=apis.replaceTransfer(self.repDetails.myPlan);
+						self.rep_sum=self.repDetails.summary;
+						self.rep_plan=self.repDetails.myPlan;
+						self.checked=self.repDetails.IsPost==1?'已提交':'未提交';
+						self.posted=self.repDetails.IsPost==1;
+						self.updateTime=self.repDetails.UpdateTime;
+						self.getReaderList(self.repDetails.Auditors);
+					}else{
+						modal.toast({'message':'无数据','doation':1});
+						}
+				},function(progress){});
+			},
+			getMax:function(retdata){
+				var max=retdata[0];
+				max.sortTime=new Date(Date.parse(max.UpdateTime)); 
+				for (var i = 1; i < retdata.length; i++) {
+					retdata[i].sortTime=new Date(Date.parse(retdata[i].UpdateTime));
+					if(retdata[i].sortTime>max.sortTime){
+						max=retdata[i];
+					}
+				}
+				return max;
+			},
+			getReaderList:function(retdata){
+				var self=this;
+				// retdata='133a751178924c7f936fb70b4b306e46/*/周立思/*/13791984705,,f8f3398735d54c53be296f69e33792ee/*/冯张龙/*/18653206277,,';
+				var arr=retdata.split(',,');
+				for(var str of arr){
+					if (str!==null&&str!=="") {
+						// require('@weex-module/myModule').printLog('autitors: '+str);
+						// console.log('Auditors: ',str);
+						var headerArr=str.split('/*/');
+						var item={};
+						item.guid=headerArr[0];
+						item.name=headerArr[1];
+						item.phone=headerArr[2];
+						self.readerList.push(item);
+					}
+				}
+			},
+			addReader:function(e){
+				var self=this;
+				self.isGetReader=true;
+				// storage.removeItem('rep_checkers',function(ret){
+				// 	console.log('REMOVEITEM: ',JSON.stringify(ret));
+				// });
+				var url=self.baseUrl+'/repCheckersList.js'+'?userPlatformCode='+self.userPlatformCode;
+				console.log('REP: ',url);
+				var params={'url':url,'animated':'true'};
+				if (self.readerList!==null&&self.readerList.length>0) {
+					console.log('REP: ',JSON.stringify(self.readerList));
+					storage.setItem('rep_checkers',JSON.stringify(self.readerList),function(e){
+						if(e.result==='success'){
+							navigator.push(params,function(ret){});
+						}
+					});
+				}else{
+					navigator.push(params,function(ret){});
+				}
+			},
+			viewappear:function(e){
+				var self=this;
+				if (self.isGetReader) {
+					self.isGetReader=false;
+					self.readerList=[];
+					storage.getItem('rep_checkers',function(ret){
+						if (ret.result=='success'&&ret.data!=null) {
+							self.readerList=JSON.parse(ret.data);
+						}
+					});
+				}
+			},
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
+			setMeasure:function(){
+				var self=this;
+				//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.$getConfig().env.platform=='iOS') {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio;
+					require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+				}.bind(this));	
+			},
+		},
+		created:function(e){
+			var self=this;
+			storage.removeItem('rep_checkers',function(ret){
+			});
+            self.setMeasure();
+			var body=this.getUrlParams();
+			self.getRepDetails(body);
+			self.rep_Tit=self.weekly_TitList[1];
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

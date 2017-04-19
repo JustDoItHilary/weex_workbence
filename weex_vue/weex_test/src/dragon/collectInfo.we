@@ -1,0 +1,535 @@
+<template>
+	<div append="node" style="background-color:rgb(235,235,243);">
+		<div class="div_loading" if="false">
+			<img class="img_loading" src="{{baseUrl+loadingUrl}}">
+		</div>
+		<list style="flex:1;margin:{{marginBottom}};background-color:#ffffff;">
+		<cell repeat="item in collectInfoList">
+			<!-- 大标题 -->
+			<div class="div_tit">
+				<!-- <div class="img_spot"></div> -->
+				<text class="text_tit">{{$index+1}}、  {{item.name}}</text>
+			</div>
+			<!-- 复选框 -->
+			<div repeat="choice in item.data ">
+			<div class="div_select" if="{{choice.atype==1||choice.atype==0}}" choice="{{choice}}" onclick="clickCheck">
+				<div class="div_check_{{choice.selected==1}}" >
+					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
+				</div>
+				<div class="div_text">
+					<text class="text_value">{{choice.aname}}</text>
+				</div>
+			</div>
+			<!-- 选择 and 输入 -->
+			<div  class="div_select" if="{{choice.atype==2}}">
+				<div class="div_check_{{choice.selected==1}}" choice="{{choice}}" onclick="clickCheck">
+					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
+				</div>
+				<text class="text_value">{{choice.aname}}</text>
+				<div class="div_input">
+					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur"></input>
+				</div>
+			</div>
+			<!-- 文本 and 输入 -->
+			<div  class="div_select" if="{{choice.atype==4}}">
+				<text class="text_value">{{choice.aname}}</text>
+				<div class="div_input">
+					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur"></input>
+				</div>
+			</div>
+			<!-- 文本 and 输入 and 文本-->
+			<div  class="div_select" if="{{choice.atype==3}}">
+				<text class="text_value">{{choice.aname[0]}}</text>
+				<div class="div_input">
+					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur"></input>
+				</div>
+				<text class="text_value">{{choice.aname[1]}}</text>
+			</div>
+			<!-- 文本 -->
+			<div  class="div_select" if="{{choice.atype==5}}">
+				<text class="text_value">{{choice.aname}}</text>
+			</div>
+			<!-- 滚动选择 -->
+			<div class="div_select" if="{{choice.atype==6}}">
+				<text class="text_value">{{choice.aname}}</text>
+				<div class="div_picker" choice="{{choice}}" onclick="clickPick">
+					<text class="text_value text_picker">{{choice.value!==""?nailDamageList[choice.value]:nailDamageHint}}</text>
+					<div class="div_img_pull">
+						<img class="img_arrowdrop" src="{{baseUrl+imgArrowDropUrl}}">
+					</div>
+				</div>
+			</div>
+			</div>
+		</cell>
+		</list>
+		<div style="flex-direction:row;justify-content:center;align-items:center;">
+			<div class="div_bottom" style="height: {{btnHeight}};margin-bottom: {{marginBottom}};" onclick="clickSub">
+				<text class="text_bottom">提交</text>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+	.div_tit{
+		/*flex-direction: row;*/
+		align-items: flex-start;
+		justify-content: flex-start;
+		margin-top: 5;
+		background-color: #eeeeee;
+		/*margin-bottom: 5;*/
+	}
+	.div_text{
+		flex:1;
+		/*justify-content: flex-start;*/
+		/*align-items: flex-start;*/
+	}
+	.div_select{
+		flex-direction: row;
+		align-items: center;
+		margin-top: 5;
+		/*margin-bottom: 5;*/
+		margin-left: 30;
+		margin-right: 20;
+		/*border-width: 1;*/
+	}
+	.div_column{
+		flex: 1;
+		flex-direction: column;
+		margin-top: 5;
+		/*margin-bottom: 5;*/
+		margin-left: 30;
+		margin-right: 20;
+	}
+	.div_multi{
+		flex-direction: row;
+		align-items: center;justify-content: center;
+		margin-left: 20;
+	}
+	.div_check{
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		margin-right: 20;
+		height: 20;
+		width: 20;
+		border-width: 1;
+	}
+	.div_check_false{
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		margin-right: 20;
+		height: 16;
+		width: 16;
+		border-width: 1;
+		border-radius: 50;
+		border-color: #000000;
+	}
+	.div_check_true{
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		margin-right: 20;
+		height: 16;
+		width: 16;
+		border-width: 4;
+		border-radius: 50;
+		border-color: rgb(2,136,209);
+	}
+	.img_check{
+		height: 20;width:20;
+		/*border-width: 1;*/
+		/*border-color: #ff0000;*/
+	}
+	.div_input{
+		flex:1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border-bottom-width: 1;
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+	.textarea{
+		flex: 1;
+		height: 28;
+		margin-left:10;
+		margin-right: 10;
+		font-size: 16;
+	}
+	.input_date{
+		width: 48;
+		font-size: 16;
+		height: 28;
+		text-align: center;
+	}
+	.img_spot{
+		width: 6;height: 6;
+		background-color: #000000;
+		margin:20;
+	}
+	.text_tit{
+		font-size: 16;
+		/*font-weight: bold;*/
+		text-align: left;
+		margin-left: 20;
+		margin-top: 5;margin-bottom: 5;
+	}
+	.text_value{
+		font-size: 16;
+		text-align: left;
+	}
+	.div_picker{
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		margin-right: 20;
+		border-top-width: 1;
+		border-bottom-width: 1;
+		border-color: #bbbbbb;
+	}
+	.text_picker{
+		margin-left: 20;
+		margin-right: 20;
+	}
+	.div_bottom{
+		flex:0.8;
+		height:45;
+		flex-direction: row;
+		/*margin-top: 20;*/
+		/*margin-bottom: 20;*/
+		margin-left: 32;
+		margin-right: 32;
+		justify-content: center;
+		align-items: center;
+		border-radius: 5;
+		border-width: 2;
+		border-color: rgb(2,136,209);
+		background-color: rgb(2,136,209);
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 18;
+		color: #ffffff;
+	}
+	.div_loading{
+		position: absolute;
+		top:0;
+		bottom: 100;
+		left:0;
+		right: 0;
+		justify-content: center;
+		align-items: center;
+	}
+	.img_loading{
+		width: 100;
+		height: 100;
+	}
+	.div_picker{
+		flex-direction: row;
+		align-items: center;
+		margin-top: 5;
+		/*margin-bottom: 5;*/
+		margin-left: 30;
+		/*background-image: linear-gradient(to bottom,#ffffff,#bbbbbb);*/
+		border-width: 1;
+		border-color: #bbbbbb;
+		border-radius: 5;
+		/*border-top-left-radius:5;*/
+		/*border-bottom-left-radius: 5;*/
+	}
+	.text_picker{
+		width: 80;
+		text-align: center;
+		margin-left: 20;
+		margin-right: 20;
+		margin-top: 5;
+		margin-bottom: 5;
+	}
+	.div_img_pull{
+		justify-content: center;
+		align-items: center;
+		background-color: #cccccc;
+		border-top-right-radius: 5;
+		border-bottom-right-radius: 5;
+		border-left-width: 1;
+		border-left-color: #bbbbbb;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	.img_arrowdrop{
+		/*margin: 6;*/
+		height: 30;
+		width: 30;
+	}
+</style>
+
+<script>
+	var stream=require('@weex-module/stream');
+	var apis=require('./common/api');
+	var configModule=require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+	var picker=require('@weex-module/picker');
+	var myModule=require('@weex-module/myModule');
+
+	module.exports={
+		data:{
+			devHeight:960,
+			devWidth:500,
+			btnHeight:60,
+			btnWidth:240,
+			imgUrl:'/drawable/ic_done_black_48dp.png',
+			imgArrowDropUrl:'/drawable/ic_arrow_drop_down_white_48dp.png',
+			loadingUrl:'/drawable/slsj-loading.gif',
+			baseUrl:'',
+			sendUrl:'',
+			collectInfoList:[],
+			selectedList:[],
+			nailDamageList:[],
+			nailDamageHint:'--请选择--',
+			inputdate:'',
+			marginBottom:20,
+		},
+		methods:{
+			clickCheck:function(e){
+				var self=this;
+				var choice=e.target.attr.choice;
+				if (choice.selected==1) {
+					choice.selected=0;
+					if (self.selectedList!=null&&self.selectedList.length>0) {
+					for (var i = 0; i < self.selectedList.length; i++) {
+						var item=self.selectedList[i];
+						if (item.aid==choice.aid) {
+							self.selectedList.splice(i,1);
+						}
+					}}
+				}else{
+					choice.selected=1;
+					var item={};
+					item.aid=choice.aid;
+					item.value=choice.value;
+					item.qid=choice.qid;
+					self.selectedList.push(item);
+				}
+				// var selected=choice.selected==1?0:1;
+				// choice.selected=selected;
+				console.log('ret: ',JSON.stringify(self.selectedList));
+			},
+			focus:function(e){
+				var self=this;
+				// var choice=e.target.attr.choice;
+				// choice.focused=true;
+			},
+			blur:function(e){
+				var self=this;
+				var choice=e.target.attr.choice;
+				// if (choice.focused) {
+					// choice.focused=false;
+					// if (e.value!==choice.value) {
+						var value=choice.value;
+						choice.value='';
+						choice.value=value;
+					// }
+				// }
+			},
+			input:function(e){
+				var self=this;
+				var choice = e.target.attr.choice;
+				var type=choice.atype;
+				if (type==2) {
+					var choice=e.target.attr.choice;
+					choice.value=e.value;
+					if (choice.selected==1) {
+						if (self.selectedList!=null&&self.selectedList.length>0) {
+							for (var i = 0; i < self.selectedList.length; i++) {
+							var item=self.selectedList[i];
+							if (item.aid==choice.aid) {
+								self.selectedList[i].value=e.value;
+							}
+						}}
+					}
+				}else if (type==4) {
+					choice.value=e.value;
+					if (choice.selected==0) {
+						choice.selected=1;
+						var item={};
+						item.aid=choice.aid;
+						item.value=e.value;
+						item.qid=choice.qid;
+						self.selectedList.push(item);
+					}else{
+						if (self.selectedList!=null&&self.selectedList.length>0) {
+							for (var i = 0; i < self.selectedList.length; i++) {
+								var item=self.selectedList[i];
+								if (item.aid==choice.aid) {
+									item.value=e.value;
+								}
+							}
+						}
+					}
+				}
+				// console.log('ret: ',JSON.stringify(self.selectedList));
+			},
+			getList:function(){
+				var self=this;
+				apis.getBlackFile(function(retdata){
+				// console.log('data: ',JSON.stringify(retdata));
+					if (retdata.result=='0000') {
+						self.pushList(retdata.data);
+					}
+				},function(progress){});
+			},
+			pushList:function(data){
+				var self=this;
+				if (data!=null) {
+					for (var key in data) {
+						var item=data[key];
+						if (item.data!==null&&item.data.length>0) {
+							item.id=item.data[0].qid;
+						}
+						if (item.data!=null&&item.data.length>0) {
+							for (var i = 0; i < item.data.length; i++) {
+								var ans=item.data[i];
+								ans.selected=0;
+								ans.value='';
+								if (ans.atype==3) {
+									var arr=ans.aname.split('|&');
+									ans.aname=arr;
+								}
+							}
+						}
+						self.collectInfoList.push(item);
+					}
+					// console.log('COLLECTINFOLIST: ',JSON.stringify(self.collectInfoList));
+				}
+			},
+			checkFinish:function(){
+				var self=this;
+				var isFinish;
+				for(var key of self.collectInfoList){
+					isFinish=false;
+					for (var i = 0; i < self.selectedList.length; i++) {
+						if (self.selectedList[i].qid==key.id) {
+							isFinish=true;
+							break;
+						}
+					}
+					if (!isFinish) {
+						return false;
+					}
+				}
+				return true;
+			},
+			clickSub:function(e){
+				var self=this;
+				var isFinish=self.checkFinish();
+				console.log('ret: ',isFinish);
+				if (!isFinish) {
+					myModule.printConfirm('顾客信息不完整,是否继续提交?',function(ret){
+							// 点击确定返回 1，点击取消返回 0
+							if(ret.data==1){
+								self.new();
+							}
+						});
+				}else{
+					self.new();
+				}
+				// var body='QueryType=saveContactFileData&UserGuid=NTV8QDM3MWQwMmI0NWRkZmU4ODc3ODA1MTMxNWM1YThmZGQ1fEA0ZDVhNTMxNDEwNmNlNmU3OGY1ZmQ0ZjU0NmYwNjBjMg--&Params={"ContactId":"b7b06192a00f5fb8abb19047fa7d675b","NailUrl":"","FileData":'+JSON.stringify(self.selectedList)+'}';
+			},
+			new:function(){
+				var self=this;
+				var queryType;
+				var userGuid;
+				var contactId;
+				var nailUrl;
+				// queryType='saveContactFileData';
+				// userGuid='NTV8QDM3MWQwMmI0NWRkZmU4ODc3ODA1MTMxNWM1YThmZGQ1fEA0ZDVhNTMxNDEwNmNlNmU3OGY1ZmQ0ZjU0NmYwNjBjMg--';
+				// contactId='b7b06192a00f5fb8abb19047fa7d675b';
+				// nailUrl=[["http://mobile-10034140.image.myqcloud.com/6b90e061-5e51-4aad-9f27-93e1955f7038","http://mobile-10034140.image.myqcloud.com/0df622a6-c980-4f00-85d5-64db5a82ce82","http://mobile-10034140.image.myqcloud.com/fdb1571c-2bb6-42a7-93b1-1a48bff281a5"],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],["http://mobile-10034140.image.myqcloud.com/0596c853-9948-49c5-923d-fc69a207e632","http://mobile-10034140.image.myqcloud.com/eec7f627-f3e4-4ada-97cb-51f4995e569e"],["http://mobile-10034140.image.myqcloud.com/8a4975a0-f9c3-4160-9d0a-1a3db00bf7a6","http://mobile-10034140.image.myqcloud.com/731e3377-bbed-4e27-b256-6842e321daff"]];
+				//获取提交时需要的参数
+				configModule.GetUploadPhotoPara(function(ret){
+					queryType=ret.queryType;
+					userGuid=ret.userGuid;
+					contactId=ret.contactID;
+					nailUrl=ret.nailUrl;
+					var body='QueryType='+queryType+'&UserGuid='+userGuid+'&Params={"ContactId":"'+contactId+'","NailUrl":'+JSON.stringify(nailUrl)+',"FileData":'+JSON.stringify(self.selectedList)+'}';
+					require('@weex-module/myModule').printLog(body);
+					// console.log('BODY: ',body);
+					apis.sendInfo(body,function(retdata){
+						// console.log('ret: ',retdata);
+						if (retdata!=null) {
+							configModule.complete(retdata);
+						}
+					},function(progress){});
+				});
+			},
+			clickPick:function(e){
+				var self=this;
+				var choice =e.target.attr.choice;
+				var index=choice.value?choice.value:0;
+				picker.pick({
+					index:index,items:self.nailDamageList
+				},function(ret){
+					if (ret.result=='success') {
+						choice.value=ret.data;
+						self.addList(choice);
+					}
+				});
+			},
+			addList:function(choice){
+				var self=this;
+				var isSelected=false;
+				for (var i=0;i< self.selectedList.length;i++) {
+					var item=self.selectedList[i];
+					console.log('item: ',JSON.stringify(item));
+					if (item.aid===choice.aid) {
+						isSelected=true;
+						item.value=choice.value;
+						break;
+					}
+				}
+				//包含两种情况：selectedList=null 和 selectedList 数组不包含该条数据所以需要放在 for 循环外
+				if (!isSelected) {
+					var ans={};
+					ans.aid=choice.aid;
+					ans.value=choice.value;
+					ans.qid=choice.qid;
+					self.selectedList.push(ans);
+				}
+				console.log('ret: ',JSON.stringify(self.nailDamageList));
+			},
+			setPickList:function(){
+				var self=this;
+				// self.nailDamageList.push('--请选择--')
+				for (var i = 0; i < 100; i++) {
+					self.nailDamageList.push(i);
+				}
+			},
+			setMeasure:function(){
+				var self=this;
+            	configModule.getContainerHeight(function(params) {
+                	// var ratio = this.$getConfig().env.devHeight /(2*750);
+                	//从本地获取按钮的高度占布局高度的比值
+                	var ratio=params.ratio;
+                	//由于是横屏显示，所以高度为设备的宽度
+					self.btnHeight=750*ratio;
+					//通过计算边距占布局高度的比值来获取边距的值
+                	self.marginBottom = (8*ratio/44)*750;
+                	// require('@weex-module/myModule').printLog(this.devHeight);
+              	}.bind(this));
+        	},
+		},
+		created:function(e){
+			var self=this;
+			// self.baseUrl='http://192.168.2.161:8888/weex';
+			self.baseUrl=self.$getConfig().bundleUrl.split('？')[0].split('/').slice(0,-1).join('/')||'';
+			self.setMeasure();
+			self.setPickList();
+			self.getList();
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

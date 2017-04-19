@@ -1,0 +1,147 @@
+<template>
+	<div>
+		<div class="div_titBar" style="height:{{actionBarHeight}};background-color:rgb(64,146,242);" data-role="none" if="{{!isiOS}}">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <img if="{{isiOS}}" class="img_back" src="{{baseUrl+imgBackUrl_iOS_true}}"> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">{{tit}}</text>
+		</div>
+		<div class="div_titBar" style="height:{{actionBarHeight}};" data-role="none" if="{{isiOS}}">
+			<div class="div_titBar_iOS" style="height:{{actionBarHeight}};">
+				<text class="text_titBar_iOS">{{tit}}</text>
+			</div>
+			<div class="div_titBar_iOS_def" onclick="clickClose">
+				<img class="img_back_iOS" style="" src="{{baseUrl+imgBackUrl_iOS}}">
+				<text class="text_titBar_def_iOS">工作台</text>
+			</div>
+			<text class="text_titBar_def_iOS" onclick="clickRight">{{titRight}}</text>
+	</div>
+</template>
+<style>
+	.div_titBar{
+		width: 750;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+		/*border-width: 1;*/
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.img_back_iOS{
+		height: 48;
+		width: 48;
+		margin-left: 10;
+		/*border-width: 1;*/
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		/*border-width: 1;*/
+		margin-left: 28;
+	}
+	.text_titBar_def_iOS{
+		font-size: 40;
+		color:rgb(22,149,252);
+		margin-right: 28;
+		/*border-width: 1;*/
+	}
+	.text_titBar_iOS{
+		text-align: center;
+		font-size: 42;
+		color: black;
+		font-family:HelveticaNeue-CondensedBlack;
+	}
+	.div_titBar_iOS_def{
+		flex-direction: row;
+		align-items: center;
+		/*border-width: 1;*/
+	}
+	.div_titBar_iOS{
+		position: absolute;
+		left: 0;
+		right: 0;
+		justify-content: center;
+		align-items: center;
+	}
+</style>
+<script>
+  	var navigator = require('@weex-module/navigator');
+	var configModule= require('@weex-module/configModule');
+	var modal=require('@weex-module/modal');
+	module.exports={
+		data:{
+			actionBarHeight:112,
+			isiOS:false,
+			baseUrl:'',
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			imgBackUrl_iOS:'/drawable/arrowleft.png',
+			tit:'',
+			titRight:'',
+		},
+		methods:{
+			setTit:function(params){
+				var self=this;
+				self.tit=params;
+			},
+			setTitElse:function(params){
+				var self=this;
+				self.titRight=params;
+			},
+			setBaseUrl:function(params){
+				var self=this;
+				self.baseUrl=params;
+			},
+            clickClose:function(e){
+                var self=this;
+                console.log('CLICK','close');
+                var params={'animated':'true'};
+                navigator.pop(params,function(ret){});
+            },
+            clickRight:function(e){
+            	var self=this;
+            	console.log('CLICK','right');
+            },
+			setMeasure:function(){
+				var self=this;
+            	//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.isiOS) {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio;
+					require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
+				});
+			},
+		},
+		created:function(e){
+			var self=this;
+			self.isiOS=self.$getConfig().env.platform=='iOS';
+			console.log('isiOS',self.isiOS);
+			self.baseUrl=self.$getConfig().bundleUrl.split('?')[0].split('/').slice(0,-1).join('/')||'';
+			// self.baseUrl='http://192.168.2.161:8888/weex';
+			// modal.alert({'message':self.baseUrl,'oktitle':'ok'});
+			self.setMeasure();
+		},
+
+	}
+</script>

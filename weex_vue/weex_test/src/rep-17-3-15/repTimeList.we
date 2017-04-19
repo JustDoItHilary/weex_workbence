@@ -1,0 +1,251 @@
+<template>
+	<div append="node">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close" onclick="clickClose">
+				<img class="img_back" src="{{baseUrl+imgBackUrl}}">
+				<!-- <text class="text_close">关闭</text> -->
+			</div>
+			<text class="text_titBar" style="flex:1;">{{userName}}的周报</text>
+		</div>
+		<div class="div_tit">
+			<div class="div_mon" style="font-size: 28;" onclick="clickLastMon">
+				<text class="text_tit">上个月</text>
+			</div>
+			<text class="text_tit" style="flex:1;font-size: 32;">{{year}} 年 {{thisMonth}} 月</text>
+			<div class="div_mon" style="font-size: 28;" onclick="clickNextMon">
+				<text class="text_tit">下个月</text>
+			</div>
+		</div>
+		<list class="list">
+			<cell repeat="item in timeList" class="cell" onclick="clickTime" start="{{item.startTime}}" end="{{item.endTime}}" sum="{{item.summary}}">
+				<text class="text_time">{{item.startTime}} ~ {{item.endTime}}</text>
+			</cell>
+			<!-- <loading style="margin:30;height:80;justify-content:center;" onloading="loading" display="{{isSHowLoading}}">
+				<text style="text-align:center;color:#58D68D;">正在加载。。。</text>
+			</loading> -->
+		</list>
+	</div>
+</template>
+
+<style>
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		justify-content: center;
+		align-items: center;
+	}
+	.img_back{
+		height: 48;
+		width: 48;
+		margin-right: 36;
+		margin-left: 36;
+		margin-top: 16;
+		margin-bottom: 16;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: left;
+		font-size: 40;
+		color: #ffffff;
+		margin-left: 28;
+	}
+	.div_tit{
+		height: 100;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-left: 20;
+		margin-right: 20;
+	}
+	.div_mon{
+		height: 56;
+		justify-content: center;align-items: center;
+		border-width: 1;
+		border-color: #58D68D;
+		border-radius: 50;
+
+	}
+	.text_tit{
+		text-align: center;
+		color:#474747;
+		margin-left: 20;
+		margin-right: 20;
+	}
+	.list{
+		width: 670;
+		margin-left: 40;margin-right: 40;
+		justify-content: center;
+	}
+	.cell{
+		height: 100;
+		justify-content: center;align-items: center;
+		border-bottom-width: 1;
+		border-color: #bbbbbb;
+	}
+	.text_time{
+		font-size: 36;
+	}
+</style>
+
+<script>
+	var apis=require('./common/api');
+	var stream=require('@weex-module/stream');
+	var modal=require('@weex-module/modal');
+	var navigator=require('@weex-module/navigator');
+	var configModule=require('@weex-module/configModule');
+
+	module.exports={
+		data:{
+			actionBarHeight:112,
+			devHeight:960,
+			imgBackUrl:'/drawable/ic_back_white_48dp.png',
+			userPlatformCode:'',
+			empGuid:'',
+			userName:'',
+			firstDate:'',
+			year:'',
+			thisMonth:'',
+			date:'',
+			loading:true,
+			isSHowLoading:'hide',
+			timeList:[],
+			baseUrl:'',
+			memberMess:'',
+		},
+		methods:{
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
+			clickTime:function(e){
+				var self=this;
+				var url=self.baseUrl+'/repCheck.js'+'?'+self.memberMess;
+				var startTime=e.target.attr.start;
+				var endTime=e.target.attr.end;
+				url=url+'&startDate='+startTime+'&endDate='+endTime;
+				// console.log('REPCALLBACK: ',url);
+				navigator.push({'url':url,'animated':true},function(ret){});
+			},
+			clickLastMon:function(e){
+				var self=this;
+				self.date=new Date(self.firstDate-86400000);
+				self.getRepList();
+			},
+			clickNextMon:function(e){
+				var self=this;
+				var day=new Date(self.year,self.thisMonth+1,1);
+				self.date=new Date(day-86400000);
+				self.getRepList();
+			},
+			getUrlParams:function(){
+				var self=this;
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				// var bundleUrl='http://weex.yy365.cn/repTimeList.js?userPlatformCode=545e1ced3b364bbabf44bb2b72903862&name=哈哈&code=58ba8990f0e2467ab167b5a002fb13cd';
+				var params=bundleUrl.split('?');
+				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+				self.memberMess=params[1];
+				var paramsArr=self.memberMess.split('&');
+				// self.devHeight=paramsArr[0].split('=')[1];
+				self.userPlatformCode=paramsArr[0].split('=')[1];
+				self.userName=paramsArr[1].split('=')[1];
+				self.empGuid=paramsArr[2].split('=')[1];
+				console.log('REPCALLBACK: ',self.empGuid);
+			},
+			loading:function(){
+				var self=this;
+				self.isSHowLoading='show';
+				//获取下一页
+				self.isSHowLoading='hide';
+			},
+			getRepList:function(){
+				var self=this;
+				self.timeList=[];
+				self.year=self.date.getFullYear();
+				var month=self.date.getMonth();
+				self.thisMonth=month+1;
+				self.firstDate=new Date(self.year,month,1);
+				var startDate=apis.formatDate(self.firstDate,'yyy-MM-dd');
+				var endDate=apis.formatDate(self.date,'yyy-MM-dd');
+				console.log('REPCALLBACK: ',startDate+' : '+endDate);
+				startDate=encodeURIComponent(startDate);
+				endDate=encodeURIComponent(endDate);
+				var body='code='+self.empGuid+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				console.log('REPCALLBACK: ',body);
+				apis.getReports(body,function(retdata){
+					if (retdata!=null&&retdata.length>0) {
+						for(var i=0;i<retdata.length;i++){
+							var item=retdata[i];console.log('REPCALLBACK: ',JSON.stringify(item));
+							for(var j=0;j<self.timeList.length;j++){
+								if (item.startTime==self.timeList[j].startTime) {
+									self.timeList.splice(j,1);
+									break;
+								}
+							}
+							self.timeList.push(item)
+						}
+							// self.timeList=ret.data;
+					}else{
+						modal.toast({'message':'这个月还没有周报信息~','doation':1});
+					}
+				},function(progress){});
+			},
+			getTimeList:function(num){
+				var self=this;
+				for(var i=0;i<num;i++){
+					self.date=new Date(self.date-86400000*i);
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(self.date-86400000)).getDay();
+				//本周的开始日期
+				var startDate=new Date(self.date.getFullYear(),self.date.getMonth(),self.date.getDate()-todayOfWeek);
+				//本周的结束日期
+				var endDate=new Date(self.date.getFullYear(),self.date.getMonth(),self.date.getDate()+6-todayOfWeek);
+				startDate=apis.formatDate(startDate,'yyy-MM-dd');
+				endDate=apis.formatDate(endDate,'yyy-MM-dd');
+				// console.log('STARTDATE: ',startDate);
+				self.timeList.push({'startTime':startDate,'endTime':endDate})
+				}
+			},
+			setMeasure:function(){
+				var self=this;
+				//              configModule.getContainerHeight(function(params) {
+   //              	var ratio = params.width / 750;
+   //              	this.devHeight = params.height / ratio ;
+   //              	// this.scrollerHeight=this.devHeight-320;
+   //            	}.bind(this));
+              	//获取 actionbar height
+				configModule.getActionBarHeight(function(params){
+					var ratio;
+					if (self.$getConfig().env.platform=='iOS') {
+						ratio=params.width/750;
+					}else{
+						ratio = self.$getConfig().env.deviceWidth / 750;
+					}
+					self.actionBarHeight=params.height/ratio; 
+				}.bind(this));	
+			},
+		},
+		created:function(){
+			var self=this;
+			self.setMeasure();
+			var day=new Date();
+			day=new Date(day.getFullYear(),day.getMonth()+1,1);
+			self.date=new Date(day-86400000);
+			self.getUrlParams();
+			self.getRepList();
+			// self.getTimeList(10);
+		},
+		ready:function(e){
+			var self=this;
+		},
+	}
+</script>

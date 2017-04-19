@@ -1,0 +1,201 @@
+<template>
+	<div style="width:750;" append="node">
+        <!-- <actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar>  -->
+        <header tit="公告"></header>
+		<div class="title" >
+			<text class="firtit">{{firTxt}}</text>
+			<text class="sectit">{{secTxt}}</text>
+		</div>
+		<web id="webview" src="{{url}}" class="webStyle" onpagefinish="finishEvt" onerror="errorEvt"></web>
+	</div>
+</template>
+
+<style>
+    .div_titBar{
+        width: 750;
+        background-color: rgb(29,128,239);
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .div_close{
+        justify-content: center;
+        align-items: center;
+        /*border-width: 1;*/
+    }
+    .img_back{
+        height: 48;
+        width: 48;
+        margin-right: 36;
+        margin-left: 36;
+        margin-top: 16;
+        margin-bottom: 16;
+    }
+    .text_close{
+        margin:20;
+        font-size: 28;
+        color: #ffffff;
+    }
+    .text_titBar{
+        text-align: left;
+        font-size: 40;
+        color: #ffffff;
+        margin-left: 28;
+    }
+  	.browserStyle {
+  		position: absolute;
+  		width: 750;
+    	top: 0;
+    	right: 0;
+    	bottom: 0;
+    	left: 0;
+        /*border-width: 1;*/
+  	}
+	.actionbar{
+		width: 750;
+		margin: 5;
+		justify-content: flex-start;
+		flex-direction: row;
+		background-color: #a0a0a0;
+	}
+	.img{
+		height: 78;
+		width: 78;
+		align-items: center;
+		justify-content: center;
+	}
+	.logo{
+		height: 48;
+		width: 48;
+	}
+	.title{
+        height: 100;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+        margin-top: 10;
+        margin-left: 30;
+        margin-right: 30;
+	}
+	.firtit{
+		font-size: 32;
+		overflow: clip;
+        text-align: left;
+	}
+	.sectit{
+		font-size: 28;
+		margin-top: 10;
+		overflow: clip;
+        text-align: left;
+	}
+	.webStyle{
+        margin:10;
+        flex:1;
+	}
+  /*.loading {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loading-text {
+    margin: auto;
+    text-align: center;
+    font-size: 40px;
+    color: #BBB;
+  }*/
+</style>
+
+<script>
+	require('weex-components');
+  	var web_module = require('@weex-module/webview');
+  	var modal=require('@weex-module/modal');
+  	var navigator=require('@weex-module/navigator');
+	var stream=require('@weex-module/stream');
+	var configModule= require('@weex-module/configModule');
+
+	module.exports={
+		data:{
+			// url:'http://romenscd.cn:4740/?',
+            // url:'http://im.yy365.cn/application/core/pdf/14835145418068.pdf',   
+            // url:'http://im.yiyao365.cn/Appnotice?GUID=589929229a0581486432546&token=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--',   
+            url:'', 
+            actionBarHeight:112,
+            devHeight:960,
+            baseUrl:'',
+            imgBackUrl:'/drawable/ic_back_white_48dp.png',
+            firTxt:'大标题',
+            secTxt:'小标题',
+            // loading:true,
+		},
+		methods:{
+            getParams:function(url){
+                    console.log('URL: ',url);
+                var index=url.indexOf('?');
+                var queryStr=url.substring(index+1,url.length);
+                var queryArr=queryStr.split('&');
+                var ret={};
+                queryArr.forEach(function(item, index) {
+                    console.log('item: ',item);
+                    var otherIndex=item.indexOf('=');
+                    // var kv = item.split('=');
+                    var key = item.substring(0,otherIndex);
+                    var value=item.substring(otherIndex+1,item.length);
+                    console.log('VALUE: ',value);
+                    if (key) {
+                        ret[key]= value;
+                    }
+                });
+                return ret;
+            },
+            setUrl:function(){
+                var bundleUrl = this.$getConfig().bundleUrl || '';
+                // var bundleUrl='http://weex.yy365.cn/notice-item.js?key=http://im.yiyao365.cn/Appnotice?GUID=58edc59264e881491977618&token=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--&title=2017_%E9%9B%A8%E8%AF%BA%E5%B7%A5%E4%BD%9C%E5%9C%88&author=%E5%86%AF%E5%BC%A0%E9%BE%99&date=2017-02-07%2009:55:46';
+                var bundleUrlParams = this.getParams(bundleUrl);
+                var webUrl = bundleUrlParams.key+'&token='+bundleUrlParams.token || 'http%3A%2F%2Fromenscd.cn%3A4740%2F%3F';
+                this.url = decodeURIComponent(webUrl);
+                console.log('url: ',this.url);
+                this.firTxt=decodeURIComponent(bundleUrlParams.title);
+                this.secTxt=decodeURIComponent(bundleUrlParams.author)+"  "+decodeURIComponent(bundleUrlParams.date);
+            },
+            finishEvt:function(e){
+            	// require('@weex-module/myModule').printLog("finish");
+            	// modal.alert({'message':'finish','doation':1});
+            	var self=this;
+            	var txtFinish=JSON.stringify(e);
+            	console.log('pagefinish',txtFinish);
+                // 加载完成修改公告的状态为-已读
+
+            },
+            errorEvt:function(e){
+            	var self=this;
+            	var txtError=JSON.stringify(e);
+            	console.log('error',txtError);
+                require('@weex-module/myModule').printLog(txtError);
+            },
+            setMeasure:function(){
+                var self=this;
+                // //获取 actionbar height
+                // configModule.getActionBarHeight(function(params){
+                //     var ratio;
+                //     if (self.$getConfig().env.platform=='iOS') {
+                //         ratio=params.width/750;
+                //     }else{
+                //         ratio = self.$getConfig().env.deviceWidth / 750;
+                //     }
+                //     self.actionBarHeight=params.height/ratio;
+                //     require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+                // }.bind(this));  
+            },
+		},
+		created:function(){
+			var self=this;
+            var bundleUrl=self.$getConfig().bundleUrl||'';
+            // var bundleUrl='http://192.168.2.161:8888/weex/my-list.js';
+            var params=bundleUrl.split('?');
+            self.baseUrl=params[0].split('/').slice(0,-1).join('/');
+            self.setUrl();
+		},
+	}
+</script>

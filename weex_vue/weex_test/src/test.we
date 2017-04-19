@@ -1,0 +1,116 @@
+<template>
+  <div class="wrapper">
+    <web ref="webview" src="{{url}}" class="webview" onpagestart="start" onpagefinish="finish" onerror="error"></web>
+  </div>
+</template>
+
+<script>
+  const webview = weex.requireModule('webview')
+  const modal = weex.requireModule('modal')
+  var storage=require('@weex-module/storage')
+
+  export default {
+    data:{
+        url : 'https://m.alibaba.com',
+        value: 'https://m.alibaba.com',
+        readerList:[],
+    },
+    methods: {
+      loadURL:function() {
+        this.url = this.value
+        modal.toast({ message: 'load url:' + this.url })
+        // setTimeout(() => {
+        //   console.log('will go back.')
+        //   modal.toast({ message: 'will go back' })
+        //   webview.goBack(this.$refs.webview)
+        // }, 10000)
+      },
+      reload :function(event) {
+        // console.log('will reload webview')
+        modal.toast({ message: 'reload' })
+        webview.reload(this.$refs.webview)
+      },
+      start:function (event) {
+        // console.log('pagestart', event)
+        modal.toast({ message: 'pagestart' })
+      },
+      finish:function (event) {
+        // console.log('pagefinish', JSON.stringify(event))
+        modal.toast({ message: JSON.stringify(event) })
+      },
+      error:function (event) {
+        // console.log('error', event)
+        modal.toast({ message: 'error' })
+      },
+      getList:function(){
+        var self=this;
+        var retdata='E296606E-C816-4DF3-B23B-E8831A289E84/*/Admin/*/Administrator,,45dc189ea3d84ac592b87855b738a8d8/*/毕恺/*/18661717782,,';
+        var arr=retdata.split(',,');
+        for(var str of arr){
+          if (str!==null&&str!=="") {
+            var headerArr=str.split('/*/');
+            var item={};
+            item.guid=headerArr[0];
+            item.name=headerArr[1];
+            item.phone=headerArr[2];
+            self.readerList.push(item);
+          }
+        }
+        console.log('will: ',self.readerList);
+        console.log('readerList: ',JSON.stringify(self.readerList));
+        storage.setItem('test',JSON.stringify(self.readerList),function(e){
+          console.log('will: ',e);
+        });
+      },
+      save:function(){
+          console.log('save: ',JSON.stringify(self.readerList));
+        
+        storage.getItem('test',function(ret){
+          if (ret.result=='success') {
+            console.log('will: ',JSON.parse(ret.data).length);
+          }
+        });
+      },
+    },
+    created:function(e){
+      var self= this;
+      self.getList();
+      self.save();
+    },
+  }
+</script>
+
+<style scoped>
+  .group {
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  .input {
+    width: 600px;
+    font-size: 36px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #BBBBBB;
+  }
+  .button {
+    width: 225px;
+    text-align: center;
+    background-color: #D3D3D3;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 30px;
+  }
+
+  .webview {
+    margin-left: 75px;
+    width: 600px;
+    height: 750px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #41B883;
+  }
+</style>

@@ -1,0 +1,561 @@
+<template>
+	<div style="height:{{devHeight}};position:absolute;width:750;">
+		<div class="div_titBar" style="height:{{actionBarHeight}}" data-role="none">
+			<div class="div_close">
+				<text class="text_close" onclick="clickClose">关闭</text>
+			</div>
+			<text class="text_titBar" style="flex:1;">工作汇报</text>
+		</div>
+		<div class="type">
+			<text class="text_black" style="flex:1;">汇报类型</text>
+			<div class="div_rad_border select_{{isSelected}}" onclick="clickDately">
+				<text class="txt_rad_border">日报</text>
+			</div>
+			<div class="div_rad_border select_{{!isSelected}}" onclick="clickWeekly">
+				<text class="txt_rad_border">周报</text>
+			</div>
+		</div>
+		<div class="date">
+			<div class="div_to_txt">
+				<text class="text_black" style="flex:1;">{{selectedType}}日期</text>
+				<text class="text_grey">{{weekDate}}</text>
+			</div >
+			<div class="div_rad_border select_{{select_dateCode==0}}" onclick="clickDateLast" >
+				<text class="txt_rad_border ">{{repDateList[0].obj}}</text>
+			</div>
+			<div class="div_rad_border select_{{select_dateCode==1}}" onclick="clickDateThis">
+				<text class="txt_rad_border">{{repDateList[1].obj}}</text>
+			</div>
+			<!-- <div class="div_rad_border select_{{select_dateCode==2}}" onclick="clickDateAfter">
+				<text class="txt_rad_border">{{repDateList[2].obj}}</text>
+			</div> -->
+		</div>
+		<div class="reader border_bottom">
+		    <text class="text_black">审阅者</text>
+		    <scroller class="readerList"  scroll-direction="horizontal">
+		        <div repeat="item in readerList">
+		            <text class="text_black">{{item.name}}</text>
+		            <img class="delReader" src=""/>
+		        </div>
+		    </scroller>
+			<div class="div_rad_border select_true" onclick="addReader">
+				<text class="txt_rad_border">添加</text>
+			</div>
+		</div>
+		<scroller >
+		<div style="flex-direction:column;">
+			<text class="txt_tit">{{rep_Tit[0]}}工作总结</text>
+			<textarea  class="textarea" disabled="{{isChecked}}" oninput ="inputSum" rows="3" value="{{rep_sum}}" placeholder="{{hintSum}}"></textarea>
+			<text class="txt_tit">{{rep_Tit[1]}}工作计划</text>
+			<textarea  class="textarea" disabled="{{isChecked}}" rows="3" oninput="inputPlan" value="{{rep_plan}}" placeholder="{{hintPlan}}"></textarea>
+		</div>
+		</scroller>
+		<div class="div_grey border_bottom">
+			<!-- <img class="img_28" src=""> -->
+			<text class="txt_time">最近保存时间 {{saveTime}}</text>
+		</div>
+		<!-- <div class="div_txt_img div_pic">
+			<text class="text_black">选择图片</text>
+			<text class="text_grey" style="text-align: left;">已添加{{selectPic}}张</text>
+			<img class="img_add" src="" onclick="addPic">
+		</div>
+		<div class="div_txt_img div_else border_bottom">
+			<text class="text_black">选择附件</text>
+			<text class="text_grey" >已添加{{selectAttach}}个</text>
+			<img class="img_add" src="">
+		</div> -->
+		<div class="div_bottom">
+			<div class="div_item_bottom">
+				<text class="select_color_true text_bottom" onclick="saveRep">保存</text>
+			</div>
+			<div class="div_item_bottom">
+				<text class="select_color_true text_bottom" onclick="subRep">提交</text>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+	.border_bottom{
+		border-bottom-width: 20;
+		border-color: #ebedef;
+	}
+	.div_titBar{
+		width: 750;
+		background-color: #58D68D;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_close{
+		width:100;
+		justify-content: center;
+		align-items: center;
+		margin-right: 20;
+		margin-left: 20;
+	}
+	.text_close{
+		margin:20;
+		font-size: 28;
+		color: #ffffff;
+	}
+	.text_titBar{
+		text-align: center;
+		font-size: 36;
+		color: #ffffff;
+		margin-right: 140;
+	}
+	.type{
+		flex-direction: row;
+		height: 100;
+		border-bottom-width: 1;
+		border-color: #ebedef;
+		align-items: center;
+		justify-content: center;
+	}
+	.select_true{
+		background-color :#58D68D;
+	}
+	.select_false{
+		background-color: #aaaaaa;
+	}
+	.div_rad_border{
+		height: 50;
+		width:90;
+		margin-right: 10;
+		border-radius: 60;
+		align-items: center;
+		justify-content: center;
+	}
+	.txt_rad_border{
+		text-align: center;
+		font-size: 26;
+		color: #fafafa;
+	}
+	.date{
+		height: 120;
+		flex-direction: row;
+		border-bottom-width:1;
+		border-color: #ebedef;
+		justify-content: center;
+		align-items: center;
+	}
+	.div_to_txt{
+		height: 100;
+		flex:1;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.text_black{
+		margin-left: 20;
+		font-size: 30;
+		justify-content: center;
+	}
+	.txt_tit{
+		height: 60;
+		margin-top: 20;
+		margin-left: 30;
+		margin-right: 30;
+		font-size: 28;
+	}
+	.textarea{
+		height: 120;
+		margin-left:20;
+		margin-right: 20;
+		padding:10;
+		font-size: 28;
+		background-color: #efefef;
+	}
+	.text_grey{
+		color: #aaaaaa;
+		flex:1;
+		font-size: 26;
+		font-weight: bold;
+		margin-left: 20;
+		justify-content: center;
+	}
+	.div_grey{
+		/*position: absolute;*/
+		/*bottom: 260;*/
+		height: 70;
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_28{
+		height: 28;
+		width: 28;
+		margin-left: 20;
+		background-color: #aaaaaa;
+	}
+	.txt_time{
+		font-size: 26;
+		color: #cccccc;
+		margin-left: 20;
+	}
+	.div_txt_img{
+		flex-direction: row;
+		align-items: center;
+	}
+	.img_add{
+		height: 36;
+		width: 36;
+		margin-right: 20;
+		background-color: #aaaaaa;
+	}
+	.div_pic{
+		/*position: absolute;*/
+		/*bottom:180;*/
+		height: 80;
+		border-bottom-width:1;
+		border-color: #ebedef;
+	}
+	.div_else{
+		/*position: absolute;*/
+		height: 100;
+		border-bottom-width:6;
+		border-color: #ebedef;
+		/*bottom:100;*/
+	}
+	.select_color_true{
+		color:#58D68D;
+	}
+	.select_color_false{
+		color: #aaaaaa;
+	}
+	.div_bottom{
+		position: absolute;
+		height:100;
+		width: 750;
+		flex-direction: row;
+		margin-top: 20;
+		justify-content: center;
+		align-items: center;
+		bottom:0;
+		background-color:#ffffff;
+	}
+	.div_item_bottom{
+		justify-content: center;
+		align-items: center;
+		height: 60;
+		margin:20;
+		flex:1;
+		border-radius: 50;
+		border-width: 2;
+		border-color: #58D68D;
+	}
+	.text_bottom{
+		text-align: center;
+		font-size: 32;
+	}
+	.reader{
+		flex-direction: row;
+		height: 120;
+		align-items: center;
+		justify-content: center;
+	}
+	.readerList{
+	    flex: 1;
+	    justify-content: flex-start;
+	    padding: 10;
+	}
+</style>
+
+<script>
+	var navigator=require('@weex-module/navigator');
+	var modal=require('@weex-module/modal');
+	var configModule=require('@weex-module/configModule');
+	var repModule=require('@weex-module/repModule');
+	var storage=require('@weex-module/storage');
+	var stream=require('@weex-module/stream');
+	module.exports={
+		data:{
+			actionBarHeight:112,
+			isSelected:false,
+			userPlatformCode:'',
+			selectedType:'周报',
+			rep_Tit:[],
+			dately_Tit:[],
+			weekly_Tit:[],
+			dately_TitList:[['今日','昨日'],['今日','明日']],
+			weekly_TitList:[['上周','本周'],['本周','下周']],
+			devHeight:1190,
+			selectPic:0,
+			selectAttach:0,
+			rep_type:2,
+			repDateList:[],
+			rep_false:[
+			{'obj':'上周','code':0},{'obj':'本周','code':1},{'obj':'下周','code':2}
+			],
+			rep_true:[
+			'昨天','今天','明天'
+			],
+			rep_plan:'',
+			rep_sum:'',
+			rep_list:[],
+			hintPlan:'请输入工作计划',
+			hintSum:'请输入工作总结',
+			isChecked:false,
+			readerList:[],
+			select_dateCode:1,
+			sum:'11',
+			plan:'22',
+			saveTime:'',
+			weekDate:'',
+			startDate:'',
+			endDate:'',
+			lastRep:{'isGeted':false},
+			thisRep:{},
+			testNewUrl:'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=UploadReports',
+			testGetUrl:'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=GetReports',
+			testData:{
+				'Guid':'1','ReportDate':'报告日期','startTime':'1','endTime':'1','type':'10','ProGuid':'','ProCode':'','funcGuid':'','funcName':'','ProName':'周报','leader':'1','Annex':'1','summary':'1','myPlan':'1','AuditFlag':'1'},
+		},
+		methods:{
+			clickDately:function(e){
+				// if (!this.isSelected) {
+				// this.isSelected=true;
+				// this.repDateList=this.rep_true;
+				// this.selectedType='日报';
+				// this.rep_Tit=this.dately_Tit;
+				// }
+				modal.toast({'message':'暂时不提供日报功能','doation':1});
+			},
+			clickWeekly:function(e){
+				if (this.isSelected) {
+					this.isSelected=false;
+					this.repDateList=this.rep_false;
+					this.selectedType='周报';
+					this.rep_Tit=this.weekly_Tit;
+				}
+			},
+			inputPlan:function(el){
+				var self=this;
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('input');  
+				self.rep_plan=el.value;
+				// modal.toast({'message':self.rep_plan,'doation':1});
+			},
+			inputSum:function(el){
+				var self=this;
+				if (!el.value) return;
+				//暂时不支持 self.$el('input').value,使用 input chang 事件中的参数 event.value 直接代替
+				// var el=self.$el('input');  
+				self.rep_sum=el.value;
+				// modal.toast({'message':self.his_item,'doation':1});
+			},
+			saveRep:function(e){
+				var self=this;
+				self.sendRep(0);
+			},
+			subRep:function(e){
+				var self=this;
+				if (!self.rep_type||!self.rep_plan||!self.rep_sum) {
+					modal.toast({'message':'不能为空','doation':1});
+					return;
+				};
+				self.sendRep(1);
+				// var date=new Date();
+				// var time=date.getTime();
+				// var obj={
+				// 	id:time,
+				// 	rep_type:self.rep_type,
+				// 	rep_plan:self.rep_plan,
+				// 	rep_sum:self.rep_sum,
+				// };
+				// storage.setItem('weekly_'+time,obj,function(e){
+				// 	self.rep_list.push(obj);
+				// 	modal.toast({'message':self.rep_list.length,'doation':1});
+				// 	var params={'animated':'true'};
+				// 	navigator.pop(params,function(ret){
+				// 	});
+				// });
+			},
+			sendRep:function(ispost){
+				var self=this;
+				// 设置 最近保存时间
+				self.saveTime=self.getDate();
+				var mbody='code='+self.userPlatformCode+'&startTime='+self.startDate+'&endTime='+self.endDate+'&isWeek=1&date='+self.formatDate(new Date)+'&ProGuid=&leader=&module=&type=10&summary='+self.rep_sum+'&plan='+self.rep_plan+'&ispost='+ispost+'&annex=&guid=&autitors=&cros=&version=1';
+				// var header = {'Content-Type': 'application/json'};
+				stream.fetch({
+					method:'POST',
+					url:self.testNewUrl,
+					type:'json',
+					body:mbody
+				},function(ret){
+					if (ret.ok&&ret.data!=null&&ret.data) {
+						var params={'animated':'true'};
+						navigator.pop(params,function(ret){});
+					}
+						console.log('CALLBACK: ',ret);
+						// require('@weex-module/myModule').printLog(params);
+					},function(progress){
+						console.log('PROGRESSCALLBACK: ',JSON.stringify(progress));
+					});
+			},
+			setDate:function(){
+				var self=this;
+				var date=new Date();
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(date-86400000)).getDay();
+				//本周的开始日期
+				self.startDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()-todayOfWeek);
+				//本周的结束日期
+				self.endDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()+6-todayOfWeek);
+				self.startDate=self.formatDate(self.startDate);
+				self.endDate=self.formatDate(self.endDate);
+				self.weekDate=self.startDate+' - '+self.endDate;
+				console.log('STARTDATE: ',self.weekDate);
+			},
+			getDate:function(e){
+				var self=this;
+				var time= new Date();
+				var y = time.getFullYear();
+				var m = time.getMonth()+1;
+				var d = time.getDate();
+				var h = time.getHours();
+				var mm = time.getMinutes();
+				return y+'-'+self.formatTime(m)+'-'+self.formatTime(d)+' '+self.formatTime(h)+':'+self.formatTime(mm);
+			},
+			//格式化日期：yyyy-MM-dd 
+			formatDate:function(date){
+				var self=this;
+				var myyear = date.getFullYear();   
+    			var mymonth = date.getMonth() + 1;   
+    			var myweekday = date.getDate(); 
+        		mymonth = self.formatTime(mymonth); 
+        		myweekday = self.formatTime(myweekday); 
+  				return (myyear + "-" + mymonth + "-" + myweekday);
+			},
+			formatTime:function(date){
+				if (date<10) {
+					date='0'+date;
+				}
+					return date;
+			},
+			getUrlParams:function(){
+				var bundleUrl=this.$getConfig().bundleUrl||'';
+				var params=bundleUrl.split('?')[1];
+				var parArr=params.split('&');
+				this.devHeight=parArr[0].split('=')[1];
+				this.userPlatformCode=parArr[1].split('=')[1];
+			},
+			getLastRep:function(){
+				var self=this;
+				var date=new Date();
+				date=new Date(date-86400000*7);
+				//因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+				var todayOfWeek=(new Date(date-86400000)).getDay();
+				//本周的开始日期
+				var startDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()-todayOfWeek);
+				//本周的结束日期
+				var endDate=new Date(date.getFullYear(),date.getMonth(),date.getDate()+6-todayOfWeek);
+				startDate=self.formatDate(startDate);
+				endDate=self.formatDate(endDate);
+				startDate=encodeURIComponent(startDate);
+				endDate=encodeURIComponent(endDate);
+				var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+				var options={method:'POST',url:self.testGetUrl,type:'json',body:body};
+				stream.fetch(options,function(ret){
+					console.log('CALLBACK: ',JSON.stringify(ret));
+					if (ret.ok) {
+						self.lastRep.isGeted=true;
+						self.lastRep.sum=ret.data!=null?ret.data[ret.data.length-1].summary:'无数据';
+						self.lastRep.plan=ret.data?ret.data[ret.data.length-1].myPlan:'无数据';
+						self.lastRep.AuditFlag=ret.data?ret.data[ret.data.length-1].AuditFlag:0;
+						self.rep_sum=self.lastRep.sum;
+						self.rep_plan=self.lastRep.plan;
+					}
+					},function(progress){});
+			},
+			clickClose:function(e){
+				var self=this;
+				var params={'animated':'true'};
+				navigator.pop(params,function(ret){});
+			},
+			clickDateLast:function(e){
+				var self=this;
+				self.sum=self.rep_sum;
+				self.plan=self.rep_plan;
+				if (self.select_dateCode!=0) {
+					self.select_dateCode=0;
+					self.rep_Tit=self.weekly_TitList[0];
+				}
+				// if (self.lastRep.AuditFlag==1) {
+					self.isChecked=true;
+				// }
+				if (!self.lastRep.isGeted) {
+					self.getLastRep();
+				}else{
+					self.rep_sum=self.lastRep.sum;
+					self.rep_plan=self.lastRep.plan;
+				}
+			},
+			clickDateThis:function(e){
+				var self=this;
+				self.rep_sum=self.sum;
+				self.rep_plan=self.plan;
+				if (self.select_dateCode!=1) {
+					self.select_dateCode=1;
+					self.rep_Tit=self.weekly_TitList[1];
+				}
+				self.isChecked=false;
+			},
+			clickDateAfter:function(e){
+				var self=this;
+				if (self.select_dateCode!=2) {
+					self.select_dateCode=2;
+				}
+				// stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
+				// 		console.log('ret:',ret);
+				// 		callback(ret.data);
+				// 	},function(progress){});
+				
+			},
+			addReader:function(e){
+				var self=this;
+				modal.toast({'message':'敬请期待。。','doation':1});
+				// self.readerList=repModule.getReaders(self.testData.guid,self.readerList,function(ret){
+				// 	self.readerList=ret;
+				// });
+			},
+			addPic:function(e){
+				// modal.toast({'message':'骚瑞~~暂时不能添加图片','doation':1});
+			},
+		},
+		created:function(e){
+			var self=this;
+			this.getUrlParams();
+			self.isSelected=false;
+			self.selectedType='周报';
+			self.repDateList=self.rep_false;
+			self.rep_Tit=self.weekly_TitList[1];
+			self.saveTime=self.getDate();
+			self.setDate();
+			// //方法区分大小写，大小写出错可导致页面无法正常渲染
+			// storage.getAllKeys(function(e){
+			// 	if (e.result=='success'&&e.data.length) {
+			// 		e.data.forEach(function(item){
+			// 			if (item.indexOf('weekly_')>-1) {
+			// 				// modal.toast({'message':self.rep_list.length,'doation':1});
+			// 			}
+			// 		});
+			// 	}
+			// });
+		},
+		ready:function(e){
+			var self=this;
+   //              configModule.getContainerHeight(function(params) {
+   //              	var ratio = params.width / 750;
+   //              	this.devHeight = params.height / ratio ;
+   //              	// this.scrollerHeight=this.devHeight-320;
+   //            	}.bind(this));
+              	//获取 actionbar height
+			configModule.getActionBarHeight(function(params){
+				var ratio = self.$getConfig().env.deviceWidth / 750;
+				self.actionBarHeight=params.height/ratio;
+				require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight); 
+			}.bind(this));	
+		},
+	}
+</script>
