@@ -1,5 +1,5 @@
 <template>
-	<div append="node" style="background-color:rgb(235,235,243);">
+	<div append="node" style="background-color:rgb(242,244,246);">
 		<list style="flex:1;margin:{{marginBottom}};background-color:#ffffff;">
 		<cell repeat="{{item in collectInfoList}}">
 			<!-- 大标题 -->
@@ -9,10 +9,10 @@
 					<text class="text_tit">{{$index+1}}、  {{item.name}}</text>
 				<!-- </div> -->
 			</div>
-			<!-- 复选框 -->
 			<div repeat="choice in item.data ">
-			<div class="div_select" if="{{choice.atype==1||choice.atype==0}}" choice="{{choice}}" onclick="clickCheck">
-				<div class="div_check_{{choice.selected==1}}" >
+			<!-- 复选框 -->
+			<div class="div_select" if="{{choice.atype==1||choice.atype==0}}" choice="{{choice}}" onclick="clickCheck" id="{{$index}}">
+				<div class="div_check_{{choice.selected==1}}">
 					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
 				</div>
 				<div class="div_text">
@@ -20,7 +20,7 @@
 				</div>
 			</div>
 			<!-- 选择 and 输入 -->
-			<div  class="div_select" if="{{choice.atype==2}}">
+			<div  class="div_select" if="{{choice.atype==2}}" id="{{$index}}">
 				<div class="div_check_{{choice.selected==1}}" choice="{{choice}}" onclick="clickCheck">
 					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
 				</div>
@@ -30,14 +30,14 @@
 				</div>
 			</div>
 			<!-- 文本 and 输入 -->
-			<div  class="div_select" if="{{choice.atype==4}}">
+			<div  class="div_select" if="{{choice.atype==4}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname}}</text>
 				<div class="div_input border_{{isEdited}}">
 					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur" disabled="{{!isEdited}}"></input>
 				</div>
 			</div>
 			<!-- 文本 and 输入 and 文本-->
-			<div  class="div_select" if="{{choice.atype==3}}">
+			<div  class="div_select" if="{{choice.atype==3}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname[0]}}</text>
 				<div class="div_input border_{{isEdited}}">
 					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur" disabled="{{!isEdited}}"></input>
@@ -45,11 +45,12 @@
 				<text class="text_value">{{choice.aname[1]}}</text>
 			</div>
 			<!-- 文本 -->
-			<div  class="div_select" if="{{choice.atype==5}}">
+			<div  class="div_select" if="{{choice.atype==5}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname}}</text>
+				<text class="text_value" style="color:#ff0000;" if="{{$index==special&&warn}}">（必选）</text>
 			</div>
 			<!-- 滚动选择 -->
-			<div class="div_select" if="{{choice.atype==6}}">
+			<div class="div_select" if="{{choice.atype==6}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname}}</text>
 				<div class="div_picker" choice="{{choice}}" onclick="clickPick">
 					<text class="text_value text_picker">{{choice.value!==""?nailDamageList[choice.value]:nailDamageHint}}</text>
@@ -66,10 +67,10 @@
 				<text class="text_bottom">修改档案</text>
 			</div>
 			<div class="div_bottom" style="height: {{btnHeight}};" if="{{isEdited}}" onclick="clickSave">
-				<text class="text_bottom">保存档案</text>
+				<text class="text_bottom">保存</text>
 			</div>
-			<div class="div_bottom" style="height:{{btnHeight}};width:{{btnWidth}};" if="{{isEdited}}" onclick="clickNew">
-				<text class="text_bottom">另存为新档案</text>
+			<div class="div_bottom" style="height:{{btnHeight}};width:{{btnWidth}};" if="{{isEdited}}" onclick="clickCancel">
+				<text class="text_bottom">取消</text>
 			</div>
 		</div>
 	</div>
@@ -81,7 +82,7 @@
 		align-items: flex-start;
 		justify-content: flex-start;
 		margin-top: 5;
-		background-color: #eeeeee;
+		background-color:rgb(242,244,246);
 		/*margin-bottom: 5;*/
 	}
 	.div_text{
@@ -107,7 +108,8 @@
 	}
 	.div_multi{
 		flex-direction: row;
-		align-items: center;justify-content: center;
+		align-items: center;
+		justify-content: center;
 		margin-left: 20;
 	}
 	.div_check_false{
@@ -173,7 +175,8 @@
 		/*font-weight: bold;*/
 		text-align: left;
 		margin-left: 20;
-		margin-top: 5;margin-bottom: 5;
+		margin-top: 5;
+		margin-bottom: 5;
 	}
 	.div_bottom{
 		flex: 0.8;
@@ -184,8 +187,6 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 5;
-		border-width: 2;
-		border-color: rgb(2,136,209);
 		background-color: rgb(2,136,209);
 	}
 	.text_bottom{
@@ -242,6 +243,7 @@
 	var modal=require('@weex-module/modal');
 	var picker=require('@weex-module/picker');
 	var myModule=require('@weex-module/myModule');
+    var dom=require('@weex-module/dom');
 
 	module.exports={
 		data:{
@@ -256,6 +258,7 @@
 			baseUrl:'',
 			// baseUrl:'http://slsj.yy365.cn/Resource/getContactFileData',
 			collectInfoList:[],
+			initInfo:'',
 			selectedList:[],
 			queryType:'',
 			userGuid:'',
@@ -265,11 +268,15 @@
 			marginBottom:20,
 			nailDamageList:[],
 			nailDamageHint:'--请选择--',
+			handAndFootProList:[],
+			special:'',
+			warn:false,
 		},
 		methods:{
 			//勾选事件
 			clickCheck:function(e){
 				var self=this;
+				self.warn=false;
 				if (self.isEdited) {
 				var choice=e.target.attr.choice;
 				if (choice.selected==1) {
@@ -281,6 +288,14 @@
 							self.selectedList.splice(i,1);
 						}
 					}}
+					if (choice.special==1) {
+						for (var i = 0; i < self.handAndFootProList.length; i++) {
+							if (self.handAndFootProList[i].aid===choice.aid) {
+								self.handAndFootProList.splice(i,1);
+								break;
+							}
+						}
+					}
 				}else{
 					choice.selected=1;
 					var item={};
@@ -288,28 +303,25 @@
 					item.value=choice.value;
 					item.qid=choice.qid;
 					self.selectedList.push(item);
+					if (choice.special==1) {
+						item.aname=choice.aname;
+						item.atype=choice.atype;
+						self.handAndFootProList.push(item);
+					}
 				}
-				// var selected=choice.selected==1?0:1;
-				// choice.selected=selected;
-				console.log('ret: ',JSON.stringify(self.selectedList));
+				// console.log('ret: ',JSON.stringify(self.selectedList));
+				// console.log('ret: ',JSON.stringify(self.handAndFootProList));
 				}
 			},
 			focus:function(e){
 				var self=this;
-				// var choice=e.target.attr.choice;
-				// choice.focused=true;
-				// console.log('ret; ','focus'+JSON.stringify(choice)+' ; '+JSON.stringify(e));
 			},
 			blur:function(e){
 				var self=this;
 				var choice=e.target.attr.choice;
-				// if (choice.focused) {
 					var value=choice.value;
 					choice.value='';
 					choice.value=value;
-					// choice.focused=false;
-				// }
-				// console.log('ret; ','blur'+JSON.stringify(choice)+' ; '+JSON.stringify(e));
 			},
 			input:function(e){
 				var self=this;
@@ -326,6 +338,13 @@
 								self.selectedList[i].value=e.value;
 							}
 						}}
+						if (choice.special==1) {
+							for (var spec of self.handAndFootProList) {
+								if (spec.aid==choice.aid) {
+									spec.value=e.value;
+								}
+							}
+						}
 					}
 				}else if (type==4) {
 					choice.value=e.value;
@@ -357,6 +376,7 @@
 			},
 			clickPick:function(e){
 				var self=this;
+				self.warn=false;
 				if (self.isEdited) {
 					var choice =e.target.attr.choice;
 					var index=choice.value?choice.value:0;
@@ -441,11 +461,20 @@
 									selItem.value=ans.value;
 									selItem.qid=ans.qid;
 									self.selectedList.push(selItem);
+									if (ans.special==1) {
+										selItem.aname=ans.aname;
+										selItem.atype=ans.atype;
+										self.handAndFootProList.push(selItem);
+									}
+								}
+								if (self.special==''&&ans.special==1) {
+									self.special=i-1;
 								}
 							}
 						}
 						self.collectInfoList.push(item);
 					}
+					self.initInfo=JSON.stringify(self.collectInfoList);
 					// console.log('DATA: ',JSON.stringify(self.collectInfoList));
 				}
 			},
@@ -468,6 +497,7 @@
 			},
 			clickSave:function(e){
 				var self=this;
+				if (self.handAndFootProList.length>0) {
 				var isFinish=self.checkFinish();
 				console.log('ret: ',isFinish);
 				if (!isFinish) {
@@ -480,6 +510,19 @@
 				}else{
 					self.save();
 				}
+				}else{
+					// myModule.printToast('九大病（手足问题）为必选项');
+					self.warn=true;
+					var el = self.$el(self.special);
+					console.log('el: ',self.special+'  '+el);
+					dom.scrollToElement(el,{offset:-2});
+				}
+			},
+			clickCancel:function(e){
+				var self=this;
+				self.isEdited=false;
+				self.collectInfoList=JSON.parse(self.initInfo);
+				configModule.cancalEditArchiveInfo();
 			},
 			clickNew:function(e){
 				var self=this;
@@ -499,17 +542,26 @@
 			save:function(){
 				var self=this;
 				 	// self.queryType="saveContactFileData";
-				 	// self.nailUrl=[["http://mobile-10034140.image.myqcloud.com/6b90e061-5e51-4aad-9f27-93e1955f7038","http://mobile-10034140.image.myqcloud.com/0df622a6-c980-4f00-85d5-64db5a82ce82","http://mobile-10034140.image.myqcloud.com/fdb1571c-2bb6-42a7-93b1-1a48bff281a5"],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],["http://mobile-10034140.image.myqcloud.com/0596c853-9948-49c5-923d-fc69a207e632","http://mobile-10034140.image.myqcloud.com/eec7f627-f3e4-4ada-97cb-51f4995e569e"],["http://mobile-10034140.image.myqcloud.com/8a4975a0-f9c3-4160-9d0a-1a3db00bf7a6","http://mobile-10034140.image.myqcloud.com/731e3377-bbed-4e27-b256-6842e321daff"]];
+				 	// self.nailUrl=[[],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],[],[]];
+					var handAndFootPro='';
+					for (var item of self.handAndFootProList) {
+						if (item.atype==1) {
+							handAndFootPro=handAndFootPro+'/'+item.aname;
+						}else if (item.atype==2) {
+							handAndFootPro=handAndFootPro+'/'+item.value;
+						}
+					}
+					// console.log('handAndFootPro: ',handAndFootPro.substring(1));
 				configModule.GetUploadPhotoPara(function(ret){
-					require('@weex-module/myModule').printLog('clickSubParams: '+JSON.stringify(ret));
+					// require('@weex-module/myModule').printLog('clickSubParams: '+JSON.stringify(ret));
 					// queryType 是提交数据接口的参数
 					self.queryType=ret.queryType;
 					// self.userGuid=ret.userGuid;
 					// self.contactId=ret.contactID;
 					self.nailUrl=ret.nailUrl;
-					var body='QueryType='+self.queryType+'&UserGuid='+self.userGuid+'&Params={"ContactId":"'+self.contactId+'","FileId":"'+self.fileId+'","NailUrl":'+JSON.stringify(self.nailUrl)+',"FileData":'+JSON.stringify(self.selectedList)+'}';
+					var body='QueryType='+self.queryType+'&UserGuid='+self.userGuid+'&Params={"ContactId":"'+self.contactId+'","FileId":"'+self.fileId+'","NailUrl":'+JSON.stringify(self.nailUrl)+',"FileData":'+JSON.stringify(self.selectedList)+',"Remark":"'+handAndFootPro.substring(1)+'"}';
 					console.log('BODY; ',body);
-					// require('@weex-module/myModule').printLog('body: '+body);
+					require('@weex-module/myModule').printLog('body: '+body);
 					apis.sendInfo(body,function(retdata){
 						if (retdata!=null) {
 							// console.log('RETDATA: ',retdata);
@@ -518,6 +570,7 @@
 					},function(progress){});
 				});
 			},
+			// 未使用
 			new:function(){
 				var self=this;
 				var queryType;

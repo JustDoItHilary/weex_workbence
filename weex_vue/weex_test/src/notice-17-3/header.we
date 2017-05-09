@@ -16,6 +16,7 @@
 				<text class="text_titBar_def_iOS">工作台</text>
 			</div>
 			<text class="text_titBar_def_iOS" onclick="clickRight">{{titRight}}</text>
+		</div>
 	</div>
 </template>
 <style>
@@ -39,8 +40,8 @@
 		margin-bottom: 16;
 	}
 	.img_back_iOS{
-		height: 48;
-		width: 48;
+		height: 40;
+		width: 40;
 		margin-left: 10;
 		/*border-width: 1;*/
 	}
@@ -57,14 +58,16 @@
 		margin-left: 28;
 	}
 	.text_titBar_def_iOS{
-		font-size: 40;
+		/*font-size: 40;*/
+		font-size: 32;
 		color:rgb(22,149,252);
 		margin-right: 28;
 		/*border-width: 1;*/
 	}
 	.text_titBar_iOS{
 		text-align: center;
-		font-size: 42;
+		/*font-size: 42;*/
+		font-size: 34;
 		color: black;
 		font-family:HelveticaNeue-CondensedBlack;
 	}
@@ -138,9 +141,9 @@
 			self.isiOS=self.$getConfig().env.platform=='iOS';
 			console.log('isiOS',self.isiOS);
 			self.baseUrl=self.$getConfig().bundleUrl.split('?')[0].split('/').slice(0,-1).join('/')||'';
+			self.setMeasure();
 			// self.baseUrl='http://192.168.2.161:8888/weex';
 			// modal.alert({'message':self.baseUrl,'oktitle':'ok'});
-			self.setMeasure();
 		},
 
 	}

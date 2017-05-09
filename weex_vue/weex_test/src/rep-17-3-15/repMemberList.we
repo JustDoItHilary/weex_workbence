@@ -54,7 +54,8 @@
 	}
 	.list{
 		width: 670;
-		margin-left: 40;margin-right: 40;
+		margin-left: 40;
+		margin-right: 40;
 		justify-content: center;
 		margin-top: 20;
 	}
@@ -65,7 +66,8 @@
 		align-items: center;
 	}
 	.div_logo{
-		height: 80;width: 80;
+		height: 80;
+		width: 80;
 		align-items: center;
 		justify-content: center;
 		background-color: #58D68D;
@@ -106,9 +108,7 @@
 			userPlatformCode:'',
 			baseUrl:'',
 			memberMess:'',
-			memberList:[
-			// {Name:'小平',Code:'110',fir:'小'},{Name:'哈哈',Code:'110',fir:'哈'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'},{Name:'小平',Code:'110'},{Name:'哈哈',Code:'110'}
-			],
+			memberList:[],
 		},
 		methods:{
 			getMemberList:function(){
@@ -121,9 +121,10 @@
 					startDate=encodeURIComponent(startDate);
 					endDate=encodeURIComponent(endDate);
 					var body='code='+self.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
+					console.log('REPCALLBACK: ',body);
 					apis.getReviewList(body,function(retdata){
+						self.memberList=[];
 						if (retdata!=null) {
-							self.memberList=[];
 							for(var i=0;i<retdata.length;i++){
 								var item=retdata[i];
 								if (item.Name.length>0 ){
@@ -131,6 +132,8 @@
 								}
 								self.memberList.push(item);
 							}
+						}else{
+							modal.toast({'message':'没有待审核信息~','doation':1});
 						}
 					},function(progress){});
 			},
@@ -139,6 +142,7 @@
 					// self.memberName=e.target.attr.name;
 					var name=e.target.attr.name;
 					var guid=e.target.attr.guid;
+					name=encodeURIComponent(name);
 					var url=self.baseUrl+'/repTimeList.js'+'?'+self.memberMess+'&name='+name+'&code='+guid;
 					// console.log('REPCALLBACK: ',url);
 					var params={'url':url,'animated':'true'};
@@ -152,7 +156,7 @@
 			getUrlParams:function(){
 				var self=this;
 				var bundleUrl=this.$getConfig().bundleUrl||'';
-				// var bundleUrl='http://weex.yy365.cn/repCheck.js?userPlatformCode=545e1ced3b364bbabf44bb2b72903862';
+				// var bundleUrl='http://weex.yy365.cn/repCheck.js?userPlatformCode=cd47e31df52647a0bdb5fffc6c8d6718';
 				var params=bundleUrl.split('?');
 				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
 				self.memberMess=params[1];

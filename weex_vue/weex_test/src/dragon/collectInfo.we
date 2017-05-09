@@ -1,18 +1,18 @@
 <template>
-	<div append="node" style="background-color:rgb(235,235,243);">
+	<div append="node" style="background-color:rgb(242,244,246);">
 		<div class="div_loading" if="false">
 			<img class="img_loading" src="{{baseUrl+loadingUrl}}">
 		</div>
-		<list style="flex:1;margin:{{marginBottom}};background-color:#ffffff;">
+		<list id="list" style="flex:1;margin:{{marginBottom}};background-color:#ffffff;">
 		<cell repeat="item in collectInfoList">
 			<!-- 大标题 -->
 			<div class="div_tit">
 				<!-- <div class="img_spot"></div> -->
 				<text class="text_tit">{{$index+1}}、  {{item.name}}</text>
 			</div>
-			<!-- 复选框 -->
 			<div repeat="choice in item.data ">
-			<div class="div_select" if="{{choice.atype==1||choice.atype==0}}" choice="{{choice}}" onclick="clickCheck">
+			<!-- 复选框 -->
+			<div class="div_select" if="{{choice.atype==1||choice.atype==0}}" choice="{{choice}}" onclick="clickCheck" id="{{$index}}">
 				<div class="div_check_{{choice.selected==1}}" >
 					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
 				</div>
@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<!-- 选择 and 输入 -->
-			<div  class="div_select" if="{{choice.atype==2}}">
+			<div  class="div_select" if="{{choice.atype==2}}" id="{{$index}}">
 				<div class="div_check_{{choice.selected==1}}" choice="{{choice}}" onclick="clickCheck">
 					<!-- <img class="img_check" src="{{baseUrl+imgUrl}}" if="{{choice.selected==1}}"> -->
 				</div>
@@ -31,14 +31,14 @@
 				</div>
 			</div>
 			<!-- 文本 and 输入 -->
-			<div  class="div_select" if="{{choice.atype==4}}">
+			<div  class="div_select" if="{{choice.atype==4}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname}}</text>
 				<div class="div_input">
 					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur"></input>
 				</div>
 			</div>
 			<!-- 文本 and 输入 and 文本-->
-			<div  class="div_select" if="{{choice.atype==3}}">
+			<div  class="div_select" if="{{choice.atype==3}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname[0]}}</text>
 				<div class="div_input">
 					<input class="textarea" type="text" value="{{choice.value}}" choice="{{choice}}" oninput="input" onfocus="focus" onblur="blur"></input>
@@ -46,8 +46,9 @@
 				<text class="text_value">{{choice.aname[1]}}</text>
 			</div>
 			<!-- 文本 -->
-			<div  class="div_select" if="{{choice.atype==5}}">
+			<div  class="div_select" if="{{choice.atype==5}}" id="{{$index}}">
 				<text class="text_value">{{choice.aname}}</text>
+				<text class="text_value" style="color:#ff0000;" if="{{$index==special&&warn}}">（必选）</text>
 			</div>
 			<!-- 滚动选择 -->
 			<div class="div_select" if="{{choice.atype==6}}">
@@ -62,7 +63,7 @@
 			</div>
 		</cell>
 		</list>
-		<div style="flex-direction:row;justify-content:center;align-items:center;">
+		<div id="bottom" style="flex-direction:row;justify-content:center;align-items:center;">
 			<div class="div_bottom" style="height: {{btnHeight}};margin-bottom: {{marginBottom}};" onclick="clickSub">
 				<text class="text_bottom">提交</text>
 			</div>
@@ -76,7 +77,7 @@
 		align-items: flex-start;
 		justify-content: flex-start;
 		margin-top: 5;
-		background-color: #eeeeee;
+		background-color: rgb(242,244,246);
 		/*margin-bottom: 5;*/
 	}
 	.div_text{
@@ -103,7 +104,8 @@
 	}
 	.div_multi{
 		flex-direction: row;
-		align-items: center;justify-content: center;
+		align-items: center;
+		justify-content: center;
 		margin-left: 20;
 	}
 	.div_check{
@@ -165,7 +167,8 @@
 		text-align: center;
 	}
 	.img_spot{
-		width: 6;height: 6;
+		width: 6;
+		height: 6;
 		background-color: #000000;
 		margin:20;
 	}
@@ -174,7 +177,8 @@
 		/*font-weight: bold;*/
 		text-align: left;
 		margin-left: 20;
-		margin-top: 5;margin-bottom: 5;
+		margin-top: 5;
+		margin-bottom: 5;
 	}
 	.text_value{
 		font-size: 16;
@@ -204,8 +208,6 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 5;
-		border-width: 2;
-		border-color: rgb(2,136,209);
 		background-color: rgb(2,136,209);
 	}
 	.text_bottom{
@@ -272,6 +274,7 @@
 	var modal=require('@weex-module/modal');
 	var picker=require('@weex-module/picker');
 	var myModule=require('@weex-module/myModule');
+    var dom=require('@weex-module/dom');
 
 	module.exports={
 		data:{
@@ -290,10 +293,14 @@
 			nailDamageHint:'--请选择--',
 			inputdate:'',
 			marginBottom:20,
+			handAndFootProList:[],
+			special:'',
+			warn:false,
 		},
 		methods:{
 			clickCheck:function(e){
 				var self=this;
+				self.warn=false;
 				var choice=e.target.attr.choice;
 				if (choice.selected==1) {
 					choice.selected=0;
@@ -302,8 +309,17 @@
 						var item=self.selectedList[i];
 						if (item.aid==choice.aid) {
 							self.selectedList.splice(i,1);
+							break;
 						}
 					}}
+					if (choice.special==1) {
+						for (var i = 0; i < self.handAndFootProList.length; i++) {
+							if (self.handAndFootProList[i].aid===choice.aid) {
+								self.handAndFootProList.splice(i,1);
+								break;
+							}
+						}
+					}
 				}else{
 					choice.selected=1;
 					var item={};
@@ -311,27 +327,24 @@
 					item.value=choice.value;
 					item.qid=choice.qid;
 					self.selectedList.push(item);
+					if (choice.special==1) {
+						item.aname=choice.aname;
+						item.atype=choice.atype;
+						self.handAndFootProList.push(item);
+					}
 				}
-				// var selected=choice.selected==1?0:1;
-				// choice.selected=selected;
-				console.log('ret: ',JSON.stringify(self.selectedList));
+				// console.log('ret: ',JSON.stringify(self.selectedList));
+				// console.log('ret: ',JSON.stringify(self.handAndFootProList));
 			},
 			focus:function(e){
 				var self=this;
-				// var choice=e.target.attr.choice;
-				// choice.focused=true;
 			},
 			blur:function(e){
 				var self=this;
 				var choice=e.target.attr.choice;
-				// if (choice.focused) {
-					// choice.focused=false;
-					// if (e.value!==choice.value) {
-						var value=choice.value;
-						choice.value='';
-						choice.value=value;
-					// }
-				// }
+				var value=choice.value;
+				choice.value='';
+				choice.value=value;
 			},
 			input:function(e){
 				var self=this;
@@ -348,6 +361,13 @@
 								self.selectedList[i].value=e.value;
 							}
 						}}
+						if (choice.special==1) {
+							for (var spec of self.handAndFootProList) {
+								if (spec.aid==choice.aid) {
+									spec.value=e.value;
+								}
+							}
+						}
 					}
 				}else if (type==4) {
 					choice.value=e.value;
@@ -393,6 +413,9 @@
 								var ans=item.data[i];
 								ans.selected=0;
 								ans.value='';
+								if (self.special==''&&ans.special==1) {
+									self.special=i-1;
+								}
 								if (ans.atype==3) {
 									var arr=ans.aname.split('|&');
 									ans.aname=arr;
@@ -423,6 +446,7 @@
 			},
 			clickSub:function(e){
 				var self=this;
+				if (self.handAndFootProList.length>0) {
 				var isFinish=self.checkFinish();
 				console.log('ret: ',isFinish);
 				if (!isFinish) {
@@ -435,7 +459,13 @@
 				}else{
 					self.new();
 				}
-				// var body='QueryType=saveContactFileData&UserGuid=NTV8QDM3MWQwMmI0NWRkZmU4ODc3ODA1MTMxNWM1YThmZGQ1fEA0ZDVhNTMxNDEwNmNlNmU3OGY1ZmQ0ZjU0NmYwNjBjMg--&Params={"ContactId":"b7b06192a00f5fb8abb19047fa7d675b","NailUrl":"","FileData":'+JSON.stringify(self.selectedList)+'}';
+				}else{
+					// myModule.printToast('九大病（手足问题）为必选项');
+					self.warn=true;
+					var el = self.$el(self.special);
+					console.log('el: ',self.special+'  '+el);
+					dom.scrollToElement(el,{offset:-2});
+				}
 			},
 			new:function(){
 				var self=this;
@@ -446,14 +476,24 @@
 				// queryType='saveContactFileData';
 				// userGuid='NTV8QDM3MWQwMmI0NWRkZmU4ODc3ODA1MTMxNWM1YThmZGQ1fEA0ZDVhNTMxNDEwNmNlNmU3OGY1ZmQ0ZjU0NmYwNjBjMg--';
 				// contactId='b7b06192a00f5fb8abb19047fa7d675b';
-				// nailUrl=[["http://mobile-10034140.image.myqcloud.com/6b90e061-5e51-4aad-9f27-93e1955f7038","http://mobile-10034140.image.myqcloud.com/0df622a6-c980-4f00-85d5-64db5a82ce82","http://mobile-10034140.image.myqcloud.com/fdb1571c-2bb6-42a7-93b1-1a48bff281a5"],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],["http://mobile-10034140.image.myqcloud.com/0596c853-9948-49c5-923d-fc69a207e632","http://mobile-10034140.image.myqcloud.com/eec7f627-f3e4-4ada-97cb-51f4995e569e"],["http://mobile-10034140.image.myqcloud.com/8a4975a0-f9c3-4160-9d0a-1a3db00bf7a6","http://mobile-10034140.image.myqcloud.com/731e3377-bbed-4e27-b256-6842e321daff"]];
+				// nailUrl=[[],[],[],[]];
 				//获取提交时需要的参数
 				configModule.GetUploadPhotoPara(function(ret){
 					queryType=ret.queryType;
 					userGuid=ret.userGuid;
 					contactId=ret.contactID;
 					nailUrl=ret.nailUrl;
-					var body='QueryType='+queryType+'&UserGuid='+userGuid+'&Params={"ContactId":"'+contactId+'","NailUrl":'+JSON.stringify(nailUrl)+',"FileData":'+JSON.stringify(self.selectedList)+'}';
+					var handAndFootPro='';
+					for (var item of self.handAndFootProList) {
+						if (item.atype==1) {
+							handAndFootPro=handAndFootPro+'/'+item.aname;
+						}else if (item.atype==2) {
+							handAndFootPro=handAndFootPro+'/'+item.value;
+						}
+					}
+					// console.log('handAndFootPro: ',handAndFootPro.substring(1));
+					var body='QueryType='+queryType+'&UserGuid='+userGuid+'&Params={"ContactId":"'+contactId+'","NailUrl":'+JSON.stringify(nailUrl)+',"FileData":'+JSON.stringify(self.selectedList)+',"Remark":"'+handAndFootPro.substring(1)+'"}';
+					// modal.alert({'message':body,'doation':1});
 					require('@weex-module/myModule').printLog(body);
 					// console.log('BODY: ',body);
 					apis.sendInfo(body,function(retdata){
@@ -466,6 +506,7 @@
 			},
 			clickPick:function(e){
 				var self=this;
+				self.warn=false;
 				var choice =e.target.attr.choice;
 				var index=choice.value?choice.value:0;
 				picker.pick({
@@ -497,7 +538,7 @@
 					ans.qid=choice.qid;
 					self.selectedList.push(ans);
 				}
-				console.log('ret: ',JSON.stringify(self.nailDamageList));
+				// console.log('ret: ',JSON.stringify(self.nailDamageList));
 			},
 			setPickList:function(){
 				var self=this;

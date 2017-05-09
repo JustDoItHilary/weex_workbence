@@ -20,9 +20,6 @@
 			<cell repeat="item in timeList" class="cell" onclick="clickTime" start="{{item.startTime}}" end="{{item.endTime}}" sum="{{item.summary}}">
 				<text class="text_time">{{item.startTime}} ~ {{item.endTime}}</text>
 			</cell>
-			<!-- <loading style="margin:30;height:80;justify-content:center;" onloading="loading" display="{{isSHowLoading}}">
-				<text style="text-align:center;color:#58D68D;">正在加载。。。</text>
-			</loading> -->
 		</list>
 	</div>
 </template>
@@ -129,12 +126,15 @@
 			},
 			clickTime:function(e){
 				var self=this;
-				var url=self.baseUrl+'/repCheck.js'+'?'+self.memberMess;
+				var url=self.baseUrl+'/repCheck.js?'+self.memberMess;
 				var startTime=e.target.attr.start;
 				var endTime=e.target.attr.end;
+				startTime=encodeURIComponent(startTime);
+				endTime=encodeURIComponent(endTime);
 				url=url+'&startDate='+startTime+'&endDate='+endTime;
 				// console.log('REPCALLBACK: ',url);
-				navigator.push({'url':url,'animated':true},function(ret){});
+				var params={'url':url,'animated':'true'};
+				navigator.push(params,function(ret){});
 			},
 			clickLastMon:function(e){
 				var self=this;
@@ -150,7 +150,7 @@
 			getUrlParams:function(){
 				var self=this;
 				var bundleUrl=this.$getConfig().bundleUrl||'';
-				// var bundleUrl='http://weex.yy365.cn/repTimeList.js?userPlatformCode=545e1ced3b364bbabf44bb2b72903862&name=哈哈&code=58ba8990f0e2467ab167b5a002fb13cd';
+				// var bundleUrl='http://weex.yy365.cn/repTimeList.js?userPlatformCode=cd47e31df52647a0bdb5fffc6c8d6718&name=张海月&code=8b107c27c2b84630b5d12cad65d6e13b';
 				var params=bundleUrl.split('?');
 				self.baseUrl=params[0].split('/').slice(0,-1).join('/');
 				self.memberMess=params[1];
@@ -158,6 +158,7 @@
 				// self.devHeight=paramsArr[0].split('=')[1];
 				self.userPlatformCode=paramsArr[0].split('=')[1];
 				self.userName=paramsArr[1].split('=')[1];
+				self.userName=decodeURIComponent(self.userName);
 				self.empGuid=paramsArr[2].split('=')[1];
 				console.log('REPCALLBACK: ',self.empGuid);
 			},

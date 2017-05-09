@@ -34,14 +34,20 @@ var apiURL = {
     savereportForJson:'SaveReport_Json'
 
 };
-function getData(url,body,callback,progresscallback){
+function getData(url,body,callback,progresscallback){ 
+    // var header={
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json;charset=UTF-8'
+    //   };
     var options={method:'POST',url:url,type:'json',body:body};
     stream.fetch(options,function(ret){
         // modal.alert({'message':JSON.stringify(ret),'oktitle':'OK'});
         // require('@weex-module/myModule').printLog('ret: '+JSON.stringify(ret));
         console.log('REPCALLBACK: ',ret);
         if (ret.ok) {
-            callback(ret.data);
+            if (ret.data!==null) {
+                callback(ret.data);
+            }
         }
     },function(progress){
         progresscallback(progress);
