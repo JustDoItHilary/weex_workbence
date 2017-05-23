@@ -6,7 +6,7 @@
         </div>
         <!-- <actionbar  tit="公告" style="height:{{actionBarHeight}}"></actionbar>  -->
         <header tit="公告"></header>
-		<div class="title" >
+		<!-- <div class="title" >
             <div >
                 <text class="firtit">{{tit}}</text>
             </div>
@@ -21,7 +21,7 @@
                     <text class="text_tab">未读 {{noread}}</text>
                 </div>
             </div>
-		</div>
+		</div> -->
 		<web if="url" id="webview" src="{{url}}" class="webStyle" onpagestart="startEvt" onpagefinish="finishEvt" onerror="errorEvt"></web>
 	</div>
 </template>
@@ -186,10 +186,14 @@
             setUrl:function(){
                 var self=this;
                 var bundleUrl = this.$getConfig().bundleUrl || '';
-                // var bundleUrl='http://weex.yy365.cn/notice-item.js?GUID=58edc59264e881491977618';
-                var params=bundleUrl.split('?');
-                self.baseUrl=params[0].split('/').slice(0,-1).join('/');
-                self.noticeId=params[1].split('=')[1];
+                // var bundleUrl='http://weex.yy365.cn/notice-item.js?http://im.yiyao365.cn/Appnotice?GUID=58edc59264e881491977618&token=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+                var index=bundleUrl.indexOf('?');
+                // var params=bundleUrl.split('?');
+                self.baseUrl=bundleUrl.substring(0,index).split('/').slice(0,-1).join('/');
+                self.url=bundleUrl.substring(index+1);
+                console.log('baseUrl: ',self.baseUrl);
+                console.log('baseUrl: ',self.url);
+                // self.noticeId=params[1].split('=')[1];
             },
             startEvt:function(e){},
             finishEvt:function(e){
@@ -261,7 +265,7 @@
 		created:function(){
 			var self=this;
             self.setUrl();
-            self.getData();
+            // self.getData();
 		},
         ready:function(e){
             var self=this;

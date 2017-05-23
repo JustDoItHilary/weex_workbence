@@ -19,14 +19,14 @@
 			<!-- <header if="false">
 				<text style="text-align:center;color:#66ff99;font-weight:bold;">HEAD</text>
 			</header> -->
-			<refresh style="width:750;margin:30;flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{isShowRefresh}}">
+			<refresh style="margin:30;flex-direction:row;justify-content:center;" onrefresh="refresh" display="{{isShowRefresh}}">
 				<loading-indicator style="width:50;height:50;color:#3192e1"></loading-indicator>
 			</refresh>
 			<cell repeat="item in mylist" class="div_item" onclick="itemClick" item="{{item}}">
-				<div style="flex:1;margin-left: 16;">
+				<div style="flex:1;height:190;margin-left: 16;">
 					<text class="text_title">{{item.TITLE}}</text>
 					<text class="text_author">发布人 / {{item.AUTHOR}}</text>
-					<text class="text_excerpt">{{item.DESC}}</text>
+					<!-- <text class="text_excerpt">{{item.DESC}}</text> -->
 					<div class="div-tab" if="false">
 						<div repeat="tab in item.tab_items">
         					<text class="text-tab" style="background-color:{{tab.background_color}};">{{tab.tab}}</text>
@@ -47,7 +47,6 @@
 
 <style>
 	.div_titBar{
-		width: 750;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
@@ -88,25 +87,29 @@
 		margin:10;
 		/*border-width: 1;*/
 	}
-	.text_time{
-		font-size: 24;
-		color: #888888;
-		margin-top: 10;
-	}
 	.text_title{
+		flex:1;
+		lines:2;
 		font-size: 32;
-		font-weight: bold;
+		font-weight: 500;
 		margin-top: 10;
 	}
 	.text_author{
+		lines:1;
 		font-size: 24;
-		margin-top: 10;
-		margin-left: 20;
+		margin-bottom: 10;
 	}
 	.text_excerpt{
+		lines:1;
 		color: black;
 		font-size: 28;
-		margin-top: 10;
+		margin-bottom: 10;
+	}
+	.text_time{
+		lines:1;
+		font-size: 24;
+		color: #888;
+		margin-bottom: 10;
 	}
     .text-tab{
         margin: 6;
@@ -188,26 +191,32 @@
 			loading:true,
 			isSelected:true,
 			isiOS:false,
+			token:'',
 		},
 		methods:{
 			getData:function(url){
 				var self=this;
 				console.log('ret:',url);
-				var body='';
-				var handleName='';
-				// body='QueryType=GetNotice&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
-				// handleName='handle';
-				configModule.getRequestBody(function(ret){
-					body=ret.body;
-					handleName=ret.handleName;
-					// require('@weex-module/myModule').printLog('body');
+				var handleName='handle';
+                var body='QueryType=GetNotice&UserGuid=';
+                // self.token='ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+                configModule.getUrl('', function(ret){
+                    self.token=ret.split('=')[1];
+                    body=body+self.token+'&Params={}';
+                    // require('@weex-module/myModule').printLog('body');
 					stream.fetch({method:'POST',url:url+handleName,type:'json',body:body},function(ret){
 						// require('@weex-module/myModule').printLog(JSON.stringify(ret));
 						if (ret.ok) {
 							self.getList(ret.data);
 						}
 					},function(progress){});
-				});
+                });
+				// body='QueryType=GetNotice&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
+				// configModule.getRequestBody(function(ret){
+					// body=ret.body;
+					// handleName=ret.handleName;
+					// require('@weex-module/myModule').printLog('body');
+				// });
 			},
 			getList:function(retdata){
 				var self=this;
@@ -232,8 +241,8 @@
 				var self=this;
 				var item=e.target.attr.item;
 				var webUrl=item.web_url;
-				webUrl=webUrl+'?GUID='+item.GUID;
-				console.log('CLICK',webUrl);
+				webUrl=webUrl+'?'+item.URL+'&token='+self.token;
+				console.log('CLICK',item.URL+'&token='+self.token);
 				var params = {'url':webUrl,'animated':'true'};
         		navigator.push(params, function(e) {
 				});
