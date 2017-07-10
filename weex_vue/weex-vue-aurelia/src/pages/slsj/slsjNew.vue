@@ -117,12 +117,12 @@
 </template>
 
 <script>
-    const stream = weex.requireModule('stream');
-    const configModule = weex.requireModule('configModule');
-    const modal = weex.requireModule('modal');
-    const picker = weex.requireModule('picker');
-    const dom = weex.requireModule('dom');
-    const myModule = weex.requireModule('myModule');
+    let stream = weex.requireModule('stream');
+    let configModule = weex.requireModule('configModule');
+    let modal = weex.requireModule('modal');
+    let picker = weex.requireModule('picker');
+    let dom = weex.requireModule('dom');
+    let myModule = weex.requireModule('myModule');
     const apis = require('../common/api');
 
     module.exports = {
@@ -167,13 +167,13 @@
         computed: {},
         methods: {
             setRequired: function (ansIndex, index) {
-                const self = this;
+                let self = this;
                 if (self.slsjSpecial.qIndex == index) {
                     if (self.slsjSpecial.aIndex == ansIndex) {
                         return true;
                     }
                     if (self.handAndFootProList.length > 0) {
-                        for (const i = 0; i < self.handAndFootProList.length; i++) {
+                        for (let i = 0; i < self.handAndFootProList.length; i++) {
                             if (self.handAndFootProList[i].aid == self.specialModelId && self.slsjSpecial.modelIndex == ansIndex) {
                                 return true;
                             }
@@ -184,7 +184,7 @@
                 return false;
             },
             getPickData(choice){
-                const self = this;
+                let self = this;
                 if (choice.value !== '') {
                     if (choice.content) {
                         return choice.content.split('|@')[choice.value];
@@ -196,22 +196,22 @@
                 }
             },
             clickCloseItem: function (item) {
-                const self = this;
+                let self = this;
                 item.showed = false;
             },
             clickItem: function (item) {
-                const self = this;
+                let self = this;
                 item.showed = !item.showed
             },
             clickCheck: function (choice, ansIndex) {
-                const self = this;
+                let self = this;
                 console.log(choice)
                 self.warn = false;
                 if (choice.selected == 1) {
                     choice.selected = 0;
                     if (self.selectedList !== null && self.selectedList.length > 0) {
-                        for (const i = 0; i < self.selectedList.length; i++) {
-                            const item = self.selectedList[i];
+                        for (let i = 0; i < self.selectedList.length; i++) {
+                            let item = self.selectedList[i];
                             if (item.aid == choice.aid) {
                                 self.selectedList.splice(i, 1);
                                 break;
@@ -219,7 +219,7 @@
                         }
                     }
                     if (choice.special == 1) {
-                        for (const i = 0; i < self.handAndFootProList.length; i++) {
+                        for (let i = 0; i < self.handAndFootProList.length; i++) {
                             if (self.handAndFootProList[i].aid === choice.aid) {
                                 self.handAndFootProList.splice(i, 1);
                                 break;
@@ -228,7 +228,7 @@
                     }
                 } else {
                     choice.selected = 1;
-                    const item = {};
+                    let item = {};
                     item.aid = choice.aid;
                     item.value = choice.value;
                     item.qid = choice.qid;
@@ -244,10 +244,10 @@
                 console.log('ret: ', JSON.stringify(self.handAndFootProList));
             },
             clickPick: function (choice) {
-                const self = this;
+                let self = this;
                 self.warn = false;
                 console.log('CHOICE: ', choice)
-                const index = choice.value ? choice.value : 0;
+                let index = choice.value ? choice.value : 0;
                 picker.pick({
                     index: index, items: choice.content ? choice.content.split('|@') : self.nailDamageList
                 }, function (ret) {
@@ -259,10 +259,10 @@
                 });
             },
             addList: function (choice) {
-                const self = this;
-                const isSelected = false;
-                for (const i = 0; i < self.selectedList.length; i++) {
-                    const item = self.selectedList[i];
+                let self = this;
+                let isSelected = false;
+                for (let i = 0; i < self.selectedList.length; i++) {
+                    let item = self.selectedList[i];
                     console.log('item: ', JSON.stringify(item));
                     if (item.aid === choice.aid) {
                         isSelected = true;
@@ -272,7 +272,7 @@
                 }
                 //包含两种情况：selectedList=null 和 selectedList 数组不包含该条数据所以需要放在 for 循环外
                 if (!isSelected) {
-                    const ans = {};
+                    let ans = {};
                     ans.aid = choice.aid;
                     ans.value = choice.value;
                     ans.qid = choice.qid;
@@ -284,10 +284,10 @@
                 // console.log('ret: ',JSON.stringify(self.nailDamageList));
             },
             clickLeft: function (e) {
-                const self = this;
-                const qIndex = self.slsjSpecial.qIndex
+                let self = this;
+                let qIndex = self.slsjSpecial.qIndex
                 if (self.handAndFootProList.length > 0) {
-                    for (const i = 0; i < self.handAndFootProList.length; i++) {
+                    for (let i = 0; i < self.handAndFootProList.length; i++) {
                         if (self.handAndFootProList[i].aid == self.specialModelId) {
                             if (self.modelList.length > 0) {
                                 return self.checkFinish();
@@ -307,28 +307,28 @@
                 }
             },
             blur: function (choice) {
-                const self = this;
-//			const choice = e.target.attr.choice;
-                const value = choice.value;
+                let self = this;
+//			let choice = e.target.attr.choice;
+                let value = choice.value;
                 choice.value = '';
                 choice.value = value;
             },
             input: function (e, choice) {
-                const self = this;
-                const type = choice.atype;
+                let self = this;
+                let type = choice.atype;
                 if (type == 2) {
                     choice.value = e.value;
                     if (choice.selected == 1) {
                         if (self.selectedList !== null && self.selectedList.length > 0) {
-                            for (const i = 0; i < self.selectedList.length; i++) {
-                                const item = self.selectedList[i];
+                            for (let i = 0; i < self.selectedList.length; i++) {
+                                let item = self.selectedList[i];
                                 if (item.aid == choice.aid) {
                                     self.selectedList[i].value = e.value;
                                 }
                             }
                         }
                         if (choice.special == 1) {
-                            for (const spec of self.handAndFootProList) {
+                            for (let spec of self.handAndFootProList) {
                                 if (spec.aid == choice.aid) {
                                     spec.value = e.value;
                                 }
@@ -339,15 +339,15 @@
                     choice.value = e.value;
                     if (choice.selected == 0) {
                         choice.selected = 1;
-                        const item = {};
+                        let item = {};
                         item.aid = choice.aid;
                         item.value = e.value;
                         item.qid = choice.qid;
                         self.selectedList.push(item);
                     } else {
                         if (self.selectedList !== null && self.selectedList.length > 0) {
-                            for (const i = 0; i < self.selectedList.length; i++) {
-                                const item = self.selectedList[i];
+                            for (let i = 0; i < self.selectedList.length; i++) {
+                                let item = self.selectedList[i];
                                 if (item.aid == choice.aid) {
                                     item.value = e.value;
                                 }
@@ -357,11 +357,11 @@
                 }
             },
             checkFinish: function () {
-                const self = this;
-                const isFinish;
-                for (const j = 0; j < self.slsjNews.length; j++) {
+                let self = this;
+                let isFinish;
+                for (let j = 0; j < self.slsjNews.length; j++) {
                     isFinish = false;
-                    for (const i = 0; i < self.selectedList.length; i++) {
+                    for (let i = 0; i < self.selectedList.length; i++) {
                         if (self.selectedList[i].qid == self.slsjNews[j].id) {
                             isFinish = true;
                             break;
@@ -379,11 +379,11 @@
                 return self.newInfo();
             },
             newInfo: function () {
-                const self = this;
-                const queryType;
-                const userGuid;
-                const contactId;
-                const nailUrl;
+                let self = this;
+                let queryType;
+                let userGuid;
+                let contactId;
+                let nailUrl;
                 // queryType='saveContactFileData';
                 // userGuid='NTV8QDM3MWQwMmI0NWRkZmU4ODc3ODA1MTMxNWM1YThmZGQ1fEA0ZDVhNTMxNDEwNmNlNmU3OGY1ZmQ0ZjU0NmYwNjBjMg--';
                 // contactId='b7b06192a00f5fb8abb19047fa7d675b';
@@ -394,8 +394,8 @@
                     userGuid = ret.userGuid;
                     contactId = ret.contactID;
                     nailUrl = ret.nailUrl;
-                    const handAndFootPro = '';
-                    for (const item of self.handAndFootProList) {
+                    let handAndFootPro = '';
+                    for (let item of self.handAndFootProList) {
                         if (item.atype == 1) {
                             handAndFootPro = handAndFootPro + '/' + item.aname;
                         } else if (item.atype == 2) {
@@ -403,27 +403,27 @@
                         }
                     }
                     // console.log('handAndFootPro: ',handAndFootPro.substring(1));
-                    const params = {};
+                    let params = {};
                     params.ContactId = contactId;
                     params.NailUrl = nailUrl;
                     params.FileData = self.selectedList;
                     params.Remark = handAndFootPro.substring(1);
-                    const body = 'QueryType=' + queryType + '&UserGuid=' + userGuid + '&Params=' + JSON.stringify(params);
-//                    const body2 = 'QueryType=' + queryType + '&UserGuid=' + userGuid + '&Params={"ContactId":"' + contactId + '","NailUrl":' + JSON.stringify(nailUrl) + ',"FileData":' + JSON.stringify(self.selectedList) + ',"Remark":"' + handAndFootPro.substring(1) + '"}';
+                    let body = 'QueryType=' + queryType + '&UserGuid=' + userGuid + '&Params=' + JSON.stringify(params);
+//                    let body2 = 'QueryType=' + queryType + '&UserGuid=' + userGuid + '&Params={"ContactId":"' + contactId + '","NailUrl":' + JSON.stringify(nailUrl) + ',"FileData":' + JSON.stringify(self.selectedList) + ',"Remark":"' + handAndFootPro.substring(1) + '"}';
                     // modal.alert({'message':body,'doation':1});
 //                    require('@weex-module/myModule').printLog(body);
                     // console.log('BODY: ',body);
                     apis.sendInfo(body, function (retdata) {
                         // console.log('ret: ',retdata);
                         if (retdata !== null) {
-                            configModule.compconste(retdata);
+                            configModule.complete(retdata);
                         }
                     }, function (progress) {
                     });
                 });
             },
             getList: function () {
-                const self = this;
+                let self = this;
 //                this.$store.dispatch('FETCH_SLSJ_NEW')
                 apis.getBlackFile(function (retdata) {
                     if (retdata.result == '0000') {
@@ -435,17 +435,17 @@
                 });
             },
             pushList: function (data) {
-                const self = this;
+                let self = this;
                 if (data !== null && data.length > 0) {
-                    for (const j = 0; j < data.length; j++) {
-                        const item = data[j];
+                    for (let j = 0; j < data.length; j++) {
+                        let item = data[j];
                         item.showed = false;
                         if (item.data !== null && item.data.length > 0) {
                             item.id = item.data[0].qid;
                         }
                         if (item.data !== null && item.data.length > 0) {
-                            for (const i = 0; i < item.data.length; i++) {
-                                const ans = item.data[i];
+                            for (let i = 0; i < item.data.length; i++) {
+                                let ans = item.data[i];
                                 ans.selected = 0;
                                 ans.value = '';
                                 if (self.slsjSpecial.aIndex == '' && ans.special == 1) {
@@ -456,11 +456,11 @@
                                     self.slsjSpecial.modelIndex = i - 1;
                                 }
                                 if (ans.atype == 3) {
-                                    const arr = ans.aname.split('|&');
+                                    let arr = ans.aname.split('|&');
                                     ans.aname = arr;
                                 }
                             }
-                            const closeItem = {atype: 7};
+                            let closeItem = {atype: 7};
                             item.data.push(closeItem);
                         }
                         self.slsjNews.push(item);
@@ -469,17 +469,17 @@
                 }
             },
             setPickList: function () {
-                const self = this;
-                for (const i = 0; i < 100; i++) {
+                let self = this;
+                for (let i = 0; i < 100; i++) {
                     self.nailDamageList.push(i);
                 }
             },
             setMeasure: function () {
-                const self = this;
+                let self = this;
                 configModule.getContainerHeight(function (params) {
-                    // const ratio = this.$getConfig().env.devHeight /(2*750);
+                    // let ratio = this.$getConfig().env.devHeight /(2*750);
                     //从本地获取按钮的高度占布局高度的比值
-                    const ratio = params.ratio;
+                    let ratio = params.ratio;
                     if (ratio !== null) {
                         //由于是横屏显示，所以高度为设备的宽度
                         self.btnHeight = 750 * ratio;
@@ -491,7 +491,7 @@
             }
         },
         created: function (e) {
-            const self = this;
+            let self = this;
 //            self.baseUrl = 'http://192.168.100.127:8888/weex';
             self.baseUrl = self.$getConfig().bundleUrl.split('?')[0].split('/').slice(0, -1).join('/') || '';
             self.setMeasure();
