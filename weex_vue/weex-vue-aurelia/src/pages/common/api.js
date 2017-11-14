@@ -14,6 +14,7 @@ var apiURL = {
     yiyaoUrl:'http://im.yiyao365.cn/handle',
     jsBaseurl: 'http://weex.yy365.cn/',
     slsjBaseUrl:'http://slsj.yy365.cn/',
+    // slsjBaseUrl:'http://192.168.100.246:8086/',
     repBaseUrl:'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
     // repBaseUrl:'http://192.168.100.117:8090/Handler/DailyAPIHandler.ashx?action=',
 
@@ -24,9 +25,10 @@ var apiURL = {
     auditReport:'AuditReport',
     getEmpList:'GetEmpList',
     savereportForJson:'SaveReport_Json',
-    slsjGetFileTemplate:'http://slsj.yy365.cn/Resource/getFileTemplate',
+    slsjGetFileTemplate:'resource/getFileTemplate',
+    // slsjGetFileTemplate:'http://slsj.yy365.cn/Resource/getFileTemplate',
     // slsjGetFileTemplate:'/getFileTemplate',
-    slsjEditFile:'http://slsj.yy365.cn/Contact'
+    slsjEditFile:'Contact'
 
 
 };
@@ -94,14 +96,14 @@ exports.getEmpList = function (body,callback,progresscallback) {
 };
 
 /*slsj*/
-exports.getBlackFile=function(callback,progresscallback){
-    getDataInGet(apiURL.slsjGetFileTemplate,callback,progresscallback);
+exports.slsjGetFileTemplate=function(callback, progresscallback){
+    getDataInGet(apiURL.slsjBaseUrl+apiURL.slsjGetFileTemplate,callback,progresscallback);
 };
 exports.getFile=function(body,callback,progresscallback){
-    getData(apiURL.slsjEditFile,body,callback,progresscallback);
+    getData(apiURL.slsjBaseUrl+apiURL.slsjEditFile,body,callback,progresscallback);
 };
 exports.sendInfo=function(body,callback,progresscallback){
-    getData(apiURL.slsjEditFile,body,callback,progresscallback);
+    getData(apiURL.slsjBaseUrl+apiURL.slsjEditFile,body,callback,progresscallback);
 };
 
 /*notice*/

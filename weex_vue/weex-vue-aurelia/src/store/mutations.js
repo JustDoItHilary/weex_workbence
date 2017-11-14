@@ -81,40 +81,29 @@ export function SET_NOTICEITEM(state, {item}) {
 }
 
 /** -----------------slsj------------------*/
-export function SET_SLSJ_NEW(state, {data}) {
-    var self = this;
-    console.log(data)
-    if (data) {
-        // state.slsjNew=data.data
-        for (var j = 0; j < data.data.length; j++) {
-            var item = data.data[j];
-            item.showed = false;
+export function SET_SLSJ_LIST(state, {data}) {
+    if (data !== null && data.length > 0) {
+        for (let j = 0; j < data.length; j++) {
+            let item = data[j];
+            item.showed = false;//showed - 是否展开
+            item.warning=false;// warning - 是否显示 （必选）
             if (item.data !== null && item.data.length > 0) {
                 item.id = item.data[0].qid;
             }
             if (item.data !== null && item.data.length > 0) {
-                for (var i = 0; i < item.data.length; i++) {
-                    var ans = item.data[i];
-                    ans.selected = 0;
+                for (let i = 0; i < item.data.length; i++) {
+                    let ans = item.data[i];
                     ans.value = '';
-                    if (state.slsjSpecial.aIndex === '' && ans.special == 1) {
-                        state.slsjSpecial.aIndex = i - 1;
-                        state.slsjSpecial.qIndex = j;
-                    }
-                    if (state.slsjSpecial.modelIndex === '' && ans.content !== '') {
-                        state.slsjSpecial.modelIndex = i - 1;
-                    }
-                    if (ans.atype == 3) {
-                        var arr = ans.aname.split('|&');
-                        ans.aname = arr;
-                    }
                 }
-                var closeItem = {atype: 7};
+                let closeItem = {atype: 7};
                 item.data.push(closeItem);
             }
-            state.slsjNew.push(item);
+            state.slsjList.push(item);
         }
     }
+}
+export function SET_SLSJ_ITEM(state, {item,index}) {
+    state.slsjList[index]=item;
 }
 
 /** -----------------REP------------------*/
@@ -143,8 +132,8 @@ export function SET_REPS(state, {retdata}) {
                     item.IsPost = false;
                     item.checked = '未提交';
                 }
-                item.summary = apis.replaceTransfer(item.summary);
-                item.myPlan = apis.replaceTransfer(item.myPlan);
+                // item.summary = apis.replaceTransfer(item.summary);
+                // item.myPlan = apis.replaceTransfer(item.myPlan);
                 state.repList.push(item);
             }
         }
@@ -165,14 +154,16 @@ export function GET_APPLY(state, {data}) {
 }
 //获取申请详情
 export function GET_APPLY_DETAILS(state, {data}) {
-    if (data.length > 0) {
-        state.applyDetails = data[0]
-        state.applyReaderList.approveList = []
-        state.applyReaderList.approveList.push({USERNAME: data[0].APPNAME})
-        state.applyReaderList.noticeList = data[0].DATA
+    let details=data.DATA;
+    if (details.length > 0) {
+        state.applyDetails = details[0];
+        state.applyDetails.OPTION=data.OPTION;
+        state.applyReaderList.approveList = [];
+        state.applyReaderList.approveList.push({USERNAME: details[0].APPNAME});
+        state.applyReaderList.noticeList = details[0].DATA
     } else {
-        state.applyReaderList.approveList = []
-        state.applyReaderList.noticeList = []
+        state.applyReaderList.approveList = [];
+        state.applyReaderList.noticeList = [];
         state.applyDetails = {}
     }
 }
@@ -199,15 +190,30 @@ export function SET_READER(state, {type, reader}) {
         state.applyReaderList.noticeList = reader;
     }
 }
-//设置新增申请的内容（解决添加成员后输入内容消失的问题）
-export function SET_INPUT_VALUE(state,{value}) {
-    state.applyInput=value;
-}
 //设置token
 export function SET_TOKEN(state,{token}) {
-    state.applyToken=token;
+    state.selfToken=token;
 }
 //设置 baseUrl
-export function SET_APPLY_URL(state, {url}) {
-    state.applyBaseUrl = url;
+export function SET_BASE_URL(state, {url}) {
+    state.baseUrl = url;
+}
+
+/** -----------------SY------------------*/
+export function GET_SY_MEMBERINFO(state,{data}) {
+    if(data!=null&&data.DETAIL!=null&&data.DETAIL.length>0){
+        for(let i=0;i<data.DETAIL.length;i++){
+            let item=data.DETAIL[i];
+            let arr=[];
+            for(let j in item.LIST){
+                let obj={};
+                obj.TIT=j;
+                obj.CONTENT=item.LIST[j];
+                arr.push(obj)
+            }
+            item.INFO=arr;
+            item.showed=true;
+            state.syMemberInfo.push(item)
+        }
+    }
 }

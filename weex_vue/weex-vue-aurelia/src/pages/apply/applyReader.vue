@@ -31,7 +31,7 @@
 
     module.exports = {
         components: {
-            ApplyHeader: require('../../components/apply-header.vue')
+            ApplyHeader: require('../../components/header/apply-header.vue')
         },
         computed: {
             reader () {
@@ -41,26 +41,23 @@
                 return ''
             },
             baseUrl(){
-                return this.$store.getters.applyBaseUrl
+                return this.$store.getters.baseUrl
             },
             memberList(){
                 return this.$store.getters.applyMember
             },
             token(){
-                return this.$store.getters.applyGetToken
+                return this.$store.getters.selfToken
             }
         },
         props: {},
         data(){
             return {
-                devHeight: 960,
-                actionBarHeight: 112,
                 imgUrl: '/drawable/ic_done_white_48dp.png',
                 imgBackUrl: '/drawable/ic_back_white_48dp.png',
                 imgSearchUrl: '/drawable/ic_search_48pt.png',
-                memberMess: '',
                 selectedList: [],
-                selectedMess: '',
+                baseList: [],
                 searchMess: '',
                 readerType: 1
             }
@@ -80,10 +77,13 @@
                 let self = this;
                 //选择结果 - 未选择的话需要将 state 中的数据清空
                 this.$store.commit('SET_READER', {type: self.readerType, reader: self.selectedList});// reader 与后面获取值得键名一致
-                self.back();
+                this.$router.back();
+//                self.back();
             },
             clickClose: function () {
                 let self = this;
+                //选择结果 - 未选择的话需要将 state 中的数据清空
+//                this.$store.commit('SET_READER', {type: self.readerType, reader: self.baseList});// reader 与后面获取值得键名一致
                 self.back();
             },
             clickMember: function (item) {
@@ -108,6 +108,9 @@
                         self.selectedList.push(item);
                     }
                 }
+                console.log("click: ",self.selectedList)
+                console.log("click: ",self.$store.getters.applyReader.noticeList)
+
             },
             input: function (e) {
                 let self = this;
@@ -116,11 +119,9 @@
             },
             getMemberList: function (search) {
                 let self = this;
-                let body = 'QueryType=getUserListFroWeex&UserGuid=';
                 let params = {};
                 params.SEARCH = search;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.$store.dispatch('FETCH_APPLY_READER', {body: body});// reader 与后面获取值得键名一致
+                self.$store.dispatch('FETCH_APPLY_READER', {params: JSON.stringify(params)});// reader 与后面获取值得键名一致
 
             },
             getParams: function (params) {
@@ -131,12 +132,12 @@
                 } else if (self.readerType == 1) {
                     self.selectedList = self.$store.getters.applyReader.noticeList;
                 }
-//                modal.alert({message:JSON.stringify(self.selectedList),duration:1})
+                self.baseList=self.selectedList;
+//                modal.alert({message:JSON.stringify(self.selected),duration:1})
             }
         },
         created: function () {
             let self = this;
-            // self.setMeasure();
             if (self.reader) {
                 self.getParams(JSON.parse(self.reader));
             }
@@ -144,7 +145,9 @@
         }
     };</script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="sass" scoped>
+    @import "../../style/mixin";
+
     .div_search {
         flex-direction: row;
     }
@@ -158,8 +161,7 @@
         justify-content: center;
         margin-top: 16px;
         margin-bottom: 10px;
-        margin-left: 36px;
-        margin-right: 36px;
+        @include marginRow(36px);
     }
 
     .txt_center {
@@ -170,8 +172,7 @@
     }
 
     .list {
-        margin-left: 40px;
-        margin-right: 40px;
+        @include marginRow(40px);
         justify-content: center;
         margin-bottom: 10px;
     }
@@ -187,7 +188,7 @@
         width: 80px;
         align-items: center;
         justify-content: center;
-        background-color: #58D68D;
+        background-color: $colorCommon;
         border-radius: 50px;
     }
 
@@ -222,6 +223,6 @@
         width: 48px;
         height: 48px;
         border-radius: 50px;
-        background-color: #58D68D;
+        background-color: $colorCommon;
     }
 </style>

@@ -11,71 +11,102 @@
 var path = require('path')
 var webpack = require('webpack')
 
-var bannerPlugin = new webpack.BannerPlugin(
-  '// { "framework": "Vue" }\n',
-  { raw: true }
-)
+//本地 json
+var express = require('express')
+var app = express()
+var appData = require('./slsj.json');
+var slsjData = appData.data;
+var apiRoutes = express.Router();
+apiRoutes.get('/slsj',function (req,res) {
+    res.json({
+        errno:0,
+        data:slsjData
+    });
+});
+app.use('/api',apiRoutes);
 
-function getBaseConfig () {
-  return {
-    entry: {
-      app: path.resolve('./src/entry.js')
-    },
-    output: {
-      path: 'dist',
-    },
-    module: {
-      // // You can use ESLint now!
-      // // Please:
-      // // 1. npm install {
-      // //   babel-eslint
-      // //   eslint
-      // //   eslint-config-standard
-      // //   eslint-loader
-      // //   eslint-plugin-html
-      // //   eslint-plugin-promise
-      // // } --save-dev
-      // // 2. set .eslintrc
-      // //   take { "extends": "standard" } for example
-      // //   so you need: npm install eslint-plugin-standard --save-dev
-      // // 3. set the config below
-      // preLoaders: [
-      //   {
-      //     test: /\.vue$/,
-      //     loader: 'eslint',
-      //     exclude: /node_modules/
-      //   },
-      //   {
-      //     test: /\.js$/,
-      //     loader: 'eslint',
-      //     exclude: /node_modules/
-      //   }
-      // ],
-      loaders: [
-        {
-          test: /\.js$/,
-          loader: 'babel',
-          exclude: /node_modules/
-        }, {
-          test: /\.vue(\?[^?]+)?$/,
-          loaders: []
-        }
-      ]
-    },
-    vue: {
-      // // You can use PostCSS now!
-      // // Take cssnext for example:
-      // // 1. npm install postcss-cssnext --save-dev
-      // // 2. write `var cssnext = require('postcss-cssnext')` at the top
-      // // 3. set the config below
-      // postcss: [cssnext({
-      //   features: {
-      //     autoprefixer: false
-      //   }
-      // })]
-    },
-    plugins: [bannerPlugin]
-  }
+
+
+var bannerPlugin = new webpack.BannerPlugin(
+    '// { "framework": "Vue" }\n',
+    {raw: true}
+)
+var cssnext = require('postcss-cssnext')
+
+function getBaseConfig() {
+    return {
+        entry: {
+            app: path.resolve('./src/entry.js')
+        },
+        output: {
+            path: 'dist',
+        },
+        module: {
+            // // You can use ESLint now!
+            // // Please:
+            // // 1. npm install {
+            // //   babel-eslint
+            // //   eslint
+            // //   eslint-config-standard
+            // //   eslint-loader
+            // //   eslint-plugin-html
+            // //   eslint-plugin-promise
+            // // } --save-dev
+            // // 2. set .eslintrc
+            // //   take { "extends": "standard" } for example
+            // //   so you need: npm install eslint-plugin-standard --save-dev
+            // // 3. set the config below
+            // preLoaders: [
+            //   {
+            //     test: /\.vue$/,
+            //     loader: 'eslint',
+            //     exclude: /node_modules/
+            //   },
+            //   {
+            //     test: /\.js$/,
+            //     loader: 'eslint',
+            //     exclude: /node_modules/
+            //   }
+            // ],
+            loaders: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel',
+                    exclude: /node_modules/
+                }, {
+                    test: /\.vue(\?[^?]+)?$/,
+                    loaders: []
+                }, {
+                    test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                    loader: 'url-loader?limit=8192&name=assets/images/[name].[ext]'
+                },
+                {
+                    test: /\.css$/,
+                    loader: 'style-loader!css-loader'
+                },
+                {
+                    test: /\.(scss|sass)$/,
+                    loader: 'style-loader!css-loader!sass-loader'
+                }
+            ]
+        },
+        vue: {
+            // // You can use PostCSS now!
+            // // Take cssnext for example:
+            // // 1. npm install postcss-cssnext --save-dev
+            // // 2. write `var cssnext = require('postcss-cssnext')` at the top
+            // // 3. set the config below
+            postcss: [cssnext({
+                features: {
+                    autoprefixer: false
+                }
+            })],
+            // loaders: {
+            //     scss: 'style!css!sass'
+            // }
+        },
+        plugins: [bannerPlugin]
+    }
 }
 
 var webConfig = getBaseConfig()

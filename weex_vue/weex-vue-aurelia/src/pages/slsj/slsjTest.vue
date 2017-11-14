@@ -61,11 +61,11 @@
                 loadingUrl: '/drawable/slsj-loading.gif',
                 baseUrl: '',
                 sendUrl: '',
-                selectedList: [],
+                selected: [],
                 nailDamageList: [],
                 nailDamageHint: '-请选择-',
                 inputdate: '',
-                handAndFootProList: [],
+                proList: [],
                 warn: false,
                 showItem: false,
                 itemId: '',
@@ -74,7 +74,7 @@
         props: {},
         computed: {
             slsjNews () {
-                return this.$store.getters.slsjNews
+                return this.$store.getters.slsjList
             },
             special_aIndex(){
                 return this.$store.getters.slsjSpecial.aIndex
@@ -86,7 +86,7 @@
         methods: {
             getList: function () {
                 var self = this;
-                this.$store.dispatch('FETCH_SLSJ_NEW')
+                this.$store.dispatch('FETCH_SLSJ_TEMPFILE')
             },
             clickSub: function (e) {
                     const el = this.$refs.mark[0]

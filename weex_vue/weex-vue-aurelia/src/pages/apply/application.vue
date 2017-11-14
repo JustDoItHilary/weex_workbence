@@ -2,58 +2,102 @@
     <div append="node">
         <apply-header :tit="applyTypeName+'申请'"></apply-header>
         <scroller>
-            <!-- <div class="type">
-                <text class="text_black" style="flex:1;">汇报类型</text>
-                <div class="div_rad_border select_{{isSelected}}" onclick="">
-                    <text class="txt_rad_border">加班申请</text>e
-                </div>
-                <div class="div_rad_border select_{{!isSelected}}" onclick="">
-                    <text class="txt_rad_border">团建申请</text>
-                </div>
-            </div> -->
-            <div class="type">
-                <text class="text_black" style="flex:1;">开始日期</text>
-                <text :class="['text_black','select_color_'+(type==0).toString()]" @click="clickStartDate($event,1)">{{startDate}}</text>
+            <div v-if="type==2" style="flex-direction: column;">
+                <text class="txt-tit">审批</text>
+                <cell-input
+                        class="div-cell-input"
+                        txtTit="审批意见"
+                        :txtList="isEmptyObject(apply)?'':apply.OPTION"
+                        txtHide="审批备注"
+                        :txtInput="exceptOption.note"
+                        :index="apply.OPTIONIDNEX?apply.OPTIONIDNEX:0"
+                        type="0"
+                        @clickCellInput="clickCellApply"
+                >
+                    <image slot="arrow-right" style="width: 48px;height: 48px;" :src="baseUrl+imgArrowRightUrl"></image>
+                </cell-input>
+                <div class="border"></div>
+                <text class="txt-tit">待审批申请</text>
+                <cell-time
+                        class="div-padding"
+                        txtLeft="申请人"
+                        :txtRight="isEmptyObject(apply)?'':apply.USERNAME"
+                        :active="type==0"
+                        bottomBorder="1"
+                ></cell-time>
             </div>
-            <div class="type">
-                <text class="text_black" style="flex:1;">{{type==0||type==2||(!isEmptyObject(apply)&&apply.ISFINISH==0)?'预计':''}}结束日期</text>
-                <text :class="['text_black','select_color_'+(type==0).toString()]" @click="clickStartDate($event,2)">{{endDate}}</text>
+            <cell-time
+                    class="div-padding"
+                    txtLeft="开始日期"
+                    :txtRight="startDate"
+                    :active="type==0"
+                    bottomBorder="1"
+                    type="1"
+                    @clickCellTime="clickCellTime"
+            ></cell-time>
+            <cell-time
+                    class="div-padding"
+                    :txtLeft="(type==0||type==2||(!isEmptyObject(apply)&&apply.ISFINISH==0)?'预计':'')+'结束日期'"
+                    :txtRight="endDate"
+                    :active="type==0"
+                    bottomBorder="1"
+                    type="2"
+                    @clickCellTime="clickCellTime"
+            ></cell-time>
+            <cell-peo
+                    v-if="type==0||type==1"
+                    class="div-padding"
+                    txtTit="审批者"
+                    txtExplain="审批该申请的人，只可选择一个人。"
+                    :peoList="approveList"
+                    :added="type==0"
+                    bottomBorder="1"
+                    type="0"
+                    @clickAddPeo="clickAddPeo"
+            ></cell-peo>
+            <cell-peo
+                    v-if="type==0||type==1"
+                    class="div-padding"
+                    txtTit="知会者"
+                    txtExplain="当审批通过该申请后所通知的人，可选择多个人。"
+                    :peoList="noticeList"
+                    :added="type==0"
+                    bottomBorder="1"
+                    type="1"
+                    @clickAddPeo="clickAddPeo"
+            ></cell-peo>
+            <cell-time
+                v-if="apply.ISAPPLED!=0&&type!=2"
+                class="div-padding"
+                bottomBorder="1"
+                txtLeft="审批意见"
+                :txtRight="isEmptyObject(apply)||apply.OPTIONNAME==''?'无意见':apply.OPTIONNAME"></cell-time>
+            <cell-time
+                    v-if="apply.ISAPPLED!=0&&type!=2"
+                    class="div-padding"
+                    bottomBorder="1"
+                    txtLeft="审批备注"
+                    :txtRight="isEmptyObject(apply)?'':apply.AUDITNOTE"></cell-time>
+            <div v-if="type==0">
+                <cell-input
+                        class="div-cell-input"
+                        txtHide="申请内容"
+                        txtLines="6"
+                        :txtInput="applyContent"
+                        type="1"
+                        @clickCellInput="clickCellApply"
+                ></cell-input>
+                <!--<textarea class="textarea" rows="8" @input="inputContent($event)" :value="applyContent"-->
+                <!--placeholder="申请内容"></textarea>-->
             </div>
-            <div class="reader" v-if="type==0||type==1">
-                <text :class="['text_black',type!=0?'class_flex':'']">审批者</text>
-                <scroller :class="['readerList',type==0?'class_flex':'']" scroll-direction="horizontal">
-                    <div class="div_reader" v-for="item in approveList">
-                        <text class="text_black">{{item.USERNAME}}</text>
-                    </div>
-                </scroller>
-                <div v-if="type==0" class="div_rad_border select_true" @click="clickAddReader(0)">
-                    <text class="txt_rad_border">添加</text>
-                </div>
-            </div>
-            <div class="reader " v-if="type==0||type==1">
-                <text :class="['text_black']">知会者</text>
-                <scroller :class="['readerList','class_flex']" scroll-direction="horizontal">
-                    <div class="div_reader" v-for="item in noticeList">
-                        <text class="text_black">{{item.USERNAME}}</text>
-                    </div>
-                </scroller>
-                <div v-if="type==0" class="div_rad_border select_true" @click="clickAddReader(1)">
-                    <text class="txt_rad_border">添加</text>
-                </div>
-            </div>
-            <div v-if="type==0" class="border_top">
-                <textarea class="textarea" rows="8" @input="inputContent($event)" :value="applyContent"
-                          placeholder="申请内容"></textarea>
-            </div>
-            <div v-else class="border_top">
-                <text class="txt_tit " style="margin-top: 30px;">申请内容</text>
-                <text class="textarea">{{isEmptyObject(apply)?'':apply.APPLOYCONTENT}}</text>
-            </div>
-            <!--<text>{{apply}}</text>-->
+            <cell-time
+                    v-else
+                    class="div-padding"
+                    txtLeft="申请内容"
+                    :txtRight="isEmptyObject(apply)?'':apply.APPLOYCONTENT"></cell-time>
         </scroller>
-        <bottom-btn v-if="showBottom" :txtLeft="bottomTxt[type]"
+        <bottom-btn v-if="showBottom" class="cell_bottom_btn" :txtLeft="getBottomLeft()"
                     :txtRight="type==2&&(!isEmptyObject(apply)&&apply.ISAPPLED==0)?'审批驳回':''"
-                    btnColor="#58D68D" btnMargin="12px"
                     :left="clickLeft" :right="clickRight"></bottom-btn>
     </div>
 </template>
@@ -68,13 +112,16 @@
 
     module.exports = {
         components: {
-            ApplyHeader: require('../../components/apply-header.vue'),
-            BottomBtn: require('../../components/bottom-btn.vue'),
+            ApplyHeader: require('../../components/header/apply-header.vue'),
+            BottomBtn: require('../../components/footer/bottom-btn.vue'),
+            CellTime: require('../../components/cell-justify.vue'),
+            CellPeo: require('../../components/cell-peo.vue'),
+            CellInput: require('../../components/cell-input.vue'),
         },
         computed: {
             params () {
                 if (this.$route && this.$route.params) {
-                    console.log(this.$route.params.params)
+//                    console.log(this.$route.params.params)
                     return this.$route.params.params
                 }
                 return ''
@@ -88,51 +135,82 @@
             },
             apply(){
                 let self = this;
-                if (!self.isEmptyObject(self.$store.getters.applyDetail)) {
+                if ((self.type==1||self.type==2)&&!self.isEmptyObject(self.$store.getters.applyDetail)) {
                     self.startDate = self.$store.getters.applyDetail.STARTTIME;
                     self.endDate = self.$store.getters.applyDetail.ISFINISH == 0 ? self.$store.getters.applyDetail.EXCEPTTIME : self.$store.getters.applyDetail.ENDTIME;
+                    self.exceptOption.guid=self.$store.getters.applyDetail.OPTIONGUID;
+                    self.exceptOption.note=self.$store.getters.applyDetail.AUDITNOTE;
                 }
+//                console.log(self.$store.getters.applyDetail)
 //                modal.alert({message:JSON.stringify(this.$store.getters.applyDetail),duration:1})
                 return self.$store.getters.applyDetail;
 
             },
-            applyContent(){
-                return this.$store.getters.applyGetInput
-            },
             baseUrl(){
-                return this.$store.getters.applyBaseUrl
+                return this.$store.getters.baseUrl
             },
             token(){
-                return this.$store.getters.applyGetToken
+                return this.$store.getters.selfToken
             }
         },
         props: {},
         data(){
             return {
-                devHeight: 1190,
-                actionBarHeight: 112,
-                imgBackUrl: '/drawable/ic_back_white_48dp.png',
                 endDateType: '预计结束',
                 date: '',
                 startDate: '',
                 endDate: '',
                 isSelected: false,
                 applyTit: '',
-                type: '',
+                type: '',//type:0-新建 1-完成 2-审批
                 itemGuid: '',
                 applyTypeName: '',
-                bottomTxt: ['申请', '完成', '审批通过']
+                bottomTxt: ['申请', '完成', '审批通过'],
+                applyContent: '',
+                txtList: ['无意见', '上班延迟', '调休'],
+                exceptOption: {guid:'',note:''},
+                imgArrowRightUrl:'/drawable/ic_keyboard_arrow_right_black_48dp.png'
             }
         },
         methods: {
-            showBottom:function () {
-                let self=this;
-                console.log('SHOWBOTTOM: ',self.type)
-                if(self.type==0){
+            getBottomLeft: function () {
+                let self = this;
+                if (self.type == 1 && self.apply.ISFINISH == 1) {
+                    return '已完成'
+                } else if (self.type == 2 && self.apply.ISAPPLED == 1) {
+                    return '已审批'
+                } else if (self.apply.ISAPPLED == 5) {
+                    return '已驳回'
+                } else {
+                    return self.bottomTxt[self.type];
+                }
+            },
+            clickCellTime: function (data, timeType) {
+                let self = this;
+                if (self.type == 0) {
+                    if (timeType == 1) {
+                        self.startDate = data;
+                    } else if (timeType == 2) {
+                        self.endDate = data;
+                    }
+                }
+            },
+            clickCellApply: function (guid, note, type) {
+                let self = this;
+                if (type == 0) {
+                    self.exceptOption.guid = guid;
+                    self.exceptOption.note = note;
+                } else if (type == 1) {
+                    self.applyContent = note;
+                }
+            },
+            showBottom: function () {
+                let self = this;
+                if (self.type == 0) {
                     return true
-                }else if(self.type==1&&!self.isEmptyObject(self.apply)&&self.apply.ISFINISH==0){
+                } else if (self.type == 1 && !self.isEmptyObject(self.apply) && self.apply.ISFINISH == 0) {
                     return true
-                }else return self.type == 2 && !self.isEmptyObject(self.apply) && self.apply.ISAPPLED == 0;
+                } else return self.type == 2 && !self.isEmptyObject(self.apply) && self.apply.ISAPPLED == 0;
             },
             isEmptyObject: function (obj) {
                 for (let key in obj) {
@@ -140,44 +218,40 @@
                 }
                 return true
             },
-            clickAddReader: function (type) {
+            clickAddPeo: function (type) {
                 let self = this;
                 let params = {};
                 params.type = type;
                 self.jump(`/applyReader/${JSON.stringify(params)}`);
             },
-            clickStartDate: function (e, type) {
-                let self = this;
-                if (self.type == 0) {
-                    let date = new Date();
-                    picker.pickDate({
-                        value: type === 1 ? self.startDate : self.endDate,
-                        max: self.formatDate(new Date(date.getFullYear() + 10, date.getMonth(), date.getDay()), 'yyyy-MM-dd'),
-                        min: self.formatDate(new Date(date.getFullYear() - 10, date.getMonth(), date.getDay()), 'yyyy-MM-dd')
-                    }, function (event) {
-                        if (event.result === 'success') {
-                            if (type === 1) {
-                                self.startDate = event.data;
-                            } else if (type === 2) {
-                                self.endDate = event.data;
-                            }
-                        }
-                    });
-                }
-            },
             inputContent: function (e) {
                 let self = this;
-                self.$store.commit('SET_INPUT_VALUE',{value:e.value})
-//                self.applyContent = e.value;
+                self.applyContent = e.value;
             },
             clickLeft: function () {
                 let self = this;
                 if (self.type == 0) {
-                    self.newApply();
+                    if(self.$store.getters.applyReader.approveList.length>0){
+                        self.newApply();
+                    }else {
+                        self.toastMsg("审批者不可为空！")
+                    }
                 } else if (self.type == 1) {
-                    self.completeApply();
+                    if (self.apply.ISFINISH == 0){
+                        if(self.apply.ISAPPLED== 5||self.apply.ISAPPLED==0) {
+                            self.toastMsg(self.apply.ISAPPLEDNAME);
+                        }else {
+                            self.completeApply();
+                        }
+                    }else{
+                        self.toastMsg(self.apply.FINISHNAME);
+                    }
                 } else if (self.type == 2) {
-                    self.exceptApply(1);
+                    if(self.apply.ISAPPLED==0){
+                        self.exceptApply(1);
+                    }else {
+                        self.toastMsg(self.apply.ISAPPLEDNAME);
+                    }
                 }
             },
             clickRight: function () {
@@ -186,7 +260,6 @@
             },
             newApply: function () {
                 let self = this;
-                let body = 'QueryType=apply_for_job&UserGuid=';
                 let type = self.itemGuid;
                 let params = {};
                 params.STARTTIME = self.startDate;
@@ -195,46 +268,45 @@
                 params.CONTENT = self.applyContent;
                 params.APPROVER = self.listToString(self.$store.getters.applyReader.approveList);
                 params.NOTICE_LIST = self.listToString(self.$store.getters.applyReader.noticeList);
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.fetchData('FETCH_APPLY_NEW', body);
+                self.fetchData('FETCH_APPLY_NEW',JSON.stringify(params));
             },
             completeApply: function () {
                 let self = this;
-                let body = 'QueryType=set_apply_for_succ&UserGuid=';
                 let params = {};
                 params.GUID = self.itemGuid;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.fetchData('FETCH_APPLY_COMPLETE', body);
+                self.fetchData('FETCH_APPLY_COMPLETE', JSON.stringify(params));
             },
             exceptApply: function (state) {
                 let self = this;
                 // excepted: 0-审批通过 1-审批驳回
-                let body = 'QueryType=set_apply_for_handle&UserGuid=';
                 let params = {};
                 params.GUID = self.itemGuid;
                 params.STATE = state;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.fetchData('FETCH_APPLY_APPROVE', body);
+                params.OPTIONGUID = self.exceptOption.guid;
+                params.NOTE = self.exceptOption.note;
+//                console.log(JSON.stringify(params))
+                self.fetchData('FETCH_APPLY_APPROVE',  JSON.stringify(params));
             },
-            fetchData: function (fetchName, body) {
+            fetchData: function (fetchName, params) {
                 let self = this;
-                let applyListBody = 'QueryType=sync_job_apply_list&UserGuid=';
                 let applyListParams = {};
                 applyListParams.TYPE = self.itemGuid;
-                applyListBody = applyListBody + self.token + '&Params=' + JSON.stringify(applyListParams);
                 self.$store.dispatch(fetchName,
                     {
-                        body: body,
-                        applyListBody: applyListBody,
+                        params: params,
+                        applyListParams: applyListParams,
                         callback: function (data) {
                             if (data.CODE == 0) {
                                 self.back();
                             } else {
-                                modal.toast({message: data.ERROR, duration: 1});
+                                self.toastMsg(data.ERROR);
                             }
                         }
                     });
 
+            },
+            toastMsg(msg){
+                modal.toast({message: msg, duration: 1});
             },
             listToString: function (list) {
                 let str = '';
@@ -251,11 +323,9 @@
             },
             getDetails: function () {
                 let self = this;
-                let body = 'QueryType=getAskForInfoFromId&UserGuid=';
                 let params = {};
                 params.GUID = self.itemGuid;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.$store.dispatch('FETCH_APPLY_DETAIL', {body: body});
+                self.$store.dispatch('FETCH_APPLY_DETAIL', {params: JSON.stringify(params)});
             },
             getParams: function (params) {
                 let self = this;
@@ -267,118 +337,61 @@
         created: function (e) {
             let self = this;
             self.getParams(JSON.parse(self.params));
-                if (self.type == 1 || self.type == 2) {
-                    self.getDetails()
-                } else if (self.type == 0) {
-                    self.getDate()
-                }
+            if (self.type == 1 || self.type == 2) {
+                self.getDetails()
+            } else if (self.type == 0) {
+                self.getDate()
+            }
 
+        },
+        beforeRouteEnter: function (to, from, next) {
+//            console.log("beforeRouteEnter------------",to)
+            next(vm => {
+                if (from.name == 'applyReader') {
+                    vm.startDate = to.meta.options.start;
+                    vm.endDate = to.meta.options.end;
+                    vm.applyContent = to.meta.options.content;
+                }
+            });
+        },
+        beforeRouteLeave: function (to, from, next) {
+            from.meta.options.start = this.startDate;
+            from.meta.options.end = this.endDate;
+            from.meta.options.content = this.applyContent;
+//            console.log("beforeRouteLeave------------",from)
+            next();
         }
     };
 </script>
-<style>
-    .class_flex {
-        flex: 1;
-    }
-</style>
 
-<style scoped>
-    .border_top {
-        border-top-width: 20px;
-        border-color: #ebedef;
-    }
+<style lang="sass" rel="stylesheet/scss" scoped>
+    @import "../../style/mixin.scss";
 
-    .border_bottom {
-        border-bottom-width: 20px;
-        border-color: #ebedef;
+    .txt-tit {
+    @include marginRow;
+    @include fontCommon;
+        margin-top: 28px;
+        color: $colorCommon;
     }
 
-    .type {
-        flex-direction: row;
-        height: 100px;
-        border-bottom-width: 1px;
-        border-color: #ebedef;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .select_true {
-        background-color: #58D68D;
-    }
-
-    .select_false {
-        background-color: #aaaaaa;
-    }
-
-    .div_rad_border {
-        height: 50px;
-        margin-right: 10px;
-        border-radius: 60px;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .txt_rad_border {
-        text-align: center;
-        font-size: 26px;
-        color: #fafafa;
-        margin-left: 16px;
-        margin-right: 16px;
-    }
-
-    .text_black {
-        margin-left: 20px;
-        margin-right: 20px;
-        font-size: 30px;
-        justify-content: center;
-    }
-
-    .txt_tit {
-        height: 60px;
-        margin-top: 20px;
-        margin-left: 20px;
-        margin-right: 20px;
-        font-size: 30px;
-    }
-
-    .textarea {
-        margin-left: 36px;
-        margin-right: 36px;
-        margin-top: 20px;
-        padding: 10px;
-        font-size: 28px;
-        background-color: #ebedef;
-        border-radius: 5px;
-    }
-
-    .select_color_true {
-        color: #58D68D;
-    }
-
-    .select_color_false {
-        color: #aaaaaa;
-    }
-
-    .readerList {
-        /*flex: 1;*/
-        /*width:560px;*/
-        flex-direction: row;
-        justify-content: flex-end;
-        height: 100px;
-    }
-
-    .reader {
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        border-bottom-color: #ebedef;
-        border-bottom-width: 1px;
-    }
-
-    .div_reader {
-        justify-content: center;
-        align-items: center;
+    .div-padding {
+    @include marginRow;
+    @include paddingColumn;
         margin-top: 10px;
-        margin-bottom: 10px;
+
+    }
+
+    .div-cell-input {
+    @include marginRow;
+    @include marginColumn;
+    }
+
+    .border {
+        height: 20px;
+        background-color: $wg;
+    }
+    .cell_bottom_btn{
+    @include paddingColumn(16px);
+    @include paddingRow;
     }
 </style>

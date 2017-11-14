@@ -48,8 +48,8 @@
 
     module.exports = {
         components: {
-            ApplyHeader: require('../../components/apply-header.vue'),
-            BottomBtn: require('../../components/bottom-btn.vue'),
+            ApplyHeader: require('../../components/header/apply-header.vue'),
+            BottomBtn: require('../../components/footer/bottom-btn.vue'),
         },
         computed: {
             approveList(){
@@ -116,11 +116,9 @@
             },
             completeApply: function () {
                 let self = this;
-                let body = 'QueryType=set_apply_for_succ&UserGuid=';
                 let params = {};
                 params.GUID = self.itemGuid;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.fetchData('FETCH_APPLY_COMPLETE', body);
+                self.fetchData('FETCH_APPLY_COMPLETE', {params: JSON.stringify(params)});
             },
             exceptApply: function (state) {
                 let self = this;
@@ -155,11 +153,9 @@
             },
             getDetails: function () {
                 let self = this;
-                let body = 'QueryType=getAskForInfoFromId&UserGuid=';
                 let params = {};
                 params.GUID = self.itemGuid;
-                body = body + self.token + '&Params=' + JSON.stringify(params);
-                self.$store.dispatch('FETCH_APPLY_DETAIL', {body: body});
+                self.$store.dispatch('FETCH_APPLY_DETAIL', {params: JSON.stringify(params)});
             },
             getUrlParams: function () {
                 let self = this;
@@ -168,7 +164,7 @@
 //                let bundleUrl = 'http://192.168.100.120:8888/weex/workRep.js?guid=620b8089ffe615d2d16615de8bf2c6db&type=1';
                 let params = bundleUrl.split('?');
                 self.baseUrl = params[0].split('/').slice(0, -1).join('/');
-                self.$store.commit('SET_APPLY_URL', {url: self.baseUrl});
+                self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
                 let paramsArr = params[1].split('&');
                 self.itemGuid = paramsArr[0].split('=')[1];
                 self.type = paramsArr[1].split('=')[1];

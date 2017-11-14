@@ -22,10 +22,11 @@
     const configModule = weex.requireModule('configModule');
     const storage = weex.requireModule('storage');
     const stream = weex.requireModule('stream');
+    const global = weex.requireModule('globalEvent');
 
     module.exports = {
         components: {
-            ApplyHeader: require('../../components/apply-header.vue')
+            ApplyHeader: require('../../components/header/apply-header.vue')
         },
         computed: {
             applyTypes(){
@@ -38,25 +39,24 @@
                 devHeight: 990,
                 actionBarHeight: 100,
                 imgBackUrl: '',
-                buildingImgUrl:'/drawable/building.png',
-                workOverImgUrl:'/drawable/workOver.png',
+                buildingImgUrl: '/drawable/building.png',
+                workOverImgUrl: '/drawable/workOver.png',
                 baseUrl: '',
                 imgUrl: '',
                 token: ''
             }
         },
         methods: {
-            getImgUrl:function (guid) {
-                let self=this;
-                if(guid=='e35ac823-5a4e-11e7-af47-ec388f6f5b1d'){
+            getImgUrl: function (guid) {
+                let self = this;
+                if (guid == 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d') {
                     return self.buildingImgUrl;
-                }else {
+                } else {
                     return self.workOverImgUrl;
                 }
             },
             //关闭界面，退出
             clickClose: function () {
-                console.log('CLOSE')
                 configModule.finish();
             },
             clickItem: function (item) {
@@ -68,33 +68,49 @@
             },
             getData: function () {
                 let self = this;
-                var body = 'QueryType=sync_job_type&UserGuid=';
+////                var body = 'QueryType=sync_job_type&UserGuid=';
+////                body = body + self.token + '&Params={}';
                 self.token = '@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--';
 //                configModule.getUrl('', function (ret) {
 //                    self.token = ret.split('=')[1];
-                    self.$store.commit('SET_TOKEN', {token: self.token});
-                    body = body + self.token + '&Params={}';
-                    self.$store.dispatch('FETCH_APPLY_TYPE', {body: body});
+                self.$store.commit('SET_TOKEN', {token: self.token});
+                self.$store.dispatch('FETCH_APPLY_TYPE', {params:{}});
 //                });
             },
         },
         created: function (e) {
             var self = this;
-//            var bundleUrl = self.$getConfig().bundleUrl || '';
-            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
-//            var bundleUrl = 'http://192.168.1.103:8888/weex/applyType.js';
+            var bundleUrl = self.$getConfig().bundleUrl || '';
+//            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
+//            var bundleUrl = 'http://192.168.1.104:8888/weex/applyType.js';
             self.baseUrl = bundleUrl.split('/').slice(0, -1).join('/');
-            self.$store.commit('SET_APPLY_URL', {url: self.baseUrl});
+            self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
             self.getData();
+        },
+        beforeRouteEnter: function (to, from, next) {
+            next(vm => {
+                if (from.name == null) {
+                    global.addEventListener("interceptBackEvent", function (result) {
+//                    modal.alert({message:'GLOBAL',duration:1});
+                        if (vm.$route.name == "home") {
+//                            modal.alert({message: "finish-applyType", duration: 1});
+                            configModule.finish();
+                        } else {
+//                            modal.alert({message: "back-applyType", duration: 1});
+                            vm.back();
+                        }
+                    });
+                }
+            });
         }
     };</script>
 
-<style scoped>
+<style lang="sass" rel="stylesheet/scss" scoped>
+    @import "../../style/mixin.scss";
+
     .list {
-        margin-left: 36px;
-        margin-right: 36px;
-        margin-top: 20px;
-        margin-bottom: 20px;
+    @include marginRow(36px);
+    @include marginColumn;
     }
 
     .div_card {
@@ -102,22 +118,19 @@
         height: 200px;
         justify-content: center;
         align-items: center;
-        background-color: #ffffff;
+        background-color: #fff;
         margin-top: 20px;
         margin-bottom: 10px;
-        border-radius: 4px;
+    @include borderRadius;
     }
 
     .logo {
+    @include borderRadius(12px);
         height: 100px;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         margin-left: 36px;
-        border-radius: 12px;
-        border-width: 2px;
-        border-color: #d9d9d9;
-        background-color: #58D68D;
+        background-color:$colorCommon;
     }
 
     .img_center {
@@ -128,7 +141,7 @@
     .flex_left {
         margin: 10px;
         flex: 1;
-        text-overflow: ellipsis;
+    @include fontLines;
     }
 
     .text_tit {
@@ -137,17 +150,4 @@
         font-size: 32px;
     }
 
-    .text_content {
-        color: #bbbbbb;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        lines: 2;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        /*font-weight: normal;*/
-        /*font-size: 24px;*/
-        /*text-align: left;*/
-        /*align-items: flex-start;*/
-        /*margin-left: 20px;*/
-    }
 </style>

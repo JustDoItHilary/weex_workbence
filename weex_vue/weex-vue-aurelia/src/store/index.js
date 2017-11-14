@@ -13,34 +13,18 @@ const store = new Vuex.Store({
     mutations,
 
     state: {
-        activeType: null,
-        items: {},
-        users: {},
-        counts: {
-            top: 20,
-            new: 20,
-            show: 15,
-            ask: 15,
-            job: 15
-        },
-        lists: {
-            top: [],
-            new: [],
-            show: [],
-            ask: [],
-            job: []
-        },
         noticelist: [],
         noticeItem:'',
-        slsjNew:[],
+
+        slsjList:[],
         slsjSpecial:{
             aIndex:'',
             qIndex:'',
             modelIndex:''
         },
-        pickerList: [],
 
-        applyBaseUrl:'',
+        baseUrl:'',
+
         applyTypes:[
             // {GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '加班'},
             // {GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'}
@@ -57,25 +41,17 @@ const store = new Vuex.Store({
             // "APPLOYCONTENT":"了了了了了了了了","APPNAME":"张海月","APPROVER":"579ef2e0ee5f6","DATA":[{"GUID":"2a3cd03f9412a50e3dabdb91429e63c3","USERNAME":"张海月"}],"ENDTIME":"","EXCEPTTIME":"2017-07-05","FINISHNAME":"未完成","GUID":"12dbecfaacd1a4609af8991ab853b283","ISAPPLED":"0","ISAPPLEDNAME":"未审批","ISFINISH":"0","STARTTIME":"2017-07-05","TYPE":"e35ac823-5a4e-11e7-af47-ec388f6f5b1d","TYPENAME":"团建","UPDATED":"1499205955","USERID":"579ef2e0ee5f6"
         },
         applyMemberLists:[],
-        applyInput:'',
-        applyToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--'
+        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
+        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
+        selfToken:'',
+
+        syMemberInfo:[],
     },
 
     getters: {
-        test(state){
-            return 'TEST--store'
-        },
-        // ids of the items that should be currently displayed based on
-        // current list type and current pagination
-        activeIds (state) {
-            const {activeType, lists, counts} = state
-            return activeType ? lists[activeType].slice(0, counts[activeType]) : []
-        },
-
-        // items that should be currently displayed.
-        // this Array may not be fully fetched.
-        activeItems (state, getters) {
-            return getters.activeIds.map(id => state.items[id]).filter(_ => _)
+        /*------ base ------*/
+        baseUrl(state){
+            return state.baseUrl
         },
 
         /** -----------------notice------------------*/
@@ -87,19 +63,13 @@ const store = new Vuex.Store({
         },
 
         /** -----------------slsj------------------*/
-        slsjNews(state){
-            return state.slsjNew
+        slsjList(state){
+            return state.slsjList
         },
         slsjSpecial(state){
             return state.slsjSpecial
         },
-        pickList(state){
-            return state.pickerList
-        },
         /** -----------------apply------------------*/
-        applyBaseUrl(state){
-            return state.applyBaseUrl
-        },
         //申请类型列表
         applyType(state){
             return state.applyTypes
@@ -125,9 +95,13 @@ const store = new Vuex.Store({
             return state.applyInput
         },
         //本人token
-        applyGetToken(state){
-            return state.applyToken
-        }
+        selfToken(state){
+            return state.selfToken
+        },
+
+        syMemberInfo(state){
+            return state.syMemberInfo
+        },
     }
 })
 

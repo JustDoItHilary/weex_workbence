@@ -3,7 +3,7 @@
         <div class="div_titBar bgColor" :style="{height:actionBarHeight+'px'}" data-role="none"
              v-if="!isiOS">
             <div class="div_titBar" @click="clickClose">
-                <img class="img_back" :src="baseUrl+imgBackUrl"/>
+                <img class="img_back" src="../../../assets/img/ic_back_white_48dp.png"/>
                 <!--<image class="image" src="https://news.ycombinator.com/favicon.ico"></image>-->
             </div>
             <text class="text_titBar" style="flex:1;">{{tit}}</text>
@@ -13,7 +13,7 @@
                 <text class="text_tit_iOS">{{tit}}</text>
             </div>
             <div class="div_titBar" @click="clickClose">
-                <img class="img_back_iOS" :src="baseUrl+imgBackUrl_iOS"/>
+                <img class="img_back_iOS" src="../../../assets/img/arrowleft.png"/>
                 <text class="text_def_iOS">工作台</text>
             </div>
             <text class="text_def_iOS" @click="clickRight">{{titRight}}</text>
@@ -30,9 +30,6 @@
                 isiOS: false,
                 actionBarHeight: 112,
                 bgColor: 'rgb(64, 146, 242)',
-                baseUrl: 'http://192.168.100.127:8888/weex',
-                imgBackUrl: '/drawable/ic_back_white_48dp.png',
-                imgBackUrl_iOS: '/drawable/arrowleft.png',
             }
         },
         props: ['tit', 'titRight'],
@@ -44,10 +41,6 @@
             setTitElse(params){
                 var self = this;
                 self.titRight = params;
-            },
-            setBaseUrl(params){
-                var self = this;
-                self.baseUrl = params;
             },
             clickClose(e){
                 var self = this;
@@ -78,10 +71,7 @@
             var self = this;
 //            self.isiOS = weex.config.env.platform == 'iOS';
 //            console.log('isiOS', weex.config);
-//            self.baseUrl = self.$getConfig().bundleUrl.split('?')[0].split('/').slice(0, -1).join('/') || '';
 //            self.setMeasure();
-             self.baseUrl='http://192.168.100.127:8888/weex';
-            // modal.alert({'message':self.baseUrl,'oktitle':'ok'});
         },
     }
 

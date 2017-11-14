@@ -8,7 +8,13 @@
                      @click="clickItem(item)">
                     <div class="div_lab"
                          :style="{ height: btnHeight+'px'}"></div>
-                    <text class="text_tit">{{item.name}}</text>
+                    <div style="flex-direction: row;flex:1;align-items: center;">
+                        <text class="text_tit">{{item.name}}</text>
+                        <text class="text_value" ref="mark"
+                              style="color:#ff0000;"
+                              v-if="setRequired(0,index)"
+                        >（必选）</text>
+                    </div>
                     <div class="div_img_open">
                         <image style="height: 16px;width: 16px;"
                                :src="baseUrl+imgKeyboardArrowDownBlackUrl"></image>
@@ -20,9 +26,9 @@
                     <!-- 复选框 -->
                     <div class="div_select"
                          v-if="choice.atype==1||choice.atype==0"
-                         @click="clickCheck(choice)"
+                         @click="clickCheck(choice,index)"
                          :ref="index">
-                        <div :class="['div_check_' + (choice.selected==1)]">
+                        <div :class="['div_check_' + (choice.chosed==1)]">
                         </div>
                         <div class="div_text">
                             <text class="text_value">{{choice.aname}}</text>
@@ -31,14 +37,14 @@
                     <!-- 选择 and 输入 -->
                     <div class="div_select"
                          v-if="choice.atype==2"
+                         @click="clickCheck(choice,index)"
                          :ref="index">
-                        <div :class="['div_check_' + (choice.selected==1)]"
-                             @click="clickCheck(choice)">
+                        <div :class="['div_check_' + (choice.chosed==1)]">
                         </div>
                         <text class="text_value">{{choice.aname}}</text>
                         <div :class="['div_input', 'border_' + (isEdited)]">
                             <input class="textarea" type="text" :value="choice.value"
-                                   @input="input($event,choice)" @blur="blur(choice)" :disabled="!isEdited"/>
+                                   @input="input($event,choice)" :disabled="!isEdited"/>
                         </div>
                     </div>
                     <!-- 文本 and 输入 -->
@@ -48,7 +54,7 @@
                         <div :class="['div_input', 'border_' + (isEdited)]">
                             <input class="textarea" type="text" :value="choice.value"
                                    @input="input($event,choice)"
-                                   @blur="blur(choice)" :disabled="!isEdited"/>
+                                   :disabled="!isEdited"/>
                         </div>
                     </div>
                     <!-- 文本 and 输入 and 文本-->
@@ -57,7 +63,6 @@
                         <div :class="['div_input', 'border_' + (isEdited)]">
                             <input class="textarea" type="text" :value="choice.value"
                                    @input="input($event,choice)"
-                                   @blur="blur(choice)"
                                    :disabled="!isEdited"/>
                         </div>
                         <text class="text_value">{{choice.aname[1]}}</text>
@@ -68,7 +73,7 @@
                         <text class="text_value">{{choice.aname}}</text>
                         <text class="text_value" ref="mark"
                               style="color:#ff0000;"
-                              v-if="setRequired(ansIndex,index)"
+                              v-if="choice.required==1||(slsjSpecial.qIndex == index&&slsjSpecial.aIndex == ansIndex)"
                         >（必选）</text>
                     </div>
                     <!-- 滚动选择 -->
@@ -208,7 +213,7 @@
     }
 
     .text_tit {
-        flex: 1;
+        /*flex: 1;*/
         font-size: 20px;
         /*font-weight: bold;*/
         text-align: left;
@@ -400,7 +405,7 @@
     }
 
     .text_tit {
-        flex: 1;
+        /*flex: 1;*/
         font-size: 20px;
         /*font-weight: bold;*/
         text-align: left;
@@ -503,7 +508,7 @@
                 baseUrl: '',
                 slsjNews: [],
                 initInfo: '',
-                selectedList: [],
+                chosedList: [],
                 queryType: '',
                 userGuid: '',
                 contactId: '',
@@ -512,7 +517,7 @@
                 marginBottom: 20,
                 nailDamageList: [],
                 nailDamageHint: '-请选择-',
-                handAndFootProList: [],
+                proList: [],
                 special: '',
                 warn: false,
                 showItem: false,
@@ -520,6 +525,8 @@
                 timer: '',
                 //检查表现-手足问题-灰指甲的aid，当选择了灰指甲手足模型必选一个，是固定值，非动态获取
                 specialModelId: '697b57d56572695ad84882a01f54f49c',
+                // 标题：手足模型的 qid,为了判定是否选中手足模型的其中一个
+                modelqId:'529093b335d3232fd989294d1b043471',
                 modelList: [],
                 slsjSpecial: {
                     aIndex: '',
@@ -527,36 +534,26 @@
                     modelIndex: ''
                 },
                 pickerList: [],
+                requiredList:[]
             }
         },
         props: {},
         methods: {
             setRequired: function (ansIndex, index) {
                 let self = this;
-                if (self.slsjSpecial.qIndex == index) {
-                    if (self.slsjSpecial.aIndex == ansIndex) {
-                        return true;
-                    }
-                    if (self.handAndFootProList.length > 0) {
-                        for (let i = 0; i < self.handAndFootProList.length; i++) {
-                            if (self.handAndFootProList[i].aid == self.specialModelId
-                                && self.slsjSpecial.modelIndex == ansIndex&&self.modelList.length==0) {
-                                return true;
-                            }
+                if (self.proList.length > 0) {
+                    for (let i = 0; i < self.proList.length; i++) {
+                        if (self.proList[i].aid == self.specialModelId && self.slsjSpecial.qIndex +1 == index) {
+                            return true;
                         }
                     }
-                    return false;
                 }
                 return false;
             },
             getPickData(choice){
                 let self = this;
                 if (choice.value !== '') {
-                    if (choice.content) {
-                        return choice.content.split('|@')[choice.value];
-                    } else {
-                        return self.nailDamageList[choice.value];
-                    }
+                    return self.nailDamageList[choice.value];
                 } else {
                     return '-请选择-';
                 }
@@ -568,92 +565,120 @@
                 item.showed = !item.showed
             },
             //勾选事件
-            clickCheck: function (choice) {
+            clickCheck: function (choice,index) {
                 let self = this;
                 self.warn = false;
                 if (self.isEdited) {
-                    if (choice.selected == 1) {
-                        choice.selected = 0;
-                        if (self.selectedList != null && self.selectedList.length > 0) {
-                            for (let i = 0; i < self.selectedList.length; i++) {
-                                let item = self.selectedList[i];
+                    if (choice.chosed == 1) {
+                        choice.chosed = 0;
+                        if (self.chosedList != null && self.chosedList.length > 0) {
+                            for (let i = 0; i < self.chosedList.length; i++) {
+                                let item = self.chosedList[i];
                                 if (item.aid == choice.aid) {
-                                    self.selectedList.splice(i, 1);
+                                    self.chosedList.splice(i, 1);
                                 }
                             }
                         }
                         if (choice.special == 1) {
-                            for (let i = 0; i < self.handAndFootProList.length; i++) {
-                                if (self.handAndFootProList[i].aid === choice.aid) {
-                                    self.handAndFootProList.splice(i, 1);
+                            for (let i = 0; i < self.proList.length; i++) {
+                                if (self.proList[i].aid === choice.aid) {
+                                    self.proList.splice(i, 1);
                                     break;
                                 }
                             }
                         }
                     } else {
-                        choice.selected = 1;
+                        choice.chosed = 1;
                         let item = {};
                         item.aid = choice.aid;
                         item.value = choice.value;
                         item.qid = choice.qid;
-                        self.selectedList.push(item);
+                        item.groupid = choice.groupid;
+                        if(choice.gtype==0){
+                            for(let i=0;i<self.chosedList.length;i++){
+                                if(self.chosedList[i].groupid==choice.groupid){
+                                    let data=self.slsjNews[index].data;
+                                    for(let j=0;j<data.length;j++){
+                                        if(data[j].groupid==choice.groupid&&data[j].aid!==choice.aid){
+                                            data[j].chosed=false;
+                                        }
+                                    }
+                                    self.chosedList.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        self.chosedList.push(item);
                         if (choice.special == 1) {
                             item.aname = choice.aname;
                             item.atype = choice.atype;
-                            self.handAndFootProList.push(item);
+                            self.proList.push(item);
                         }
                     }
                 }
-                console.log('ret: ', JSON.stringify(self.selectedList));
-                console.log('ret: ', JSON.stringify(self.handAndFootProList));
-            },
-            blur: function (choice) {
-                let self = this;
-                let value = choice.value;
-                choice.value = '';
-                choice.value = value;
+//                console.log('ret: ', JSON.stringify(self.chosedList));
+//                console.log('ret: ', JSON.stringify(self.proList));
             },
             input: function (e,choice) {
                 let self = this;
                 let type = choice.atype;
                 if (type == 2) {
                     choice.value = e.value;
-                    if (choice.selected == 1) {
-                        if (self.selectedList != null && self.selectedList.length > 0) {
-                            for (let i = 0; i < self.selectedList.length; i++) {
-                                let item = self.selectedList[i];
+                    if (choice.chosed == 1) {
+                        console.log(choice)
+                        if (self.chosedList != null && self.chosedList.length > 0) {
+                            for (let i = 0; i < self.chosedList.length; i++) {
+                                let item = self.chosedList[i];
                                 if (item.aid == choice.aid) {
-                                    self.selectedList[i].value = e.value;
+                                    self.chosedList[i].value = e.value;
                                 }
                             }
                         }
                         if (choice.special == 1) {
-                            for (let spec of self.handAndFootProList) {
+                            for (let spec of self.proList) {
                                 if (spec.aid == choice.aid) {
                                     spec.value = e.value;
                                 }
                             }
                         }
+                    } else {
+                        self.selectItem(choice);
                     }
                 } else if (type == 4) {
                     choice.value = e.value;
-                    if (choice.selected == 0) {
-                        choice.selected = 1;
+                    if (choice.chosed == 0) {
+                        choice.chosed = 1;
                         let item = {};
                         item.aid = choice.aid;
                         item.value = e.value;
                         item.qid = choice.qid;
-                        self.selectedList.push(item);
+                        self.chosedList.push(item);
                     } else {
-                        if (self.selectedList != null && self.selectedList.length > 0) {
-                            for (let i = 0; i < self.selectedList.length; i++) {
-                                let item = self.selectedList[i];
+                        if (self.chosedList != null && self.chosedList.length > 0) {
+                            for (let i = 0; i < self.chosedList.length; i++) {
+                                let item = self.chosedList[i];
                                 if (item.aid == choice.aid) {
                                     item.value = e.value;
                                 }
                             }
                         }
                     }
+                }
+            },
+            selectItem: function (choice) {
+                let self = this;
+                choice.chosed = 1;
+                let item = {};
+                item.aid = choice.aid;
+                item.value = choice.value;
+                item.qid = choice.qid;
+                item.groupid = choice.groupid;
+                self.chosedList.push(item);
+                if (choice.special == 1) {
+                    item.aname = choice.aname;
+                    item.atype = choice.atype;
+                    item.aid = choice.aid;
+                    self.proList.push(item);
                 }
             },
             clickEdit: function (e) {
@@ -678,23 +703,22 @@
             },
             addList: function (choice) {
                 let self = this;
-                let isSelected = false;
-                for (let i = 0; i < self.selectedList.length; i++) {
-                    let item = self.selectedList[i];
-                    console.log('item: ', JSON.stringify(item));
+                let ischosed = false;
+                for (let i = 0; i < self.chosedList.length; i++) {
+                    let item = self.chosedList[i];
                     if (item.aid === choice.aid) {
-                        isSelected = true;
+                        ischosed = true;
                         item.value = choice.value;
                         break;
                     }
                 }
-                //包含两种情况：selectedList=null 和 selectedList 数组不包含该条数据所以需要放在 for 循环外
-                if (!isSelected) {
+                //包含两种情况：chosedList=null 和 chosedList 数组不包含该条数据所以需要放在 for 循环外
+                if (!ischosed) {
                     let ans = {};
                     ans.aid = choice.aid;
                     ans.value = choice.value;
                     ans.qid = choice.qid;
-                    self.selectedList.push(ans);
+                    self.chosedList.push(ans);
                     if (choice.content) {
                         self.modelList.push(ans);
                     }
@@ -708,11 +732,31 @@
             },
             checkFinish: function () {
                 let self = this;
+                for (let j=0;j<self.requiredList.length;j++){
+                    let required=false;
+                    for (let i = 0; i < self.chosedList.length; i++) {
+//                        console.log(self.requiredList[j].groupid,self.chosedList[i].groupid)
+                        if (self.chosedList[i].groupid == self.requiredList[j].groupid) {
+                            required = true;
+                            break;
+                        }
+                    }
+                    if (!required){
+//                        console.log("scroll: ",self.requiredList[j])
+                        for(let s=0;s<self.slsjNews.length;s++){
+                            if (self.slsjNews[s].id==self.requiredList[j].qid){
+                                self.slsjNews[s].showed = true;
+                                const el = this.$refs.mark[2]
+                                return dom.scrollToElement(el, {offset: -20})
+                            }
+                        }
+                    }
+                }
                 let isFinish;
                 for (let j = 0; j < self.slsjNews.length; j++) {
                     isFinish = false;
-                    for (let i = 0; i < self.selectedList.length; i++) {
-                        if (self.selectedList[i].qid == self.slsjNews[j].id) {
+                    for (let i = 0; i < self.chosedList.length; i++) {
+                        if (self.chosedList[i].qid == self.slsjNews[j].id) {
                             isFinish = true;
                             break;
                         }
@@ -730,20 +774,22 @@
             },
             clickSave: function (e) {
                 let self = this;
-                let qIndex = self.slsjSpecial.qIndex
-                if (self.handAndFootProList.length > 0) {
-                    for (let i = 0; i < self.handAndFootProList.length; i++) {
-                        if (self.handAndFootProList[i].aid == self.specialModelId) {
-                            if (self.modelList.length > 0) {
-                                return self.checkFinish();
-                            } else {
-                                return dom.scrollToElement(this.$refs.mark[1], {offset: -20})
+                let qIndex = self.slsjSpecial.qIndex;
+                if (self.proList.length > 0) {
+                    for (let i = 0; i < self.proList.length; i++) {
+                        if (self.proList[i].aid == self.specialModelId) {
+                            for(let j=0;j<self.chosedList.length;j++){
+                                if(self.chosedList[j].qid==self.modelqId){
+                                    return self.checkFinish();
+                                }
                             }
+                            self.slsjNews[qIndex+1].showed = true;
+                            return dom.scrollToElement(this.$refs.mark[1], {offset: -20})
                         }
                     }
                     return self.checkFinish();
                 } else {
-                    console.log(qIndex)
+                    console.log("qIndex: ",qIndex)
                     self.slsjNews[qIndex].showed = true;
                     self.warn = true
                     const el = this.$refs.mark[0]
@@ -752,17 +798,17 @@
             },
             save: function () {
                 let self = this;
-                // self.queryType="saveContactFileData";
-                // self.nailUrl=[[],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],[],[]];
+//                 self.queryType="saveContactFileData";
+//                 self.nailUrl=[[],["http://mobile-10034140.image.myqcloud.com/357f636e-e524-4f73-9a68-ccebd4dd067d"],[],[],[]];
                 let handAndFootPro = '';
-                for (let item of self.handAndFootProList) {
+                for (let item of self.proList) {
                     if (item.atype == 1) {
                         handAndFootPro = handAndFootPro + '/' + item.aname;
-                    } else if (item.atype == 2) {
+                    } else if (item.atype == 2&&item.value!="") {
                         handAndFootPro = handAndFootPro + '/' + item.value;
                     }
                 }
-                // console.log('handAndFootPro: ',handAndFootPro.substring(1));
+//                // console.log('handAndFootPro: ',handAndFootPro.substring(1));
                 configModule.GetUploadPhotoPara(function (ret) {
                     // require('@weex-module/myModule').printLog('clickSubParams: '+JSON.stringify(ret));
                     // queryType 是提交数据接口的参数
@@ -774,11 +820,11 @@
                     params.ContactId = self.contactId;
                     params.FileId = self.fileId;
                     params.NailUrl = self.nailUrl;
-                    params.FileData = self.selectedList;
+                    params.FileData = self.chosedList;
                     params.Remark = handAndFootPro.substring(1);
                     let body = 'QueryType=' + self.queryType + '&UserGuid=' + self.userGuid + '&Params=' + JSON.stringify(params);
-//                    let body = 'QueryType=' + self.queryType + '&UserGuid=' + self.userGuid + '&Params={"ContactId":"' + self.contactId + '","FileId":"' + self.fileId + '","NailUrl":' + JSON.stringify(self.nailUrl) + ',"FileData":' + JSON.stringify(self.selectedList) + ',"Remark":"' + handAndFootPro.substring(1) + '"}';
-                    console.log('BODY; ', body);
+//                    let body = 'QueryType=' + self.queryType + '&UserGuid=' + self.userGuid + '&Params={"ContactId":"' + self.contactId + '","FileId":"' + self.fileId + '","NailUrl":' + JSON.stringify(self.nailUrl) + ',"FileData":' + JSON.stringify(self.chosedList) + ',"Remark":"' + handAndFootPro.substring(1) + '"}';
+//                    console.log('BODY; ', body);
 //                    require('@weex-module/myModule').printLog('body: ' + body);
                     apis.sendInfo(body, function (retdata) {
                         if (retdata != null) {
@@ -791,6 +837,9 @@
             },
             getList: function () {
                 let self = this;
+//                self.contactId = 'b7b06192a00f5fb8abb19047fa7d675b';
+//                self.fileId = 'fd65c06b27b568bff14dd106fb50d808';
+
                 //调用 native 接口获取参数
                 configModule.GetUploadPhotoPara(function (ret) {
                     // queryType 是提交数据接口的参数
@@ -805,7 +854,7 @@
 //                    let body = 'QueryType=getContactFileData' + '&UserGuid=' + self.userGuid + '&Params={"ContactId":"' + self.contactId + '","FileId":"' + self.fileId + '"}';
                     //查询已有的数据
                     apis.getFile(body, function (retdata) {
-                        console.log('DATA: ', JSON.stringify(retdata));
+//                        console.log('DATA: ', JSON.stringify(retdata));
                         if (retdata.result == '0000') {
                             self.pushList(retdata.data);
                         }
@@ -825,29 +874,47 @@
                         if (item.data != null && item.data.length > 0) {
                             for (let i = 0; i < item.data.length; i++) {
                                 let ans = item.data[i];
-                                // 如果已被选中放入 selectedList 列表
-                                if (ans.selected == 1) {
-                                    let selItem = {};
-                                    selItem.aid = ans.aid;
-                                    selItem.value = ans.value;
-                                    selItem.qid = ans.qid;
-                                    self.selectedList.push(selItem);
-                                    if (ans.special == 1) {
-                                        selItem.aname = ans.aname;
-                                        selItem.atype = ans.atype;
-                                        self.handAndFootProList.push(selItem);
-                                    }
+                                // 如果已被选中放入 chosedList 列表
+                                if(ans.chosed==1){
+                                    self.selectItem(ans);
                                 }
+//                                if (ans.chosed == 1) {
+//                                    let selItem = {};
+//                                    selItem.aid = ans.aid;
+//                                    selItem.value = ans.value;
+//                                    selItem.qid = ans.qid;
+//                                    self.chosedList.push(selItem);
+//                                    if (ans.special == 1) {
+//                                        selItem.aname = ans.aname;
+//                                        selItem.atype = ans.atype;
+//                                        self.proList.push(selItem);
+//                                    }
+//                                }
                                 if (self.slsjSpecial.aIndex == '' && ans.special == 1) {
                                     self.slsjSpecial.aIndex = i - 1;
                                     self.slsjSpecial.qIndex = j;
                                 }
-                                if (ans.content !== '') {
-                                    self.modelList.push(ans);
-                                    if (self.slsjSpecial.modelIndex === '') {
-                                        self.slsjSpecial.modelIndex = i - 1;
+                                if (self.slsjSpecial.modelIndex === '' && j == self.slsjSpecial.qIndex+1) {
+                                    self.slsjSpecial.modelIndex = i ;
+                                }
+                                if (ans.required == 1) {
+                                    let newItem=true;
+                                    for (let r=0;r<self.requiredList.length;r++){
+                                        if (ans.groupid==self.requiredList[r].groupid){
+                                            newItem=false;
+                                            break;
+                                        }
+                                    }
+                                    if (newItem){
+                                        self.requiredList.push(ans);
                                     }
                                 }
+//                                if (ans.content !== '') {
+//                                    self.modelList.push(ans);
+//                                    if (self.slsjSpecial.modelIndex === '') {
+//                                        self.slsjSpecial.modelIndex = i - 1;
+//                                    }
+//                                }
                             }
                             let closeItem = {atype: 7};
                             item.data.push(closeItem);
@@ -856,6 +923,8 @@
                     }
                     self.initInfo = JSON.stringify(self.slsjNews);
                 }
+//                console.log("chosedList: ",JSON.stringify(self.chosedList))
+//                console.log("chosedList: ",JSON.stringify(self.requiredList.length))
             },
             setPickList: function () {
                 let self = this;
@@ -878,7 +947,7 @@
             self.setMeasure();
             self.setPickList();
             self.getList();
-//            let bundleUrl = 'http://192.168.100.127:8888/weex/queryInfo.js?isEditedOfAll=1';
+//            let bundleUrl = 'http://192.168.100.120:8888/weex/queryInfo.js?isEditedOfAll=1';
             let bundleUrl = self.$getConfig().bundleUrl || '';
             let paramsArr = bundleUrl.split('?');
             self.baseUrl = paramsArr[0].split('/').slice(0, -1).join('/');
