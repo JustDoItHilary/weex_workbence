@@ -96,13 +96,11 @@
         height: 80px;
     }
     .border_selected{
-        border-bottom-width: 6px;
-        border-color: $colorCommon;
+        @include sideBorder(bottom,$colorCommon,6px);
         padding-bottom:18px;
     }
     .border_selected_false{
-        border-bottom-width: 1px;
-        border-color: $bc;
+        @include sideBorder(bottom,$bc);
         padding-bottom:24px;
     }
 </style>

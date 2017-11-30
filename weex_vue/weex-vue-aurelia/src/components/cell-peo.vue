@@ -1,15 +1,20 @@
 <template>
-    <div class="div-border" :style="{'borderBottomWidth':bottomBorder+'px'}">
+    <div class="div-border"
+         :style="{'borderBottomWidth':bottomBorde}">
         <div class="div-peo">
             <text class="txt-tit">{{txtTit}}</text>
             <div class="div-scroll">
                 <div style="flex:1;"></div>
-                <scroller class="scroll" scroll-direction="horizontal">
-                    <text v-for="item in peoList" class="txt-tit">{{item.USERNAME}}</text>
+                <scroller class="scroll"
+                          scroll-direction="horizontal">
+                    <text v-for="item in peoList"
+                          class="txt-tit">{{item.USERNAME}}</text>
                 </scroller>
             </div>
             <slot name="option"></slot>
-            <text v-if="added" class="txt-add" @click="clickAdd">添加</text>
+            <text v-if="added"
+                  class="txt-add"
+                  @click="clickAdd">添加</text>
         </div>
         <text class="txt-explain">{{txtExplain}}</text>
     </div>
@@ -50,6 +55,11 @@
                 required: false
             }
         },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
         methods: {
             clickAdd: function () {
                 this.$emit('clickAddPeo', this.type)
@@ -76,26 +86,26 @@
     }
 
     .txt-add {
-        @include cornerBtn(28px, #fff, $colorCommon)
+        @include cornerBtn($cs, #fff, $colorCommon)
     }
 
     .txt-explain {
         @include fontTip;
-        margin-top: 10px;
+        margin-top: $sl;
     }
 
     .scroll {
         border-width: 1px;
-        height: 48px;
+        height: $bl;
         flex-direction: row;
         align-items: center;
         flex: 0;
-        margin-left: 8px;
-        margin-right: 8px;
+        margin-left: $sl;
+        margin-right: $sl;
     }
 
     .txt-tit {
         @include fontCommon;
-        margin-right: 16px;
+        margin-right: $cl;
     }
 </style>

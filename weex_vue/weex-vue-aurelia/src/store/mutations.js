@@ -85,7 +85,7 @@ export function SET_SLSJ_LIST(state, {data}) {
     if (data !== null && data.length > 0) {
         for (let j = 0; j < data.length; j++) {
             let item = data[j];
-            item.showed = false;//showed - 是否展开
+            item.showType = false;//showType - 是否展开
             item.warning=false;// warning - 是否显示 （必选）
             if (item.data !== null && item.data.length > 0) {
                 item.id = item.data[0].qid;
@@ -199,21 +199,21 @@ export function SET_BASE_URL(state, {url}) {
     state.baseUrl = url;
 }
 
-/** -----------------SY------------------*/
-export function GET_SY_MEMBERINFO(state,{data}) {
-    if(data!=null&&data.DETAIL!=null&&data.DETAIL.length>0){
-        for(let i=0;i<data.DETAIL.length;i++){
-            let item=data.DETAIL[i];
-            let arr=[];
-            for(let j in item.LIST){
-                let obj={};
-                obj.TIT=j;
-                obj.CONTENT=item.LIST[j];
-                arr.push(obj)
-            }
-            item.INFO=arr;
-            item.showed=true;
-            state.syMemberInfo.push(item)
-        }
-    }
-}
+// /** --------------废弃---SY 会员信息------------------*/
+// export function GET_SY_MEMBERINFO(state,{data}) {
+//     if(data!=null&&data.DETAIL!=null&&data.DETAIL.length>0){
+//         for(let i=0;i<data.DETAIL.length;i++){
+//             let item=data.DETAIL[i];
+//             let arr=[];
+//             for(let j in item.LIST){
+//                 let obj={};
+//                 obj.TIT=j;
+//                 obj.CONTENT=item.LIST[j];
+//                 arr.push(obj)
+//             }
+//             item.INFO=arr;
+//             item.showType=true;
+//             state.syMemberInfo.push(item)
+//         }
+//     }
+// }

@@ -1,7 +1,9 @@
 <template>
     <div>
-        <text class="txt-big">{{txtBig}}</text>
-        <text class="txt-small">{{txtSmall}}</text>
+        <text   
+              class="txt-big">{{txtBig}}</text>
+        <text   
+              class="txt-small">{{txtSmall}}</text>
     </div>
 </template>
 
@@ -18,18 +20,22 @@
                 required:false,
                 default:''
             },
-        }
+        },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
     }
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../style/mixin.scss";
+
     .txt-big{
-        font-size: 32px;
-        color: #000;
+        @include fontCommon($bs);
     }
     .txt-small{
-        font-size: 20px;
-        color: $css-grey;
+        @include fontCommon($ss,$css-grey);
     }
 </style>

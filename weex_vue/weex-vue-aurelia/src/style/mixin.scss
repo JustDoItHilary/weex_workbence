@@ -1,7 +1,7 @@
 /*common*/
 $colorCommon: #58D68D;
-//$colorCommon: #3190e8;
 //$colorCommon: rgb(2, 136, 209);
+//$colorCommon: #3190e8;
 //$colorCommon: #d9d9d9;
 //$slsjColor: rgb(2,n 136, 209);
 $applyColor: #58D68D;
@@ -11,6 +11,7 @@ $bgColor: #fff;
 $css-blue: rgb(2, 136, 209);
 $wg: #efefef;
 $bc: #d9d9d9;
+$gc: #dfdfdf;
 $fc: #fff;
 $css-grey: #aaa;
 $css-black: #000;
@@ -19,9 +20,19 @@ $blue: #3190e8;
 $bg: #e4e4e4;
 
 $radius: 8px;
+$bRadius:100px;
+$hs:96px;
+$ls:48px;
+
 $bs:32px;
 $cs:28px;
 $ss:24px;
+
+$sl:8px;
+$cl:16px;
+$bl:32px;
+$borderW:1px;
+
 
 @mixin slsjBtnCommon {
   background-color: $colorCommon;
@@ -56,27 +67,27 @@ $ss:24px;
   align-items: center;
 }
 
-@mixin marginRow($length:20px) {
+@mixin marginRow($length:$cl) {
   margin-left: $length;
   margin-right: $length;
 }
 
-@mixin marginColumn($length:20px) {
+@mixin marginColumn($length:$cl) {
   margin-top: $length;
   margin-bottom: $length;
 }
 
-@mixin paddingRow($length:20px) {
+@mixin paddingRow($length:$cl) {
   padding-left: $length;
   padding-right: $length;
 }
 
-@mixin paddingColumn($length:20px) {
+@mixin paddingColumn($length:$cl) {
   padding-top: $length;
   padding-bottom: $length;
 }
 
-@mixin cornerBtn($fontSize:$cs,$fontColor:#000,$bgColor:#fff,$borderWidth:1px) {
+@mixin cornerBtn($fontSize:$cs,$fontColor:#000,$bgColor:#fff,$borderWidth:$borderW) {
   font-size: $fontSize;
   color: $fontColor;
   border-radius: 50px;
@@ -86,12 +97,13 @@ $ss:24px;
   text-align: center;
   border-color: $colorCommon;
   background-color: $bgColor;
-  @include paddingColumn(8px);
-  @include paddingRow(16px);
+  @include paddingColumn($sl);
+  @include paddingRow($cl);
 }
 
-@mixin bg {
-  background-color: violet;
+@mixin sideBorder($side:bottom,$sideColor:#000,$wid:$borderW) {
+  border-#{$side}-width:$wid;
+  border-#{$side}-color:$sideColor;
 }
 
 // 背景图片地址和大小
@@ -101,7 +113,7 @@ $ss:24px;
   background-size: 100% 100%;
 }
 
-@mixin borderRadius($radius:8px) {
+@mixin borderRadius($radius:$radius) {
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;
   -ms-border-radius: $radius;
@@ -109,7 +121,7 @@ $ss:24px;
   border-radius: $radius;
 }
 
-@mixin borderCommon($w:2px,$r:8px,$c:#dfdfdf) {
+@mixin borderCommon($w:$borderW,$c:$gc,$r:$radius) {
   border-width: $w;
   border-color: $c;
   -webkit-border-radius: $radius;
@@ -149,7 +161,7 @@ $ss:24px;
 }
 
 //宽高
-@mixin wh($width, $height) {
+@mixin wh($width:$ls, $height:$ls) {
   width: $width;
   height: $height;
 }
@@ -172,7 +184,7 @@ $ss:24px;
 
 }
 
-@function dp($size) {
+@function dp($size:1) {
   @return $size* 750 / ( $deviceWidth / $scale )*1px;
 }
 

@@ -1,11 +1,15 @@
 <template>
-    <div class="div-border" :style="{'borderBottomWidth':bottomBorder+'px'}">
+    <div class="div-border"
+         :style="{'borderBottomWidth':bottomBorder}">
         <div class="div-peo">
             <text class="txt-tit">{{txtTit}}</text>
             <slot name="option"></slot>
-            <text v-if="btnName" class="txt_btn" @click="click">{{btnName}}</text>
+            <text v-if="btnName"
+                  class="txt_btn"
+                  @click="click">{{btnName}}</text>
         </div>
-        <text v-if="txtExplain" class="txt-explain">{{txtExplain}}</text>
+        <text v-if="txtExplain"
+              class="txt-explain">{{txtExplain}}</text>
     </div>
 </template>
 
@@ -36,6 +40,11 @@
                 required: false
             }
         },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
         methods: {
             click: function () {
                 this.$emit('clickBtn', this.type)
@@ -55,14 +64,14 @@
         @include divRow;
     }
     .txt_btn {
-        @include cornerBtn(28px, #fff, $colorCommon)
+        @include cornerBtn($cs, #fff, $colorCommon)
     }
     .txt-explain {
         @include fontTip;
-        margin-top: 10px;
+        margin-top: $sl;
     }
     .txt-tit {
         @include fontCommon;
-        margin-right: 16px;
+        margin-right: $cl;
     }
 </style>

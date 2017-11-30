@@ -2,33 +2,47 @@
     <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"></app-header>
         <scroller>
-            <cell-peo
+            <cell-peo v-ratio="ratio"
                     class="div_item"
                     txtTit="周报日期"
                     bottomBorder="1"
                     :txtExplain="startDate+' - '+endDate"
             >
-                <div slot="option" style="flex-direction: row;flex:1;justify-content: flex-end;">
-                    <div :class="['option_selected_'+!isEdited]" @click="clickDate(false)">
-                        <text class="txt_add">上周</text>
+                <div v-ratio="ratio"
+                     slot="option"
+                     style="flex-direction: row;flex:1;justify-content: flex-end;">
+                    <div v-ratio="ratio"
+                         :class="['option_selected_'+!isEdited]"
+                         @click="clickDate(false)">
+                        <text v-ratio="ratio"
+                              class="txt_add">上周</text>
                     </div>
-                    <div :class="['option_selected_'+isEdited]" @click="clickDate(true)">
-                        <text class="txt_add">本周</text>
+                    <div v-ratio="ratio"
+                         :class="['option_selected_'+isEdited]"
+                         @click="clickDate(true)">
+                        <text v-ratio="ratio"
+                              class="txt_add">本周</text>
                     </div>
                 </div>
             </cell-peo>
-            <cell-peo
+            <cell-peo v-ratio="ratio"
                     class="div_item border"
                     txtTit="审阅者"
                     :btnName="isEdited?'添加':''"
                     @clickBtn="clickCellBtn"
             >
-                <scroller slot="option" scroll-direction="horizontal" class="cell-scroll">
-                    <text v-for="item in readerList" class="txt_tit">{{item.Name}}</text>
+                <scroller v-ratio="ratio"
+                          slot="option"
+                          scroll-direction="horizontal"
+                          class="cell-scroll">
+                    <text v-ratio="ratio"
+                          v-for="item in readerList"
+                          class="txt_tit">{{item.Name}}</text>
                 </scroller>
                 >
             </cell-peo>
-            <cell-input v-if="isEdited"
+            <cell-input v-ratio="ratio"
+                        v-if="isEdited"
                         class="div_item"
                         txtTit="本周工作总结"
                         txtHide="请输入工作总结"
@@ -36,12 +50,14 @@
                         :txtInput="repDetails.summary?repDetails.summary:''"
                         @clickCellInput="clickSum"
             ></cell-input>
-            <cell-input v-else
+            <cell-input v-ratio="ratio"
+                        v-else
                         class="div_item"
                         txtTit="本周工作总结"
                         :txtInput="lastDetails.summary?lastDetails.summary:'无数据'"
             ></cell-input>
-            <cell-input v-if="isEdited"
+            <cell-input v-ratio="ratio"
+                        v-if="isEdited"
                         class="div_item"
                         txtTit="下周工作计划"
                         txtHide="请输入工作计划"
@@ -49,14 +65,17 @@
                         :txtInput="repDetails.myPlan?repDetails.myPlan:''"
                         @clickCellInput="clickPlan"
             ></cell-input>
-            <cell-input v-else
+            <cell-input v-ratio="ratio"
+                        v-else
                         class="div_item"
                         txtTit="下周所定工作计划"
                         :txtInput="lastDetails.myPlan?lastDetails.myPlan:'无数据'"
             ></cell-input>
-            <text class="txt_grey border">最近保存时间 {{saveTime}}</text>
+            <text v-ratio="ratio"
+                  class="txt_grey border">最近保存时间 {{saveTime}}</text>
         </scroller>
-        <bottom-btn class="cell_bottom_btn"
+        <bottom-btn v-ratio="ratio"
+                    class="cell_bottom_btn"
                     :txtLeft="repDetails.IsPost?'提交':'保存'"
                     :txtRight="repDetails.IsPost?'':'提交'"
                     :left="clickLeft"
@@ -83,6 +102,9 @@
             CellInput: require('../../components/cell-input.vue')
         },
         computed: {
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
             },
@@ -245,28 +267,28 @@
     .div_item {
         background-color: #fff;
         @include paddingRow;
-        @include paddingColumn(16px);
+        @include paddingColumn();
     }
 
     .option_selected_true {
-        @include marginRow(8px);
+        @include marginRow($sl);
         @include cornerBtn($cs, #fff, $colorCommon, 0px);
     }
 
     .option_selected_false {
-        @include marginRow(8px);
+        @include marginRow($sl);
         @include cornerBtn($cs, #fff, $css-grey, 0px);
     }
 
     .txt_add {
         @include fontCommon($cs,#fafafa);
-        @include marginRow(16px);
+        @include marginRow();
         text-align: center;
     }
 
     .txt_tit {
         @include fontCommon($cs,$colorCommon);
-        margin-right: 16px;
+        margin-right: $cl;
     }
 
     .txt_grey {
@@ -277,20 +299,20 @@
     }
 
     .border {
-        margin-bottom: 20px;
+        margin-bottom: $cl;
     }
 
     .cell_bottom_btn {
-        @include paddingColumn(16px);
-        @include paddingRow(8px);
+        @include paddingColumn();
+        @include paddingRow($sl);
     }
 
     .cell-scroll {
-        height: 48px;
+        height: $ls;
         flex-direction: row;
         align-items: center;
         flex: 1;
-        margin-left: 16px;
-        margin-right: 8px;
+        margin-left: $cl;
+        margin-right: $sl;
     }
 </style>

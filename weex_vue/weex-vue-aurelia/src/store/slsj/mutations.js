@@ -6,7 +6,7 @@ export function SET_SLSJ_LIST(state, {data}) {
     if (data !== null && data.length > 0) {
         for (let j = 0; j < data.length; j++) {
             let item = data[j];
-            item.showed = false;//showed - 是否展开
+            item.showType = false;//showType - 是否展开
             item.warning=false;// warning - 是否显示 （必选）
             if (item.data !== null && item.data.length > 0) {
                 item.id = item.data[0].qid;

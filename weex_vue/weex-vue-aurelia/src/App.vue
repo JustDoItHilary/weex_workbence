@@ -16,12 +16,22 @@
 </template>
 
 <script >
+
     export default {
         methods: {
             back: function () {
                 this.$router.back()
-            }
+            },
         },
+//        beforeCreate(){
+//            console.log(this,this.$el)
+//            let self=this;
+//            var width=self.$getConfig().env.hasOwnProperty('deviceWidth')?self.$getConfig().env.deviceWidth:0;
+//            var scale=self.$getConfig().env.hasOwnProperty('scale')?self.$getConfig().env.scale:2;
+//            var ratio= 750 / ( width / scale );
+//            console.log("ratio: ",ratio);
+//            var dp=ratio+'px';
+//        },
     }
 </script>
 

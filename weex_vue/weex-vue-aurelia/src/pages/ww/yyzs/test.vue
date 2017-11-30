@@ -37,7 +37,7 @@
         },
         methods:{
             clickShow(item,index){
-                item.showed=!item.showed;
+                item.showType=!item.showType;
             },
         },
         created(e){

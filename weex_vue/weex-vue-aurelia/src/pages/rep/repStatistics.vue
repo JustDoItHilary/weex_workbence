@@ -1,27 +1,49 @@
 <template>
     <div>
         <app-header tit="周报提交情况"></app-header>
-        <cell-txt-center :txt="startDate+' -- '+endDate" fontColor="#58D68D" class="cell_txt_center"
+        <cell-txt-center v-ratio="ratio"
+                         :txt="startDate+' -- '+endDate"
+                         fontColor="#58D68D"
+                         class="cell_txt_center"
                          @clickTxtCenter="clickDate">
-            <text slot="left" class="div_add" @click="clickLast()">上个周</text>
-            <text slot="right" class="div_add" @click="clickNext()">下个周</text>
+            <text v-ratio="ratio"
+                  slot="left"
+                  class="div_add"
+                  @click="clickLast()">上个周</text>
+            <text v-ratio="ratio"
+                  slot="right"
+                  class="div_add"
+                  @click="clickNext()">下个周</text>
         </cell-txt-center>
         <!--<input class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>-->
-        <div class="div_tit" >
-            <div class="div_table" style="border-right-width: 1px;background-color: #fff">
-                <text class="txt_name">姓名</text>
+        <div v-ratio="ratio"
+             class="div_tit" >
+            <div v-ratio="ratio"
+                 class="div_table div_border">
+                <text v-ratio="ratio"
+                      class="txt_name">姓名</text>
             </div>
-            <div class="div_table">
-                <text class="txt_state">提交情况</text>
+            <div v-ratio="ratio"
+                 class="div_table">
+                <text v-ratio="ratio"
+                      class="txt_state">提交情况</text>
             </div>
         </div>
-        <scroller class="scroll">
-            <div v-for="(item,index) in statistics" class="div_item" :style="{ backgroundColor: bgColor(item) }">
-                <div class="div_table" style="border-right-width: 1px;background-color: #fff">
-                    <text class="txt_name">{{item.name}} {{item.code}}</text>
+        <scroller v-ratio="ratio"
+                  class="scroll">
+            <div v-ratio="ratio"
+                 v-for="(item,index) in statistics"
+                 class="div_item"
+                 :style="{ backgroundColor: bgColor(item) }">
+                <div v-ratio="ratio"
+                     class="div_table div_border" >
+                    <text v-ratio="ratio"
+                          class="txt_name">{{item.name}} {{item.code}}</text>
                 </div>
-                <div class="div_table">
-                    <text class="txt_state">{{getState(item)}}</text>
+                <div v-ratio="ratio"
+                     class="div_table">
+                    <text v-ratio="ratio"
+                          class="txt_state">{{getState(item)}}</text>
                 </div>
             </div>
         </scroller>
@@ -44,6 +66,9 @@
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
         },
         computed: {
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             statistics(){
                 return this.$store.getters.getRepStatistics;
             },
@@ -141,27 +166,25 @@
 
     .div_tit{
         flex-direction: row;
-        border-top-width: 1px;
-        border-right-width: 1px;
-        border-left-width: 1px;
-        margin-top: 32px;
+        @include sideBorder(top);
+        @include sideBorder(right);
+        @include sideBorder(left);
+        margin-top: $bl;
         @include marginRow();
     }
     .scroll {
         @include marginRow();
-        margin-bottom: 32px;
+        margin-bottom: $bl;
         border-width: 1px;
-
-        /*color:#F59905;*/
     }
 
     .div_item {
         flex-direction: row;
-        border-bottom-width: 1px;
+        @include sideBorder(bottom);
     }
 
     .div_table {
-        padding: 16px;
+        padding:$cl;
         flex: 1;
     }
 
@@ -173,31 +196,17 @@
         text-align: center;
         @include fontCommon();
     }
-
-    .input {
-        height: 64px;
-        background-color: $bc;
-        border-radius: 12px;
-        align-items: center;
-        justify-content: center;
-        margin-top: 16px;
-        margin-bottom: 10px;
-        @include marginRow(36px);
-    }
-
-    .txt_center {
-        height: 48px;
-        text-align: center;
-        font-weight: bold;;
-        font-size: $cs;
-    }
-
     .cell_txt_center {
-        margin-top: 36px;
-        @include marginRow(16px);
+        margin-top: $bl;
+        @include marginRow();
+        @include marginColumn($sl);
     }
 
     .div_add {
         @include cornerBtn();
+    }
+    .div_border{
+        @include sideBorder(right);
+        background-color: #fff
     }
 </style>

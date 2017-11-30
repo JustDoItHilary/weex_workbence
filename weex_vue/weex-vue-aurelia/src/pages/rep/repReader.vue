@@ -1,20 +1,31 @@
 <template>
     <div append="node">
         <apply-header tit="添加审核人员" :done="clickDone" :imgUrl="imgUrl"></apply-header>
-        <div class="div_search">
-            <input class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
+        <div v-ratio="ratio"
+             class="div_search">
+            <input v-ratio="ratio"
+                   class="txt_center input"
+                   type="text"
+                   placeholder="搜索"
+                   @input="input"
+                   :value="searchMess"/>
         </div>
-        <list class="list">
-            <cell v-for="item in empList" class="cell" @click="clickMember(item)">
-                <div class="div_logo">
-                    <text class="text_logo">{{item.fir}}</text>
+        <list v-ratio="ratio" class="list">
+            <cell  v-ratio="ratio"
+                   v-for="item in empList"
+                   class="cell"
+                   @click="clickMember(item)">
+                <div  v-ratio="ratio"
+                      class="div_logo">
+                    <text v-ratio="ratio"
+                          class="text_logo">{{item.fir}}</text>
                 </div>
-                <div class="div_member">
-                    <div style="flex:1;">
-                        <text class="text_member">{{item.Name}}</text>
-                    </div>
-                    <div class="div_select" v-if="getSelected(item)">
-                        <image class="img_select" :src="baseUrl+imgUrl"></image>
+                <div v-ratio="ratio" class="div_member">
+                    <!--<div v-ratio="ratio">-->
+                        <text v-ratio="ratio" class="text_member" style="flex:1;">{{item.Name}}</text>
+                    <!--</div>-->
+                    <div v-ratio="ratio" class="div_select" v-if="getSelected(item)">
+                        <image v-ratio="ratio" class="img_select" :src="baseUrl+imgUrl"></image>
                     </div>
                 </div>
             </cell>
@@ -34,6 +45,9 @@
             ApplyHeader: require('../../components/header/apply-header.vue')
         },
         computed: {
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             baseUrl(){
                 return this.$store.getters.baseUrl
             },
@@ -139,39 +153,39 @@
     }
 
     .input {
-        height: 64px;
+        height: 32px;
         flex: 1;
         background-color: #ebedef;
-        border-radius: 12px;
         align-items: center;
         justify-content: center;
-        margin-top: 16px;
-        margin-bottom: 10px;
-        @include marginRow(36px);
+        @include marginColumn($cl);
+        @include marginRow($bl);
+        @include borderRadius();
     }
 
     .txt_center {
-        height: 48px;
+        height: $ls;
         text-align: center;
         font-weight: bold;
-        font-size: 28px;
+        @include fontCommon($cs);
     }
 
     .list {
-        @include marginRow(40px);
+        @include marginRow($bl);
         justify-content: center;
-        margin-bottom: 10px;
+        @include marginColumn($sl);
     }
 
     .cell {
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        @include paddingColumn($sl);
+        @include paddingRow($bl);
     }
 
     .div_logo {
-        height: 80px;
-        width: 80px;
+        @include wh(40px,40px);
         align-items: center;
         justify-content: center;
         background-color: $colorCommon;
@@ -179,25 +193,27 @@
     }
 
     .text_logo {
-        font-size: 48px;
+        font-size: 18px;
         color: #ffffff;
+        font-weight: bold;
     }
 
     .text_member {
         font-size: $bs;
-        margin-left: 16px;
-        margin-top: 28px;
-        margin-bottom: 20px;
+        margin-left: $cl;
+        margin-top: $bl;
+        margin-bottom: $cl;
     }
 
     .div_member {
         flex: 1;
         flex-direction: row;
-        margin-left: 24px;
+        margin-left: $cl;
         border-bottom-width: 1px;
         border-color: #bbbbbb;
         align-items: center;
         justify-content: center;
+        @include marginColumn($sl);
     }
 
     .div_select {
@@ -206,9 +222,8 @@
     }
 
     .img_select {
-        width: 48px;
-        height: 48px;
-        border-radius: 50px;
+        @include wh();
+        border-radius: $bRadius;
         background-color: $colorCommon;
     }
 </style>

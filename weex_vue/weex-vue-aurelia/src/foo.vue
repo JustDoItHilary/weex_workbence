@@ -1,11 +1,26 @@
 <template>
-    <div class="root" bubble="true">
-        <scroller>
-            <div class="root">
+    <div class="root" bubble="true" style="border-width:10px;border-color: red;">
+        <cell-header tit="营销活动" ></cell-header>
+        <scroller >
+            <!--<text v-for="item in list">{{item}}  test      </text>-->
+            <div class="root" @click="click('#ff0')">
                 <text class="txt">{{getSize(28)+',,,'+width+',,,'+scale}}心若在梦就在迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +
                     '，按旷工半天 处理。 研发部门弹性工作制要求: 研发</text>
             </div>
-            <text v-ratio="ratio()" class="txt">{{rootText}}</text>
+            <!--<text @click="click('#0f0')" class="txt_else" style="border-width: 10;font-size: 16;" v-ratio="ratio">1{{rootText}}</text>-->
+            <!--<text @click="click('#f0f')" v-ratio="ratio" :class="['txt']" style="border-width: 10;">2{{rootText}}</text>-->
+            <!--<text @click="click('#0ff')" v-ratio="ratio" :class="['txt']" style="border-width: 10;" v-if="showType">2{{rootText}}</text>-->
+
+            <text class="txt1">test1</text>
+            <text class="txt2">test2</text>
+            <text class="txt3">test3</text>
+            <!--<validator name="validation" style="border-width: 1px;border-color: red;">-->
+                <!--<input type="text" v-model='comment' ref='comment' v-validate:comment="{ minlength: 3, maxlength: 15 }">-->
+                <!--<div>-->
+                    <!--<span v-show="$validation.comment.minlength">不得少于3个字符</span>-->
+                    <!--<span v-show="$validation.comment.maxlength">不得大于15个字符</span>-->
+                <!--</div>-->
+            <!--</validator>-->
         </scroller>
     </div>
 </template>
@@ -16,8 +31,9 @@
     module.exports = {
         data(){
             return {
-                size: '58px',
-                rootText: '迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +
+                size: '58dp',
+                rootText: '迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' ,
+                txt:
                 '，按旷工半天 处理。 研发部门弹性工作制要求: 研发部门员工，如因项目紧急出现晚上加班的情况，可执行弹性工作时间，前一天加班时间太晚，' +
                 '第二天上班时间可适当延迟，但需提供前一天经部门经理审批的加班记录单，无加班记录单，一律按迟 到处理。' +
             ' 外勤管理规定' +
@@ -36,57 +52,110 @@
                 '前可根据情况申请调休，逾期将归零处理;',
                 width: '',
                 scale:1,
+                showed:true,
+                color:'#F00',
+                ratio:1,
+                list:[1,2,3,4,5,6,7,8,9,9],
+                imgUrl:'/drawable/no_found.png',
+                baseUrl:'',
             }
         },
-        components: {},
+        components: {
+            cellError:require('./components/error.vue'),
+            cellHeader:require('./components/header/apply-header.vue')
+        },
         computed: {
             toDpw(){
-                return '48px';
+                return '48dp';
             },
         },
         methods: {
+            click(c){
+                this.color=c;
+                this.showed=!this.showed;
+            },
             getSize(size){
                 var tt=Math.round(size* 750 / ( this.width / this.scale ));
                 console.log(tt+',,,'+this.width+',,,'+this.scale );
 //                this.toAlert(tt+',,,'+this.width+',,,'+this.scale,'',function () {
 //
 //                });
-                return tt+'px';
+                return tt+'dp';
             },
-            ratio(){
-                return 750 / ( this.width / this.scale );
+            setRatio(){
+//                return 1;
+                this.ratio= 750 / ( this.width / this.scale );
+                this.$store.commit('SET_RATIO', {ratio: this.ratio});
             },
         },
         created(e){
-            console.log(this.$getConfig())
+            console.log("created")
             let self = this;
+            var bundleUrl = 'http://weex.yy365.cn/sy-member.js';
+            self.baseUrl = self.getBaseUrl(bundleUrl);
+            self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
             self.width=self.$getConfig().env.hasOwnProperty('deviceWidth')?self.$getConfig().env.deviceWidth:0;
             self.scale=self.$getConfig().env.hasOwnProperty('scale')?self.$getConfig().env.scale:2;
+            self.setRatio();
 
         },
         beforeCreate(e){
-//            console.log("beforeCreate")
+            console.log("beforeCreate",this);
+        },
+        beforeMount(){
+            console.log("beforeMount")
+        },
+        mount(){
+            console.log("mount")
+        },
+        beforeUpdate(){
+            console.log("beforeUpdated")
+        },
+        updated(){
+            this.setRatio();
+            console.log('UPDATED')
+        },
+        beforeDestroyed(){
+            console.log("beforeDestroyed")
+        },
+        destroyed(){
+            console.log('destroyed')
+        },
+        activated(){
+            console.log('activated')
+        },
+        deactivated(){
+            console.log('deactivated')
         },
     }
 </script>
 
-<style lang="sass" rel="stylesheet/scss" scoped>
+<style lang="sass" rel="stylesheet/scss" >
     @import "./style/mixin";
 
 
     .root {
-        /*margin:20px;*/
+        margin:20px;
+        /*margin:20dp;*/
+    }
+    .txt_else{
+        /*margin-top: 20dp;*/
+        /*margin-left: 10dp;*/
+        /*padding-right: 20dp;*/
     }
 
     .txt {
-        margin-top: 20px;
-        margin-left: 10px;
-        padding-right: 20px;
+        margin-top: 20dp;
+        margin-left: 20px;
+        /*padding-right: 20dp;*/
         border-width: 10px;
-        @include fontCommon($bs,#fc8);
-        border-bottom-width: 2px;
+        @include fontCommon(16px,#fc8);
+        /*border-bottom-width: 2dp;*/
         /*font-size: dp(24);*/
-        /*font-size:28px;*/
+        /*font-size:28dp;*/
+    }
+    .txt1{
+        font-size: dp(28);
     }
 
 </style>

@@ -2,10 +2,10 @@ const modal = weex.requireModule('modal');
 export default {
     methods: {
         toToast(mess){
-            modal.toast({message: mess, duration: 0.3});
+            modal.toast({message: mess, duration: 2});
         },
-        toAlert(mess,oktit,callback){
-            modal.alert({message:mess,okTitle:oktit?oktit:'OK'},callback)
+        toAlert(mess, oktit, callback){
+            modal.alert({message: mess, okTitle: oktit ? oktit : 'OK'}, callback)
         },
         jump (to) {
             if (this.$router) {
@@ -50,6 +50,30 @@ export default {
                 time = '0' + time;
             }
             return time;
+        },
+        toArr(string) {
+            return (string.match(/\{(.*?)\}/g) || []).map(function (text) {
+                return text.substring(1, text.length - 1);
+            });
+        },
+        getBaseUrl(url) {
+            let urlArr = url.split('?');
+            return urlArr[0].split('/').slice(0, -1).join('/');
+        },
+        mate(str, data){
+            var arr = toArr(str);
+            if (data && data.length > 0) {
+                for (var i = 0; i < arr.length; i++) {
+                    for (var key in data[0]) {
+                        var key2 = key.split(' ').join('');
+                        arr[i] = arr[i].split(' ').join('');
+                        if (key2 == arr[i]) {
+                            str = str.replace(new RegExp('{' + arr[i] + '}', 'g'), data[0][key]);
+                        }
+                    }
+                }
+            }
+            return str
         },
         replaceTransfer: function (str) {
             if (str.length === 0) return "";

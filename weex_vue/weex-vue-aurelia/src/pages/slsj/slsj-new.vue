@@ -101,13 +101,13 @@
                                     return self.checkFinish(selectedList, proList);
                                 }
                             }
-                            self.slsjNews[self.slsjSpecial.modelIndex].showed = true;
+                            self.slsjNews[self.slsjSpecial.modelIndex].showType = true;
                             return self.$refs.itemref[self.slsjSpecial.modelIndex].scroll(1);
                         }
                     }
                     return self.checkFinish(selectedList, proList);
                 } else {
-                    self.slsjNews[qIndex].showed = true;
+                    self.slsjNews[qIndex].showType = true;
                     self.$nextTick(function () {
                         self.$refs.itemref[qIndex].scroll(0);
                     })
@@ -183,7 +183,7 @@
             setItemShowed(index){
                 let self = this;
                 if (index == 1) {
-                    self.slsjNews[self.slsjSpecial.modelIndex].showed = true;
+                    self.slsjNews[self.slsjSpecial.modelIndex].showType = true;
                     self.slsjNews[self.slsjSpecial.modelIndex].warning = true;
                     self.$nextTick(function () {
                         self.$refs.itemref[self.slsjSpecial.modelIndex].scroll(1);

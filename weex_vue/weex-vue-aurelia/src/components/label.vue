@@ -1,15 +1,19 @@
 <template>
     <div class="border_bottom">
-        <div class="flex_center" style="border-right-width: 2px;border-color:#eeeeee;" @click="labelOne">
-            <div style="flex-direction: row;padding:20px;">
+        <div class="flex_center div_border"
+             @click="labelOne">
+            <div class="div_label">
                 <text :class="['text_center', 'select_' + (selected)]">{{labelOneTxt}}</text>
-                <text v-if="oneInfo" class="txt_info">{{oneInfo}}</text>
+                <text v-if="oneInfo"
+                      class="txt_info">{{oneInfo}}</text>
             </div>
         </div>
-        <div class="flex_center" @click="labelTwo">
-            <div style="flex-direction: row;padding:20px;">
+        <div class="flex_center"
+             @click="labelTwo">
+            <div class="div_label">
                 <text :class="['text_center', 'select_' + (!selected)]">{{labelTwoTxt}}</text>
-                <text v-if="twoInfo" class="txt_info">{{twoInfo}}</text>
+                <text v-if="twoInfo"
+                      class="txt_info">{{twoInfo}}</text>
             </div>
         </div>
     </div>
@@ -46,6 +50,11 @@
                 type: Function
             },
         },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
     }
 </script>
 
@@ -53,24 +62,22 @@
     @import "../style/mixin";
 
     .border_bottom {
-        /*border-bottom-width: 20px;*/
-        /*border-color: #eeeeee;*/
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: #ffffff;
+        background-color: #fff;
     }
 
     .flex_center {
         flex: 1;
         align-items: center;
-        @include marginColumn(10px);
+        @include marginColumn($cl);
     }
 
     .text_center {
-        font-size: 32px;
         text-align: center;
-        @include paddingRow(16px);
+        @include fontCommon($bs);
+        @include paddingRow($sl);
     }
 
     .select_true {
@@ -78,19 +85,29 @@
     }
 
     .select_false {
-        color: #aaaaaa;
+        color: $css-grey;
     }
 
     .txt_info {
         position: absolute;
-        right: 0px;
-        top: 10px;
-        height: 28px;
+        right: 0;
+        top: $sl;
+        height: $bl;
         text-align: center;
         background-color: #f00;
-        @include paddingRow(7px);
-        @include borderRadius(50px);
-        @include fontCommon(24px, #fff);
+        @include paddingRow($sl);
+        @include borderRadius($bRadius);
+        @include fontCommon($cs, #fff);
+    }
+    .div_border{
+        @include sideBorder(right,$bc,$borderW);
+    }
+    .div_label{
+        flex-direction: row;
+        justify-content:center;
+        align-items: center;
+        @include paddingColumn();
+        @include paddingRow();
     }
 
 </style>

@@ -2,17 +2,17 @@
     <div>
         <app-header :tit="getParams.Name+'的周报'"></app-header>
         <scroller>
-            <cell-input
+            <cell-input v-ratio="ratio"
                     class="div_item"
                     txtTit="本周工作总结"
                     :txtInput="repDetails.summary"
             ></cell-input>
-            <cell-input
+            <cell-input v-ratio="ratio"
                     class="div_item"
                     txtTit="下周工作计划"
                     :txtInput="repDetails.myPlan"
             ></cell-input>
-            <cell-input
+            <cell-input v-ratio="ratio"
                     class="div_item"
                     txtTit="审核评价"
                     txtHide="请输入评价（非必须）"
@@ -21,7 +21,8 @@
                     @clickCellInput="clickAssessment"
             ></cell-input>
         </scroller>
-        <bottom-btn class="cell_bottom_btn"
+        <bottom-btn v-ratio="ratio"
+                    class="cell_bottom_btn"
                     txtLeft="审核"
                     :left="clickLeft"
         ></bottom-btn>
@@ -42,6 +43,9 @@
             CellInput: require('../../components/cell-input.vue'),
         },
         computed: {
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             getParams(){
                 if (this.$route && this.$route.params) {
 //                    console.log(this.$route.params)
@@ -112,12 +116,12 @@
     .div_item {
         background-color: #fff;
         @include paddingRow;
-        @include paddingColumn(16px);
+        @include paddingColumn();
     }
 
     .cell_bottom_btn {
-        @include paddingColumn(16px);
-        @include paddingRow(8px);
+        @include paddingColumn();
+        @include paddingRow($sl);
     }
 
 </style>

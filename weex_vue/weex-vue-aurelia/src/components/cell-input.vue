@@ -1,24 +1,29 @@
 <template>
-    <div >
-        <div class="div-tit" v-if="txtTit">
-            <text class="tit" style="flex:1;">{{txtTit}}</text>
-            <text class="tit color_active" @click="clickPick">{{txtList.length>0?txtList[index].NAME:''}}</text>
-            <slot name='arrow-right' @click="clickPick"></slot>
+    <div>
+        <div class="div-tit"
+             v-if="txtTit">
+            <text class="tit"
+                  style="flex:1;">{{txtTit}}</text>
+            <text class="tit color_active"
+                  @click="clickPick">{{txtList.length>0?txtList[index].NAME:''}}</text>
+            <slot name='arrow-right'
+                  @click="clickPick"></slot>
             <!--<img class="img" src="../../assets/img/ic_keyboard_arrow_right_black_48dp.png" @click="clickPick"/>-->
         </div>
         <textarea v-if="txtHide"
-                class="content input_content"
+                  class="content input_content"
                   :value="txtInput"
                   :rows="txtLines"
                   @input="inputContent($event)"
                   :placeholder="txtHide"></textarea>
-        <text v-if="!txtHide&&txtInput" class="content">{{txtInput}}</text>
+        <text v-if="!txtHide&&txtInput"
+              class="content">{{txtInput}}</text>
         <slot name="content"></slot>
     </div>
 </template>
 
 <script>
-    const picker = weex.requireModule('picker')
+    const picker = weex.requireModule('picker');
 
     module.exports={
         props:{
@@ -65,6 +70,9 @@
             }
         },
         computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             getList:function () {
                 let list=[];
                 for(let key of this.txtList){
@@ -110,12 +118,12 @@
         color: $colorCommon;
     }
     .img{
-    @include wh(48px,48px);
+    @include wh();
     }
     .content{
-        @include marginColumn(10px);
+        @include marginColumn($sl);
         @include fontCommon;
-        padding:20px;
+        padding:$cl;
         background-color:$wg;
     }
     .input_content{

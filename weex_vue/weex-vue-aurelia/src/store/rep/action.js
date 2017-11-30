@@ -4,8 +4,8 @@ import {
 } from '../fetch'
 const apiURL = {
     yiyaoUrl: 'http://im.yiyao365.cn/',
-    baseUrl: 'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
-    // baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
+    // baseUrl: 'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
+    baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
     // baseUrl: 'http://192.168.100.96:8090/Handler/DailyAPIHandler.ashx?action=',
 
 }

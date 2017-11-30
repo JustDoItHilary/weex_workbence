@@ -29,13 +29,15 @@ export function fetch(path) {
             // headers: {'Content-Type': 'application/json'}
         }, (response) => {
             // console.log('----------> post response: ' + JSON.stringify(response))
-            if (response.status == 200) {
-                resolve(response.data)
+            if (response.status == 200&&response.hasOwnProperty('data')) {
+                if(response.data){
+                    resolve(response.data)
+                }
             }
             else {
-                reject(response)
+                reject(response.data?"请求失败："+response.data:"请求服务器失败");
             }
-        }, () => {
+        }, (progresscallback) => {
         })
     })
 }
@@ -53,17 +55,15 @@ export function fetchByPost(path, body) {
             // modal.alert({'message':JSON.stringify(response),'doation':1})
             // console.log('----------> post response: ' + response)
             // console.log('----------> post response: ' + JSON.stringify(response))
-            if (response.status == 200 && response.ok) {
-                resolve(response.data)
-            } else {
-                if (response.data != null) {
-                    modal.toast({message: response.data, duration: 0.3})
-                } else {
-                    modal.toast({message: '请求失败', duration: 0.3})
+            if (response.status == 200 && response.ok&&response.hasOwnProperty("data")) {
+                if(response.data){
+                    resolve(response.data)
                 }
-                reject(response)
+            } else {
+                reject(response.hasOwnProperty("data")?"请求失败："+response.data:"请求服务器失败");
+                // reject(path+body+JSON.stringify(response));
             }
-        }, () => {
+        }, (progresscallback) => {
         })
     })
 }
@@ -78,40 +78,17 @@ export function fetchByPostWithHeader(path, body,header) {
         }, (response) => {
             // console.log('----------> post response: ' + response)
             // console.log('----------> post response: ' + JSON.stringify(response))
-            if (response.status == 200 && response.ok) {
-                resolve(response.data)
-            } else {
-                if (response.data != null) {
-                    modal.toast({message: response.data, duration: 0.3})
-                } else {
-                    modal.toast({message: '请求失败', duration: 0.3})
+            if (response.status == 200 && response.ok&&response.hasOwnProperty('data')) {
+                if(response.data){
+                    resolve(response.data)
                 }
-                reject(response)
+            } else {
+                reject(response.data?"请求失败："+response.data:"请求服务器失败");
             }
-        }, () => {
+        }, (progresscallback) => {
         })
     })
 }
-
-//
-// export function fetchIdsByType(type) {
-//     var path = `${baseURL}/${type}stories.json`
-//     return fetch(path)
-// }
-//
-// export function fetchItem(id) {
-//     var path = `${baseURL}/item/${id}.json`
-//     return fetch(path)
-// }
-//
-// export function fetchItems(ids) {
-//     return Promise.all(ids.map(id => fetchItem(id)))
-// }
-//
-// export function fetchUser(id) {
-//     var path = `${baseURL}/user/${id}.json`
-//     return fetch(path)
-// }
 
 /** -----------------notice------------------*/
 export function fetchNotices() {

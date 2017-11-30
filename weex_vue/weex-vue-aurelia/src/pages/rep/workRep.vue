@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <text v-ratio="ratio" class="text_mulit">下周工作计划:</text>
-                    <text v-ratio="ratio" class="text_tit" style="margin-bottom: 20px;">{{item.myPlan}}</text>
+                    <text v-ratio="ratio" class="text_tit txt_border">{{item.myPlan}}</text>
                     <image v-if="item.AuditFlag==1" v-ratio="ratio" class="img_logo" :src="baseUrl+imgLogoUrl"></image>
                 </div>
             </cell>
@@ -71,7 +71,6 @@
         },
         data(){
             return {
-//                isSelected: true,
                 typeName: '',
                 itemGuid: '',
                 token: '',
@@ -292,9 +291,9 @@
         ,
         created: function (e) {
             let self = this;
-//            self.setRatio();
-            var bundleUrl = self.$getConfig().bundleUrl || '';
-//            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
+            self.setRatio();
+//            var bundleUrl = self.$getConfig().bundleUrl || '';
+            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
             self.baseUrl = bundleUrl.split('/').slice(0, -1).join('/');
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
             self.setDate();
@@ -326,7 +325,7 @@
     @import "../../style/mixin.scss";
 
     .list {
-        @include marginRow($bs);
+        @include marginRow($bl);
     }
 
     .div_item {
@@ -346,11 +345,11 @@
     }
 
     .select_false {
-        color: #aaaaaa;
+        color: $css-grey;
     }
 
     .select_bg_true {
-        background-color: #aaaaaa;
+        background-color:$css-grey;
     }
 
     .select_bg_false {
@@ -361,8 +360,7 @@
         position: absolute;
         right: $ss;
         bottom: $ss;
-        height: 96px;
-        width: 96px;
+        @include wh($hs,$hs);
     }
 
     .flex_left {
@@ -373,27 +371,25 @@
     }
 
     .cell {
-        padding-top: $ss;
-        /*border-bottom-width: ss;*/
-        /*border-color: #ebedef;*/
+        padding-top: $cl;
     }
 
     .text_tit {
         @include fontCommon;
         @include marginRow($ss);
-        margin-top: 10px;
+        margin-top: $sl;
         lines: 1;
     }
 
     .text_mulit {
         @include fontLines;
-        @include marginRow($ss);
+        @include marginRow($cl);
         @include fontCommon($ss);
     }
 
     .cell_bottom_btn {
-        @include paddingColumn(16px);
-        @include paddingRow(8px);
+        @include paddingColumn($cl);
+        @include paddingRow($sl);
     }
 
     .div_search {
@@ -401,13 +397,12 @@
     }
 
     .input {
-        height: 64px;
+        height: 32px;
         background-color: #fff;
         border-radius: 12px;
         align-items: center;
         justify-content: center;
-        margin-top: 16px;
-        margin-bottom: 10px;
+        @include marginColumn();
         @include marginRow($bs);
     }
 
@@ -420,14 +415,14 @@
     }
 
     .txt_center {
-        height: 48px;
+        height: $ls;
         text-align: center;
         font-weight: bold;;
         font-size: $cs;
     }
 
     .div_logo {
-        padding: 10px;
+        padding: $sl;
         border-radius: 50px;
         text-align: center;
         @include fontCommon($ss, #fff);
@@ -435,9 +430,9 @@
 
     .text_member {
         font-size: $bs;
-        margin-left: 16px;
+        margin-left: $cl;
         margin-top: $bs;
-        margin-bottom: 16px;
+        margin-bottom: $cl;
     }
 
     .div_member {
@@ -445,5 +440,8 @@
         flex-direction: row;
         margin-left: $ss;
         align-items: center;
+    }
+    .txt_border{
+        margin-bottom: $cl;
     }
 </style>

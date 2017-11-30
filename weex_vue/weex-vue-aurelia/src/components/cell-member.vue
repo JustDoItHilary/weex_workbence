@@ -7,8 +7,10 @@
             <div style="flex:1;">
                 <text class="text_member">{{item.USERNAME}}</text>
             </div>
-            <div class="div_select" v-if="getSelected(item)">
-                <image class="img_select" :src="baseUrl+imgUrl"></image>
+            <div class="div_select"
+                 v-if="getSelected(item)">
+                <image class="img_select"
+                       :src="baseUrl+imgUrl"></image>
             </div>
         </div>
     </div>
@@ -17,6 +19,11 @@
     module.exports={
         props:{
 
-        }
+        },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
     }
 </script>

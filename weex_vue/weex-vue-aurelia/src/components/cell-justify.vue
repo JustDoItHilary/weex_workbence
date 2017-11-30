@@ -1,10 +1,16 @@
 <template>
-    <div class="div-time" :style="{'borderBottomWidth':bottomBorder+'px'}">
+    <div class="div-time"
+         :style="{'borderBottomWidth':bottomBorder}">
         <text class="txt-left">{{txtLeft}}</text>
-        <div style="margin-left: 20px;justify-content: center;">
-            <text :class="['txt-right','txt-actived-'+active]" @click="clickRight">{{txtRight}}</text>
-            <text v-if="txtRightElse" :class="['txt-right','txt-actived-'+active]">{{txtRightElse}}</text>
+        <div class="div_right">
+            <text :class="['txt-right','txt-actived-'+active]"
+                  v-if="txtRight"
+                  @click="clickRight">{{txtRight}}</text>
+            <text v-if="txtRightElse"
+                  :class="['txt-right','txt-actived-'+active]">{{txtRightElse}}</text>
         </div>
+        <image class="img_open" :src="baseUrl+imgUrl" v-if="imgUrl"></image>
+        <slot name="else"></slot>
     </div>
 </template>
 
@@ -19,7 +25,7 @@
             },
             txtRight:{
                 type:String,
-                required:true,
+                required:false,
                 default:''
             },
             txtRightElse:{
@@ -40,6 +46,17 @@
             type:{
                 type:String,
                 required:false
+            },
+            imgUrl:{
+                type:String
+            }
+        },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            },
+            baseUrl(){
+                return this.$store.getters.baseUrl;
             }
         },
         methods:{
@@ -67,11 +84,9 @@
     @import "../style/mixin.scss";
 
     .div-time{
-    /*@include paddingRow;*/
-    /*@include paddingColumn;*/
         flex-direction:row;
         justify-content:space-between;
-        align-items:center;
+        /*align-items:center;*/
         border-color: $bc;
     }
     .txt-left{
@@ -79,7 +94,6 @@
     }
     .txt-right{
     @include fontCommon;
-        flex:1;
         text-align: right;
     }
     .txt-actived-true{
@@ -87,5 +101,13 @@
     }
     .txt-actived-false{
         color:$css-grey;
+    }
+    .div_right{
+        flex:1;
+        margin-left:$cl;
+        justify-content: center;
+    }
+    .img_open{
+        @include wh();
     }
 </style>

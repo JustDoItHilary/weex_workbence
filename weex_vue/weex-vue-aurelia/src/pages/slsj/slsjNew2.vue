@@ -105,10 +105,10 @@
                 }
             },
             clickCloseItem: function (item) {
-                item.showed = false;
+                item.showType = false;
             },
             clickItem: function (item) {
-                item.showed = !item.showed
+                item.showType = !item.showType
             },
             clickCheck: function (choice, ansIndex) {
                 let self = this;
@@ -197,7 +197,7 @@
                                     return self.checkFinish();
                                 }
                             }
-                            self.slsjNews[qIndex + 1].showed = true;
+                            self.slsjNews[qIndex + 1].showType = true;
                             return dom.scrollToElement(this.$refs.mark[1], {offset: -20})
                         }
                     }
@@ -205,7 +205,7 @@
                 } else {
                     // modal.toast({'message':'九大病（手足问题）为必选项','doation':1});
                     // myModule.printToast('九大病（手足问题）为必选项'
-                    self.slsjNews[qIndex].showed = true;
+                    self.slsjNews[qIndex].showType = true;
                     self.warn = true
                     const el = this.$refs.mark[0]
                     dom.scrollToElement(el, {offset: -20})
@@ -337,7 +337,7 @@
                 if (data !== null && data.length > 0) {
                     for (let j = 0; j < data.length; j++) {
                         let item = data[j];
-                        item.showed = true;
+                        item.showType = true;
                         if (item.data !== null && item.data.length > 0) {
                             item.id = item.data[0].qid;
                         }

@@ -107,11 +107,3 @@ export function FETCH_APPLY_READER({commit,state}, {params}) {
         .then(data => commit('GET_APPLY_READER', {data}))
 }
 
-/** -----------------yyzs------------------*/
-export function FETCH_SY_MEMBERINFO({commit, state},{params}) {
-    // var body=config.formatTime()
-    let body='QueryType='+URL_SY_GET_MEMBERINFO+'&UserGuid='+state.selfToken+'&Params='+params;
-    console.log('FETCH_SY_BODY: ',body)
-    return fetchSy(body)
-        .then(data => commit('GET_SY_MEMBERINFO',{data}))
-}

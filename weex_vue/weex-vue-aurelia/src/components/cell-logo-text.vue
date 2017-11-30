@@ -1,14 +1,20 @@
 <template>
     <div class="div_row">
         <div class="div_logo">
-            <text class="text_logo" v-if="firName">{{firName}}</text>
-            <image class="img_logo" v-if="imgLogoUrl" :src="imgLogoUrl"></image>
+            <text class="text_logo"
+                  v-if="firName">{{firName}}</text>
+            <image class="img_logo"
+                   v-if="imgLogoUrl"
+                   :src="imgLogoUrl"></image>
         </div>
         <div class="div_member">
-            <text class="text_member" v-if="tit">{{tit}}</text>
-            <text class="text_code" v-if="content">{{content}}</text>
+            <text class="text_member"
+                  v-if="tit">{{tit}}</text>
+            <text class="text_code"
+                  v-if="content">{{content}}</text>
         </div>
-        <slot class="div_member" name="endImg"></slot>
+        <slot class="div_member"
+              name="endImg"></slot>
     </div>
 </template>
 
@@ -27,7 +33,12 @@
             content:{
                 type:String
             },
-        }
+        },
+        computed:{
+            ratio(){
+                return this.$store.getters.ratio;
+            }
+        },
     }
 </script>
 
@@ -41,36 +52,32 @@
     }
 
     .div_logo {
-        height: 64px;
-        width: 64px;
+        @include wh(64px,64px);
         align-items: center;
         justify-content: center;
-        border-radius: 50px;
+        border-radius: $bRadius;
     }
 
     .text_logo {
-        font-size: 36px;
-        color: #ffffff;
+        @include fontCommon($bs,#fff);
     }
     .img_logo{
-        height: 48px;
-        width: 48px;
+        @include wh();
     }
 
     .text_member {
-        font-size: 36px;
+        @include fontCommon($bs);
         flex:1;
     }
 
     .text_code {
-        font-size: 28px;
+        @include fontCommon($cs, #898989);
         flex:1;
-        color: #898989;
-        margin-top: 10px;
+        margin-top: $sl;
     }
 
     .div_member {
         flex: 1;
-        margin-left: 10px;
+        margin-left: $sl;
     }
 </style>

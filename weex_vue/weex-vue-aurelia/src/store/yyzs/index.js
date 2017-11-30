@@ -13,12 +13,17 @@ const store = new Vuex.Store({
     mutations,
 
     state: {
-        baseUrl:'',
+        baseUrl: '',
         // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
         // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        selfToken:'',
+        selfToken: '@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjMuM2MxNzEwMTZ8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJ',
+        ratio:1,
+        errorInfo:{
+            errorImg:'/drawable/no_found.png',
+            errorMess:'无数据',
+        },
 
-        syMemberInfo:[],
+        syMemberInfo: [],
         tabs: [
             {
                 index: 0,
@@ -52,16 +57,22 @@ const store = new Vuex.Store({
             },
         ],
 
-        memberOperatorList:[],
-        memberOperatorCode:'',
+        memberOperatorList: [],
+        memberOperatorCode: '',
+
+        memberInfo: [],
+
+        actSelected:true,
+        ongoingAct:[],
+        historyAct:[],
 
         /*{".expires":"Wed, 29 Nov 2017 09:42:05 GMT",".issued":"Mon, 30 Oct 2017 09:42:05 GMT",
-        "access_token":"wd158S_Kt7PVs7sqyqo6-eF-K0qmRhm4s5UPf2D8npqTmd46RIDzeJ0ScUTDbPQsSdKYN9TOFviYLKaRDwtoP_
-        Vh7w-HVRq5lrekwPSpoy6Jvtlo2OPOs86F6tBRxotC4ELqyro16job_W7t0OWZa-MUkKBMERG1NEFY-xGFCXEU7f0Gubee4GZXJ7HCqVN8CZNH_
-        x6kXGXcvYmhQtT9WKqp3E9vxrzbxsRbF3pSG1IDQMyIB9FlbIKcBjWaY3TZofrooEdWkfLmJBJaeE-SuBLJnYDUfn5CRywrOw6G_
-        GvIWuo3TqT7rWRxNYKv0Iso3jkVreJK8U0Q6hT1iR0omA",
-        "as:client_id":"[YY365]","expires_in":2591999,
-        "refresh_token":"1b3fc4086e754fbe9ca6c3ccc3513ebc","token_type":"bearer"}*/
+         "access_token":"wd158S_Kt7PVs7sqyqo6-eF-K0qmRhm4s5UPf2D8npqTmd46RIDzeJ0ScUTDbPQsSdKYN9TOFviYLKaRDwtoP_
+         Vh7w-HVRq5lrekwPSpoy6Jvtlo2OPOs86F6tBRxotC4ELqyro16job_W7t0OWZa-MUkKBMERG1NEFY-xGFCXEU7f0Gubee4GZXJ7HCqVN8CZNH_
+         x6kXGXcvYmhQtT9WKqp3E9vxrzbxsRbF3pSG1IDQMyIB9FlbIKcBjWaY3TZofrooEdWkfLmJBJaeE-SuBLJnYDUfn5CRywrOw6G_
+         GvIWuo3TqT7rWRxNYKv0Iso3jkVreJK8U0Q6hT1iR0omA",
+         "as:client_id":"[YY365]","expires_in":2591999,
+         "refresh_token":"1b3fc4086e754fbe9ca6c3ccc3513ebc","token_type":"bearer"}*/
         // tokens:{
         //     accessToken:'',//
         //     refreshToken:'',//
@@ -80,6 +91,13 @@ const store = new Vuex.Store({
         selfToken(state){
             return state.selfToken
         },
+        //不同平台的放大比例
+        ratio(state){
+            return state.ratio
+        },
+        errorInfo(state){
+            return state.errorInfo
+        },
 
         syMemberInfo(state){
             return state.syMemberInfo
@@ -95,6 +113,18 @@ const store = new Vuex.Store({
         },
         getMemberOperatorCode(state){
             return state.memberOperatorCode
+        },
+        getMemberInfo(state){
+            return state.memberInfo
+        },
+        getActSelected(state){
+            return state.actSelected;
+        },
+        getOngoingAct(state){
+            return state.ongoingAct;
+        },
+        getHistoryAct(state){
+            return state.historyAct;
         },
     }
 })

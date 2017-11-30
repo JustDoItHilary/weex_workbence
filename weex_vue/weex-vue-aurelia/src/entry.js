@@ -1,10 +1,14 @@
 // import Vue from 'vue'
+// import 'lib-flexible'
 import App from './App.vue'
 import router from './router'
-import store from './store/rep'
+import store from './store/yyzs'
 import {sync} from 'vuex-router-sync'
 import * as filters from './filters'
 import mixins from './mixins'
+import Validator from 'vue-validator'
+
+Vue.use(Validator);
 
 // sync the router with the vuex store.
 // this registers `store.state.route`
@@ -18,23 +22,24 @@ Object.keys(filters).forEach(key => {
 // register global mixins.
 Vue.mixin(mixins)
 
-Vue.directive('ratio', {
-    bind: function (el, binding, vnode) {
-        // console.log(el,binding);
-        var list=['fontSize','height','width','borderWidth','margin','padding','marginLeft','marginRight','margingTop','marginBottom','paddingTop','paddingBottom','paddingLeft','paddingRight','borderBottomWidth','borderTopWidth','borderLeftWidth','borderRightWidth'];
-        for(var obj in el.style){
-            // console.log("style: ",obj);
-            for(var i=0;i<list.length;i++){
-                if(obj==list[i]){
-                    el.style[obj]=Math.round(binding.value * el.style[obj]);
-                    break;
-                }
-            }
-        }
-        // console.log(el.style)
-
-    }
-})
+// Vue.directive('ratio',
+//     // {update:
+//         function (el, binding) {
+//         // console.log(binding.value)
+//         // console.log(el,binding);
+//         var list=['fontSize','height','width','borderWidth','margin','padding','marginLeft','marginRight','margingTop','marginBottom','paddingTop','paddingBottom','paddingLeft','paddingRight','borderBottomWidth','borderTopWidth','borderLeftWidth','borderRightWidth','left','right','top','bottom'];
+//         for(var obj in el.style){
+//             // console.log("style: ",obj);
+//             for(var i=0;i<list.length;i++){
+//                 if(obj==list[i]){
+//                     el.style[obj]=Math.round(binding.value * el.style[obj]);
+//                     break;
+//                 }
+//             }
+//         }
+//         // console.log(el.style)
+//     // }
+// })
 
 // create the app instance.
 // here we inject the router and store to all child components,

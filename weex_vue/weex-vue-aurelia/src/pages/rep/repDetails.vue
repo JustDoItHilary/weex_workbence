@@ -2,35 +2,41 @@
     <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"></app-header>
         <scroller>
-            <cell-justify
+            <cell-justify v-ratio="ratio"
                     class="div_item"
                     txtLeft="汇报类型"
                     :txtRight="repDetails.ProName"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-justify
+            <cell-justify v-ratio="ratio"
                     class="div_item"
                     txtLeft="周报日期"
                     :txtRight="repDetails.startTime+' - '+repDetails.endTime"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-justify
+            <cell-justify v-ratio="ratio"
                     class="div_item"
                     txtLeft="周报状态"
                     :txtRight="repDetails.IsPost==1?'已提交':'未提交'"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-peo
+            <cell-peo v-ratio="ratio"
                     class="div_item border"
                     txtTit="审阅者"
                     btnName="添加"
                     @clickBtn="clickCellBtn"
             >
-                <scroller slot="option" scroll-direction="horizontal" class="cell-scroll">
-                    <text v-for="item in readerList" class="txt_tit">{{item.Name}}</text>
+                <scroller v-ratio="ratio"
+                          slot="option"
+                          scroll-direction="horizontal"
+                          class="cell-scroll">
+                    <text v-ratio="ratio"
+                          v-for="item in readerList"
+                          class="txt_tit">{{item.Name}}</text>
                 </scroller>
             </cell-peo>
-            <cell-input v-if="isEdited"
+            <cell-input v-ratio="ratio"
+                        v-if="isEdited"
                         class="div_item"
                         txtTit="本周工作总结"
                         txtHide="请输入工作总结"
@@ -38,12 +44,14 @@
                         :txtInput="repDetails.repSum"
                         @clickCellInput="clickSum"
             ></cell-input>
-            <cell-input v-else
+            <cell-input v-ratio="ratio"
+                        v-else
                         class="div_item"
                         txtTit="本周工作总结"
                         :txtInput="repDetails.summary?repDetails.summary:' '"
             ></cell-input>
-            <cell-input v-if="isEdited"
+            <cell-input v-ratio="ratio"
+                        v-if="isEdited"
                         class="div_item"
                         txtTit="下周工作计划"
                         txtHide="请输入工作计划"
@@ -51,23 +59,33 @@
                         :txtInput="repDetails.repPlan"
                         @clickCellInput="clickPlan"
             ></cell-input>
-            <cell-input v-else
+            <cell-input v-ratio="ratio"
+                        v-else
                         :class="['div_item',repDetails.hasComment==1?'border':'']"
                         txtTit="下周工作计划"
                         :txtInput="repDetails.myPlan?repDetails.myPlan:' '"
             ></cell-input>
-            <cell-input v-if="repDetails.hasComment==1&&assessment.length>0"
+            <cell-input v-ratio="ratio"
+                        v-if="repDetails.hasComment==1&&assessment.length>0"
                         class="div_item"
                         txtTit="审核评价"
             >
-                <div slot="content" v-for="item in assessment" class="div_content">
-                    <text class="content">{{item.AutName}}:</text>
-                    <text class="content" style="flex:1;">{{item.Content}}</text>
+                <div v-ratio="ratio"
+                     slot="content"
+                     v-for="item in assessment"
+                     class="div_content">
+                    <text v-ratio="ratio"
+                          class="content">{{item.AutName}}:</text>
+                    <text v-ratio="ratio"
+                          class="content"
+                          style="flex:1;">{{item.Content}}</text>
                 </div>
             </cell-input>
-            <text class="txt_grey border">最近保存时间 {{repDetails.UpdateTime}}</text>
+            <text v-ratio="ratio"
+                  class="txt_grey border">最近保存时间 {{repDetails.UpdateTime}}</text>
         </scroller>
-        <bottom-btn class="cell_bottom_btn"
+        <bottom-btn v-ratio="ratio"
+                    class="cell_bottom_btn"
                     :txtLeft="isEdited?(repDetails.IsPost?'提交':'保存'):'修改'"
                     :txtRight="isEdited&&!repDetails.IsPost?'提交':''"
                     :left="clickLeft"
@@ -93,6 +111,9 @@
             CellJustify: require('../../components/cell-justify.vue')
         },
         computed: {
+            ratio(){
+                return this.$store.getters.ratio;
+            },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
             },
@@ -217,18 +238,18 @@
     .div_item {
         background-color: #fff;
         @include paddingRow;
-        @include paddingColumn(16px);
+        @include paddingColumn();
     }
 
     .txt_tit {
         @include fontCommon($cs, $colorCommon);
-        margin-right: 16px;
+        margin-right: $cl;
     }
 
     .txt_grey {
         background-color: #fff;
         @include paddingRow;
-        @include paddingColumn(10px);
+        @include paddingColumn($sl);
         @include fontCommon($ss, $css-grey);
     }
 
@@ -237,8 +258,8 @@
     }
 
     .cell_bottom_btn {
-        @include paddingColumn(16px);
-        @include paddingRow(8px);
+        @include paddingColumn();
+        @include paddingRow($sl);
     }
 
     .txt-corner-btn {
@@ -246,12 +267,12 @@
     }
 
     .cell-scroll {
-        height: 48px;
+        height: $ls;
         flex-direction: row;
         align-items: center;
         flex: 1;
-        margin-left: 16px;
-        margin-right: 8px;
+        margin-left: $cl;
+        margin-right: $sl;
     }
 
     .content {
@@ -262,6 +283,6 @@
     .div_content {
         flex-direction: row;
         background-color: $wg;
-        @include marginColumn(10px);
+        @include marginColumn($sl);
     }
 </style>
