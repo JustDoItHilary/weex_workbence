@@ -9,13 +9,13 @@ import Router from 'vue-router'
 // import ApplyDetails from './pages/apply/application-details.vue'
 
 /*rep*/
-// import WorkRep from './pages/rep/workRep.vue'
-// import NewRep from './pages/rep/newRep.vue'
-// import RepDetails from './pages/rep/repDetails.vue'
-// import RepAssessment from './pages/rep/repAssessment.vue'
-// import RepReader from './pages/rep/repReader.vue'
-// import RepTime from './pages/rep/repTime.vue'
-// import RepStatistics from './pages/rep/repStatistics.vue'
+import WorkRep from './pages/rep/workRep.vue'
+import NewRep from './pages/rep/newRep.vue'
+import RepDetails from './pages/rep/repDetails.vue'
+import RepAssessment from './pages/rep/repAssessment.vue'
+import RepReader from './pages/rep/repReader.vue'
+import RepTime from './pages/rep/repTime.vue'
+import RepStatistics from './pages/rep/repStatistics.vue'
 
 /*slsj*/
 // import SlsjNew from './pages/slsj/slsjNew.vue'
@@ -30,8 +30,8 @@ import Router from 'vue-router'
 // import WWDetails from './pages/ww/ww-details.vue'
 //
 /*ww-yyzs*/
-import SyActivityDetails from './pages/ww/yyzs/sy-activity-details.vue'
-import SyActivity from './pages/ww/yyzs/sy-activity.vue'
+// import SyActivityDetails from './pages/ww/yyzs/sy-activity-details.vue'
+// import SyActivity from './pages/ww/yyzs/sy-activity.vue'
 // import SyMember from './pages/ww/yyzs/sy-member.vue'
 // import SYMain from './pages/ww/yyzs/sy-main.vue'
 // import GetToken from './pages/ww/yyzs/getToken.vue'
@@ -44,8 +44,9 @@ import SyActivity from './pages/ww/yyzs/sy-activity.vue'
 // //
 // import Error from './pages/ww/error.vue'
 
+// import TestAurelia from './testAurelia.vue'
 // import Test from './foo.vue'
-// import Test from './vue/index.vue'
+// import Test from './vue/components/slider.vue'
 
 
 Vue.use(Router)
@@ -97,62 +98,62 @@ export default new Router({
         // },
 
         /*rep*/
-        // {
-        //     path: '/workRep',
-        //     component: WorkRep,
-        //     name: 'home',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/newRep',
-        //     component: NewRep,
-        //     name: 'newRep',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/repDetails',
-        //     component: RepDetails,
-        //     name: 'repDetails',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/repAssessment/:params',
-        //     component: RepAssessment,
-        //     name: 'repAssessment',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/repReader',
-        //     component: RepReader,
-        //     name: 'repReader',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/repTime/:params',
-        //     component: RepTime,
-        //     name: 'repTime',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
-        // {
-        //     path: '/RepStatistics',
-        //     component: RepStatistics,
-        //     name: 'RepStatistics',
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
+        {
+            path: '/workRep',
+            component: WorkRep,
+            name: 'home',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/newRep',
+            component: NewRep,
+            name: 'newRep',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/repDetails',
+            component: RepDetails,
+            name: 'repDetails',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/repAssessment/:params',
+            component: RepAssessment,
+            name: 'repAssessment',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/repReader',
+            component: RepReader,
+            name: 'repReader',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/repTime/:params',
+            component: RepTime,
+            name: 'repTime',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/RepStatistics',
+            component: RepStatistics,
+            name: 'RepStatistics',
+            meta: {
+                keepAlive: false
+            }
+        },
         /*slsj*/
         // {
         //     path: '/slsjNew', component: SlsjNew
@@ -180,16 +181,16 @@ export default new Router({
         //     }
         // },
         /*ww-yyzs*/
-        {
-            path:'/syActivityDetails/:params',
-            component:SyActivityDetails,
-            name:'syActivityDetails'
-        },
-        {
-            path:'/syActivity',
-            component:SyActivity,
-            name:'syActivity'
-        },
+        // {
+        //     path:'/syActivityDetails/:params',
+        //     component:SyActivityDetails,
+        //     name:'syActivityDetails'
+        // },
+        // {
+        //     path:'/syActivity',
+        //     component:SyActivity,
+        //     name:'syActivity'
+        // },
         // {
         //     path:'/syMember',
         //     component:SyMember,
@@ -234,13 +235,16 @@ export default new Router({
         //     }
         // },
         // {
+        //     path: '/aurelia', component: TestAurelia,
+        // },
+        // {
         //     path: '/test', component: Test,
         //     meta: {
         //         keepAlive: false
         //     }
         // },
 
-        {path: '/', redirect: '/syActivity'}
+        {path: '/', redirect: '/workRep'}
         // {path: '/', redirect:`/applyList/${JSON.stringify({GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'})}`}
     ]
 })

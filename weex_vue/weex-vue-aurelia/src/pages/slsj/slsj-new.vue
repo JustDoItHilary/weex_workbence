@@ -88,8 +88,8 @@
                         }
                     }
                 }
-//                console.log("selectedList: ",selectedList.length);
-//                console.log("prolist: ",proList.length);
+                console.log("selectedList: ",selectedList.length);
+                console.log("prolist: ",proList.length);
                 let qIndex = self.slsjSpecial.qIndex;
                 //手足问题至少选一个
                 if (proList.length > 0) {
@@ -101,13 +101,13 @@
                                     return self.checkFinish(selectedList, proList);
                                 }
                             }
-                            self.slsjNews[self.slsjSpecial.modelIndex].showType = true;
+                            self.slsjNews[self.slsjSpecial.modelIndex].showed = true;
                             return self.$refs.itemref[self.slsjSpecial.modelIndex].scroll(1);
                         }
                     }
                     return self.checkFinish(selectedList, proList);
                 } else {
-                    self.slsjNews[qIndex].showType = true;
+                    self.slsjNews[qIndex].showed = true;
                     self.$nextTick(function () {
                         self.$refs.itemref[qIndex].scroll(0);
                     })
@@ -125,14 +125,14 @@
                             break;
                         }
                     }
-                    if (!isFinish) {
-                        return myModule.printConfirm('顾客信息不完整,是否继续提交?', function (ret) {
-//                             点击确定返回 1，点击取消返回 0
-                            if (ret.data == 1) {
-                                self.newInfo(selectedList, proList);
-                            }
-                        });
-                    }
+//                    if (!isFinish) {
+//                        return myModule.printConfirm('顾客信息不完整,是否继续提交?', function (ret) {
+////                             点击确定返回 1，点击取消返回 0
+//                            if (ret.data == 1) {
+//                                self.newInfo(selectedList, proList);
+//                            }
+//                        });
+//                    }
                 }
                 return self.newInfo(selectedList, proList);
             },
@@ -142,16 +142,16 @@
                 let userGuid;
                 let contactId;
                 let nailUrl;
-//                 queryType='saveContactFileData';
-//                userGuid = 'NTV8QGM4YjQwZGVmOTNjNjYyNDNhMjc1ZmI4MjkzZmVkNGNkfEBjYjMzZDFiMjY2Y2U5YjhhOTE3YTc3MDhlOThkYmIyOHxAMTAuMS4yfEAyMDE3MDgxN3xAUm9tZW5zLlNMU0o-';
-//                 contactId='b7b06192a00f5fb8abb19047fa7d675b';
-//                 nailUrl=[[],[],[],[],[]];
-                //获取提交时需要的参数
-                configModule.GetUploadPhotoPara(function (ret) {
-                    queryType = ret.queryType;
-                    userGuid = ret.userGuid;
-                    contactId = ret.contactID;
-                    nailUrl = ret.nailUrl;
+                 queryType='saveContactFileData';
+                userGuid = 'NTV8QGM4YjQwZGVmOTNjNjYyNDNhMjc1ZmI4MjkzZmVkNGNkfEBjYjMzZDFiMjY2Y2U5YjhhOTE3YTc3MDhlOThkYmIyOHxAMTAuMS4yfEAyMDE3MDgxN3xAUm9tZW5zLlNMU0o-';
+                 contactId='b7b06192a00f5fb8abb19047fa7d675b';
+                 nailUrl=[[],[],[],[],[]];
+//                //获取提交时需要的参数
+//                configModule.GetUploadPhotoPara(function (ret) {
+//                    queryType = ret.queryType;
+//                    userGuid = ret.userGuid;
+//                    contactId = ret.contactID;
+//                    nailUrl = ret.nailUrl;
                     //拼接手足问题选择结果
                     let handAndFootPro = '';
                     for (let item of proList) {
@@ -172,18 +172,18 @@
                     console.log('BODY: ', body);
                     self.$store.dispatch('FETCH_SLSJ_NEW', {
                         body: body, callback: function (retdata) {
-//                            console.log(retdata)
+                            console.log(retdata)
                             if (retdata !== null) {
                                 configModule.complete(retdata);
                             }
                         }
                     });
-                });
+//                });
             },
             setItemShowed(index){
                 let self = this;
                 if (index == 1) {
-                    self.slsjNews[self.slsjSpecial.modelIndex].showType = true;
+                    self.slsjNews[self.slsjSpecial.modelIndex].showed = true;
                     self.slsjNews[self.slsjSpecial.modelIndex].warning = true;
                     self.$nextTick(function () {
                         self.$refs.itemref[self.slsjSpecial.modelIndex].scroll(1);

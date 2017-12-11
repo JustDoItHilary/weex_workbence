@@ -1,48 +1,48 @@
 <template>
     <div>
         <app-header tit="周报提交情况"></app-header>
-        <cell-txt-center v-ratio="ratio"
+        <cell-txt-center 
                          :txt="startDate+' -- '+endDate"
                          fontColor="#58D68D"
                          class="cell_txt_center"
                          @clickTxtCenter="clickDate">
-            <text v-ratio="ratio"
+            <text 
                   slot="left"
                   class="div_add"
                   @click="clickLast()">上个周</text>
-            <text v-ratio="ratio"
+            <text 
                   slot="right"
                   class="div_add"
                   @click="clickNext()">下个周</text>
         </cell-txt-center>
         <!--<input class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>-->
-        <div v-ratio="ratio"
+        <div 
              class="div_tit" >
-            <div v-ratio="ratio"
+            <div 
                  class="div_table div_border">
-                <text v-ratio="ratio"
+                <text 
                       class="txt_name">姓名</text>
             </div>
-            <div v-ratio="ratio"
+            <div 
                  class="div_table">
-                <text v-ratio="ratio"
+                <text 
                       class="txt_state">提交情况</text>
             </div>
         </div>
-        <scroller v-ratio="ratio"
+        <scroller 
                   class="scroll">
-            <div v-ratio="ratio"
+            <div 
                  v-for="(item,index) in statistics"
                  class="div_item"
                  :style="{ backgroundColor: bgColor(item) }">
-                <div v-ratio="ratio"
+                <div 
                      class="div_table div_border" >
-                    <text v-ratio="ratio"
+                    <text 
                           class="txt_name">{{item.name}} {{item.code}}</text>
                 </div>
-                <div v-ratio="ratio"
+                <div 
                      class="div_table">
-                    <text v-ratio="ratio"
+                    <text 
                           class="txt_state">{{getState(item)}}</text>
                 </div>
             </div>
@@ -153,7 +153,12 @@
         created(e){
             let self = this;
             self.date = new Date();
-            self.getWeekDate(-7);
+            var todayOfWeek = (new Date(self.date.getTime() - 86400000)).getDay();
+            if(todayOfWeek>4){
+                self.getWeekDate(0);
+            }else {
+                self.getWeekDate(-7);
+            }
             self.getList();
         }
     }
@@ -199,7 +204,6 @@
     .cell_txt_center {
         margin-top: $bl;
         @include marginRow();
-        @include marginColumn($sl);
     }
 
     .div_add {

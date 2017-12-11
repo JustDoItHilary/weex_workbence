@@ -86,7 +86,7 @@ $borderW:1px;
   padding-top: $length;
   padding-bottom: $length;
 }
-
+//圆角btn:文字大小，文字颜色，背景颜色（白），边框宽度（边框颜色不可设置，为主题色）
 @mixin cornerBtn($fontSize:$cs,$fontColor:#000,$bgColor:#fff,$borderWidth:$borderW) {
   font-size: $fontSize;
   color: $fontColor;
@@ -100,7 +100,13 @@ $borderW:1px;
   @include paddingColumn($sl);
   @include paddingRow($cl);
 }
-
+//卡片
+@mixin card($bg:$bgColor,$borderColor:$bc,$borderRadius:$radius){
+  background-color:$bg;
+  padding: $cl;
+  @include borderCommon($borderW, $borderColor,$borderRadius);
+}
+//边框的一条边：方向，颜色，宽度
 @mixin sideBorder($side:bottom,$sideColor:#000,$wid:$borderW) {
   border-#{$side}-width:$wid;
   border-#{$side}-color:$sideColor;
@@ -120,7 +126,7 @@ $borderW:1px;
   -o-border-radius: $radius;
   border-radius: $radius;
 }
-
+//边框：宽度，颜色，圆角
 @mixin borderCommon($w:$borderW,$c:$gc,$r:$radius) {
   border-width: $w;
   border-color: $c;
@@ -130,7 +136,11 @@ $borderW:1px;
   -o-border-radius: $radius;
   border-radius: $radius;
 }
-
+//所包含内容上下左右居中
+@mixin inCenter{
+  align-items: center;
+  justify-content:center;
+}
 //定位全屏
 @mixin allcover {
   position: absolute;

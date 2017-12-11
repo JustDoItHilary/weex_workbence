@@ -123,19 +123,29 @@
                 let self=this;
                 configModule.getActionBarHeight(function(params){
                     var scale;
-                    if (self.$getConfig().env.platform.toLowerCase()=='ios') {
+                    if (self.isiOS) {
                         scale=params.width/750;
                     }else{
-                        scale = self.$getConfig().env.deviceWidth / 750;
+                        scale = weex.config.env.deviceWidth / 750;
                     }
                     self.actionBarHeight=params.height/scale;
+//                    require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
                 }.bind(this));
+//                configModule.getActionBarHeight(function(params){
+//                    var scale;
+//                    if (self.$getConfig().env.platform.toLowerCase()=='ios') {
+//                        scale=params.width/750;
+//                    }else{
+//                        scale = self.$getConfig().env.deviceWidth / 750;
+//                    }
+//                    self.actionBarHeight=params.height/scale;
+//                }.bind(this));
             },
         },
         created: function (e) {
             let self = this;
-//            self.getMeasure();
-            self.isiOS = self.$getConfig().env.platform.toLowerCase() == 'ios';
+            self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
+            self.getMeasure();
         }
 
     };</script>

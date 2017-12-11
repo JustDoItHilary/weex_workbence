@@ -1,5 +1,5 @@
 <template>
-    <div v-ratio="ratio" class="div_bottom">
+    <div  class="div_bottom">
         <cell-btn
                   class="style_btn"
                   :btnHeight="btnHeight"
@@ -61,6 +61,7 @@
     }
 
     .style_btn {
+        flex:1;
     }
 
 </style>

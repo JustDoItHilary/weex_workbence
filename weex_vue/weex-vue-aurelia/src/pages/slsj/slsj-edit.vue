@@ -347,7 +347,7 @@
 //                        console.log("scroll: ",self.requiredList[j])
                         for(let s=0;s<self.slsjNews.length;s++){
                             if (self.slsjNews[s].id==self.requiredList[j].qid){
-                                self.slsjNews[s].showType = true;
+                                self.slsjNews[s].showed = true;
                                 const el = this.$refs.mark[2]
                                 return dom.scrollToElement(el, {offset: -20})
                             }
@@ -385,14 +385,14 @@
                                     return self.checkFinish();
                                 }
                             }
-                            self.slsjNews[qIndex+1].showType = true;
+                            self.slsjNews[qIndex+1].showed = true;
                             return dom.scrollToElement(this.$refs.mark[1], {offset: -20})
                         }
                     }
                     return self.checkFinish();
                 } else {
                     console.log("qIndex: ",qIndex)
-                    self.slsjNews[qIndex].showType = true;
+                    self.slsjNews[qIndex].showed = true;
                     self.warn = true
                     const el = this.$refs.mark[0]
                     dom.scrollToElement(el, {offset: -20})
@@ -472,7 +472,7 @@
                 if (data != null) {
                     for (let j = 0; j < data.length; j++) {
                         let item = data[j];
-                        item.showType = false;
+                        item.showed = false;
                         if (item.data !== null && item.data.length > 0) {
                             item.id = item.data[0].qid;
                         }

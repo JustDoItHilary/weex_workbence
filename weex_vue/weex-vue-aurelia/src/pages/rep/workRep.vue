@@ -10,41 +10,46 @@
         ></label>
         <div v-if="isSelected"></div>
         <div v-if="isSelected==false">
-            <input v-ratio="ratio" class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
+            <input  class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
         </div>
-        <list v-ratio="ratio" class="list">
+        <!--<cell-error v-if="repList.length<1" :errorImg="errorInfo.errorImg"-->
+                    <!--:errorMess="errorInfo.errorMess"></cell-error>-->
+        <list  class="list">
+            <!--<refresh>-->
+                <!--<text class="t">加载中...</text>-->
+            <!--</refresh>-->
             <!--我的汇报-->
-            <cell v-if="isSelected" v-ratio="ratio" class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
+            <cell v-if="isSelected"  class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
                   @longpress="longPressItem(item)">
-                <div v-ratio="ratio" class="div_item">
-                    <div v-ratio="ratio" class="div_item_top">
+                <div  class="div_item">
+                    <div  class="div_item_top">
                         <date-logo :type="item.IsPost==0"
                                    :month="item.month"
                                    :year="item.year"></date-logo>
-                        <div v-ratio="ratio" class="flex_left">
-                            <text v-ratio="ratio" class="text_tit">{{item.startTime}} -- {{item.endTime}}</text>
-                            <text v-ratio="ratio" :class="['text_tit', 'select_'+item.IsPost ]">{{item.checked}}</text>
+                        <div  class="flex_left">
+                            <text  class="text_tit">{{item.startTime}} -- {{item.endTime}}</text>
+                            <text  :class="['text_tit', 'select_'+item.IsPost ]">{{item.checked}}</text>
                         </div>
                     </div>
-                    <text v-ratio="ratio" class="text_mulit">下周工作计划:</text>
-                    <text v-ratio="ratio" class="text_tit txt_border">{{item.myPlan}}</text>
-                    <image v-if="item.AuditFlag==1" v-ratio="ratio" class="img_logo" :src="baseUrl+imgLogoUrl"></image>
+                    <text  class="text_mulit">下周工作计划:</text>
+                    <text  class="text_tit txt_border">{{item.myPlan}}</text>
+                    <image v-if="item.AuditFlag==1"  class="img_logo" :src="baseUrl+imgLogoUrl"></image>
                 </div>
             </cell>
             <!--团队汇报-->
             <cell v-if="!isSelected"
-                  v-ratio="ratio"
+                  
                   class="cell_member"
                   v-for="(item,index) in reviewList"
                   @click="clickReview(item)">
-                <div v-ratio="ratio" class="div_member">
-                    <text v-ratio="ratio" class="text_member">{{item.Name}}</text>
+                <div  class="div_member">
+                    <text  class="text_member">{{item.Name}}</text>
                 </div>
-                <text v-ratio="ratio" :class="['div_logo','select_bg_'+item.isAudited]">{{item.isAudited?'全部审核':'有未审核'}}</text>
+                <text  :class="['div_logo','select_bg_'+item.isAudited]">{{item.isAudited?'全部审核':'有未审核'}}</text>
             </cell>
         </list>
         <bottom-btn v-if="isSelected"
-                    v-ratio="ratio"
+                    
                     class="cell_bottom_btn"
                     txtLeft="新建"
                     txtRight="提交统计"
@@ -68,6 +73,7 @@
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             Label: require('../../components/label.vue'),
             DateLogo: require('../../components/cell-date-logo.vue'),
+//            CellError: require('../../components/error.vue'),
         },
         data(){
             return {
@@ -85,6 +91,9 @@
             }
         },
         computed: {
+//            errorInfo(){
+//                return this.$store.getters.errorInfo;
+//            },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
             },
@@ -291,15 +300,16 @@
         ,
         created: function (e) {
             let self = this;
-            self.setRatio();
-//            var bundleUrl = self.$getConfig().bundleUrl || '';
-            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
+//            self.setRatio();
+            var bundleUrl = self.$getConfig().bundleUrl || '';
+//            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
+//            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
             self.baseUrl = bundleUrl.split('/').slice(0, -1).join('/');
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
             self.setDate();
-//            self.getData();
-            self.getMyRep();
-            self.getLastWeekReviewNum();
+            self.getData();
+//            self.getMyRep();
+//            self.getLastWeekReviewNum();
         }
         ,
         beforeRouteEnter: function (to, from, next) {
@@ -378,7 +388,7 @@
         @include fontCommon;
         @include marginRow($ss);
         margin-top: $sl;
-        lines: 1;
+        @include fontLines;
     }
 
     .text_mulit {
@@ -397,7 +407,7 @@
     }
 
     .input {
-        height: 32px;
+        height: 64px;
         background-color: #fff;
         border-radius: 12px;
         align-items: center;
@@ -423,7 +433,7 @@
 
     .div_logo {
         padding: $sl;
-        border-radius: 50px;
+        border-radius: 100px;
         text-align: center;
         @include fontCommon($ss, #fff);
     }

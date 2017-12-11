@@ -167,10 +167,10 @@
                 }
             },
             clickCloseItem: function (item) {
-                item.showType = false;
+                item.showed = false;
             },
             clickItem: function (item) {
-                item.showType = !item.showType
+                item.showed = !item.showed
             },
             clickCheck: function (choice, index,ansIndex) {
                 let self = this;

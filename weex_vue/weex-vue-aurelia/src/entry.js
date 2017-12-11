@@ -2,11 +2,13 @@
 // import 'lib-flexible'
 import App from './App.vue'
 import router from './router'
-import store from './store/yyzs'
+import store from './store/rep'
 import {sync} from 'vuex-router-sync'
 import * as filters from './filters'
 import mixins from './mixins'
 import Validator from 'vue-validator'
+// import 'lib-flexible/flexible.js'
+
 
 Vue.use(Validator);
 

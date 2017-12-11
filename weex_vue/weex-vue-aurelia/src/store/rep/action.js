@@ -4,8 +4,8 @@ import {
 } from '../fetch'
 const apiURL = {
     yiyaoUrl: 'http://im.yiyao365.cn/',
-    // baseUrl: 'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
-    baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
+    baseUrl: 'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
+    // baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
     // baseUrl: 'http://192.168.100.96:8090/Handler/DailyAPIHandler.ashx?action=',
 
 }
@@ -32,8 +32,9 @@ export function FETCH_USERPLATEFORMCODE({commit, state}, {params, callback}) {
     return fetchUserPlatformCode(body)
         .then(retdata => {
             commit('SET_USERPLATFORMCODE', {retdata, callback});
-        }, errorData => {
+        }, error => {
             state.userPlatformCode = '';
+            commit('SET_ERROR', {showType:2 ,mess: error});
         })
 
 }
@@ -45,36 +46,42 @@ export function FETCH_REP_LIST({commit, state}, {body, callback}) {
     // var body='Params='+params;
     return fetchRep(URL_REP_GET_LIST, body)
         .then(retdata => {
-            // console.log(retdata)
+            commit('SET_ERROR', {showType:0});
             commit('SET_REP_LIST', {retdata, callback})
-        }, errorData => {
+        }, error => {
             state.repList = [];
+            commit('SET_ERROR', {showType:2 ,mess: error});
         })
 }
 //获取审核人员列表
 export function FETCH_REP_EMP({commit, state}, {body}) {
+    commit('SET_ERROR', {showType:4});
     return fetchRep(URL_REP_GET_EMP, body)
         .then(
-            data => commit('SET_REP_EMP', {data}),
-            errorData => {
+            data =>{
+                commit('SET_ERROR', {showType:0});
+                commit('SET_REP_EMP', {data})
+            }, error => {
             state.empList = [];
+                commit('SET_ERROR', {showType:2 ,mess: error});
         })
 }
 //获取待审核人员列表
-export function FETCH_REP_REVIEW({commit, state}, {body}) {
-    return fetchRep(URL_REP_GET_REVIEW, body)
-        .then(retdata => {
-            // console.log(retdata);
-            commit('SET_REP_REVIEW', {retdata})
-        })
-}
+// export function FETCH_REP_REVIEW({commit, state}, {body}) {
+//     return fetchRep(URL_REP_GET_REVIEW, body)
+//         .then(retdata => {
+//             commit('SET_REP_REVIEW', {retdata})
+//         })
+// }
 //获取可审核人员列表和上周已审核人员（标注上周未审核人员）
 export function FETCH_REP_GET_ALL_AUDITED({commit, state}, {body}) {
     return fetchRep(URL_REP_GET_ALL_AUDITED, body)
         .then(retdata => {
+            commit('SET_ERROR', {showType:0});
             commit('SET_REP_ALL_AUDITED', {retdata})
-        }, errorData => {
+        }, error => {
             state.reviewList = [];
+            commit('SET_ERROR', {showType:2 ,mess: error});
         })
 }
 //审核
@@ -121,9 +128,11 @@ export function FETCH_REP_GET_COMMENTS({commit, state}, {body}) {
 export function FETCH_REP_GET_STATISTICS({commit, state}, {body}) {
     return fetchRep(URL_REP_GET_STATISTICS, body)
         .then(retdata => {
+            commit('SET_ERROR', {showType:0});
             commit('SET_REP_STATISTICS', {retdata})
-        },errorData=>{
+        },error=>{
             state.repStatistics=[];
+            commit('SET_ERROR', {showType:2 ,mess: error});
         })
 }
 

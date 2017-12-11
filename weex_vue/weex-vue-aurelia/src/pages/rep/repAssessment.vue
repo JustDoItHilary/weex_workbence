@@ -2,17 +2,17 @@
     <div>
         <app-header :tit="getParams.Name+'的周报'"></app-header>
         <scroller>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                     class="div_item"
                     txtTit="本周工作总结"
                     :txtInput="repDetails.summary"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                     class="div_item"
                     txtTit="下周工作计划"
                     :txtInput="repDetails.myPlan"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                     class="div_item"
                     txtTit="审核评价"
                     txtHide="请输入评价（非必须）"
@@ -21,7 +21,7 @@
                     @clickCellInput="clickAssessment"
             ></cell-input>
         </scroller>
-        <bottom-btn v-ratio="ratio"
+        <bottom-btn 
                     class="cell_bottom_btn"
                     txtLeft="审核"
                     :left="clickLeft"

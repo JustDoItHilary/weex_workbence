@@ -4,6 +4,36 @@ import {
     replaceTransfer, sortList
 } from '../../mixins'
 
+//设置token
+export function SET_TOKEN(state, {token}) {
+    state.selfToken = token;
+}
+//设置 baseUrl
+export function SET_BASE_URL(state, {url}) {
+    state.baseUrl = url;
+}
+//设置 不同平台的放大倍数
+export function SET_RATIO(state, {ratio}) {
+    state.ratio = ratio;
+}
+//设置 error
+export function SET_ERROR(state, {showType, mess}) {
+    // console.log(showType)//showType:0-不显示；1：请求成功-没有数据；2：请求失败-请求服务器失败；3：请求失败-刷新数据失败；4：正在请求-正在请求中的loading
+    if (showType == 0) {//请求数据成功后设置
+        state.errorInfo.errorMess = '';
+        state.errorInfo.errorImg = '';
+    } else if (showType == 1) {//页面中 computed 中获取数据时判断列表为空时设置
+        // state.errorInfo.errorImg='/drawable/no_data.png';
+        state.errorInfo.errorMess = mess;
+    } else if (showType == 4) {//初始进入新界面时设置 废弃（改为 refresh 组件）
+        state.errorInfo.errorMess = '加载中...';
+    } else {//请求失败后设置
+        // state.errorInfo.errorImg=showType==2?'/drawable/loading_404.png':'';
+        state.errorInfo.errorMess = mess;
+    }
+
+}
+
 /** -----------------REP------------------*/
 export function SET_USERPLATFORMCODE(state, {retdata, callback}) {
     if (retdata != null) {
@@ -160,16 +190,3 @@ export function SET_REP_FIRST_SELECTED(state, {selected}) {
     state.isSelected = selected;
 }
 
-
-//设置token
-export function SET_TOKEN(state, {token}) {
-    state.selfToken = token;
-}
-//设置 baseUrl
-export function SET_BASE_URL(state, {url}) {
-    state.baseUrl = url;
-}
-//设置 不同平台的放大倍数
-export function SET_RATIO(state, {ratio}) {
-    state.ratio = ratio;
-}

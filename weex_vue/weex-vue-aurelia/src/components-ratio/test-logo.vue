@@ -26,7 +26,7 @@
         methods:{
             clickShow(item){
                 this.$emit('clickShow',item)
-//                item.showType=!item.showType;
+//                item.showed=!item.showed;
             }
         }
     }

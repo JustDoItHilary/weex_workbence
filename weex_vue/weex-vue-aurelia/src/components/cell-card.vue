@@ -1,32 +1,5 @@
 <template>
-    <!--<div v-ratio="ratio" class="div_card" style="margin: 16;padding: 8;border-width: 0.5;">-->
-        <!--<div v-ratio="ratio" class="div_tit" style="margin-top: 4;margin-bottom: 4;border-bottom-width: 1;">-->
-            <!--<text v-ratio="ratio" class="txt_tit" style="padding-top: 4;padding-bottom: 4;font-size: 12;">{{tit}}</text>-->
-            <!--<text v-ratio="ratio" class="txt_else" style="padding-top: 4;padding-bottom: 4;font-size: 12;" @click="clickShow">{{txtElse}}</text>-->
-        <!--</div>-->
-        <!--<slot name="mess"></slot>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='CV'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
-            <!--<cell-justify v-ratio="ratio" :txtLeft="data.tit" :txtRight="data.content"></cell-justify>-->
-        <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='TS'" v-ratio="ratio">-->
-            <!--<text v-ratio="ratio" class="txt_content div_item_ts">{{ts(item.Extra.TS_TITLE)}}</text>-->
-            <!--<text v-ratio="ratio" class="txt_content div_item_ts">{{ts(item.Extra.TS_SUBTITLE)}}</text>-->
-        <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='TSLR'" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
-            <!--<cell-justify v-ratio="ratio" :txtLeft="ts(item.Extra.TS_TITLE)" :txtRight="item.Name!='SEGMENT_MEMBERS'?ts(item.Extra.TS_SUBTITLE):''">-->
-                <!--<text  v-ratio="ratio"-->
-                       <!--slot="else"-->
-                       <!--v-if="item.Name=='SEGMENT_MEMBERS'"-->
-                       <!--:class="['div_corner_'+(ts(item.Extra.TS_SUBTITLE)=='已签到')]"-->
-                       <!--@click="clickSign"> {{ts(item.Extra.TS_SUBTITLE)}} </text>-->
-            <!--</cell-justify>-->
-        <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='CVMD'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
-            <!--<cell-justify v-ratio="ratio" :txtLeft="data.tit"></cell-justify>-->
-            <!--<cell-justify v-ratio="ratio" :txtRight="data.content"></cell-justify>-->
-        <!--</div>-->
-    <!--</div>-->
-    <div   class="div_card" >
+    <div  class="div_card" >
         <div   class="div_tit"  @click="clickShow">
             <text   class="txt_tit" >{{tit}}</text>
             <text   class="txt_else">{{txtElse}}</text>
@@ -36,8 +9,8 @@
             <cell-justify   :txtLeft="data.tit" :txtRight="data.content"></cell-justify>
         </div>
         <div v-if="item.showed&&item.Extra.SHOWTYPE=='TS'"  >
-            <text   class="txt_content div_item_ts">{{ts(item.Extra.TS_TITLE)}}</text>
-            <text   class="txt_content div_item_ts">{{ts(item.Extra.TS_SUBTITLE)}}</text>
+            <text v-if="ts(item.Extra.TS_TITLE)"  class="txt_content div_item_ts">{{ts(item.Extra.TS_TITLE)}}</text>
+            <text v-if="ts(item.Extra.TS_SUBTITLE)"  class="txt_content div_item_ts">{{ts(item.Extra.TS_SUBTITLE)}}</text>
         </div>
         <div v-if="item.showed&&item.Extra.SHOWTYPE=='TSLR'"   :class="['div_item',index>0?'border_bottom_grey':'']">
             <cell-justify   :txtLeft="ts(item.Extra.TS_TITLE)" :txtRight="item.Name!='SEGMENT_MEMBERS'?ts(item.Extra.TS_SUBTITLE):''">
@@ -49,8 +22,12 @@
             </cell-justify>
         </div>
         <div v-if="item.showed&&item.Extra.SHOWTYPE=='CVMD'" v-for="(data,index) in item.List"   :class="['div_item',index>0?'border_bottom_grey':'']">
-            <cell-justify   :txtLeft="data.tit"></cell-justify>
-            <cell-justify   :txtRight="data.content"></cell-justify>
+            <!--<cell-justify   :txtLeft="data.tit"></cell-justify>-->
+            <!--<cell-justify   :txtLeft="data.content"></cell-justify>-->
+            <text v-if="data.tit" class="txt_content">{{data.tit}}</text>
+            <text v-if="data.content" class="txt_grey">{{data.content}}</text>
+            <!--<text class="txt_common">{{data.tit}}</text>-->
+            <!--<text class="txt_grey">{{data.content}}</text>-->
         </div>
     </div>
 </template>
@@ -95,7 +72,7 @@
             },
             clickSign(bol,data){
                 let self=this;
-                if(bol&&data.hasOwnProperty("GUID")){
+                if(!bol&&data.hasOwnProperty("GUID")){
                     var params={};
                     params.GUID=data.GUID;
                     self.$store.dispatch('FETCH_SIGN_IN',{params:params,callback:function () {
@@ -130,9 +107,8 @@
     .div_card {
         background-color: #fff;
         padding: $cl;
+        margin:$bl;
         @include borderCommon($borderW, $bc,$radius);
-        @include marginRow($bl);
-        @include marginColumn($bl);
     }
 
     .div_tit {
@@ -155,8 +131,12 @@
     }
 
     .txt_content {
-        @include fontCommon($cs);
+        @include fontCommon();
         @include sideBorder(bottoom);
+    }
+    .txt_grey{
+        @include fontCommon($cs,$css-grey);
+        margin-top: $cl;
     }
 
     .div_open {

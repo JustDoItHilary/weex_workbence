@@ -7,7 +7,10 @@
     props: {
       image: { default: '' },
       link: { default: '' },
-    }
+    },
+      created(){
+        console.log("created",this.image)
+      }
   };
 </script>
 

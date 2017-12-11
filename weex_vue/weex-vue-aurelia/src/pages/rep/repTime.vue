@@ -1,37 +1,37 @@
 <template>
     <div>
         <app-header :tit="getParams.Name+'的周报'"></app-header>
-        <cell-txt-center v-ratio="ratio"
+        <cell-txt-center 
                          :txt="year+'年'+thisMonth+'月'"
                          fontColor="#aaa"
                          class="cell_txt_center">
-            <text v-ratio="ratio"
+            <text 
                   slot="left"
                   class="div_add"
                   @click="clickLast()"> 上个月 </text>
-            <text  v-ratio="ratio"
+            <text  
                    slot="right"
                    class="div_add"
                    @click="clickNext()"> 下个月 </text>
         </cell-txt-center>
-        <div v-ratio="ratio"
+        <div 
              v-if="repList.length<1"
              class="div_hide">
-            <image  v-ratio="ratio"
+            <image  
                     class="img_search"
                     :src="baseUrl+imgUrl"></image>
-            <text  v-ratio="ratio"
+            <text  
                    class="txt_hide">没有待审核周报</text>
         </div>
         <scroller>
-            <div  v-ratio="ratio"
+            <div  
                   class="div_item cell_border"
                   v-for="(item,index) in repList"
                   @click="clickItem(index)">
-                <text v-ratio="ratio"
+                <text 
                       class="cell_txt_center "
                       :style="{color:item.AuditFlag==1?'#000':colorCommon,flex:1}">{{item.startTime+' ~ '+item.endTime}}</text>
-                <text v-ratio="ratio"
+                <text 
                       :class="['cell_txt_center','div_logo','select_bg_'+String(item.AuditFlag==1)]">{{item.AuditFlag==1?'已审核':'未审核'}}</text>
             </div>
         </scroller>
@@ -79,7 +79,7 @@
                 thisMonth: '',
                 firstDate: '',
                 colorCommon:'#58D68D',
-                imgUrl:'/drawable/no_found.png',
+                imgUrl:'/drawable/no_data.png',
             }
         },
         methods: {

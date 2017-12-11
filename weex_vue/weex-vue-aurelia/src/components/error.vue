@@ -19,8 +19,8 @@
             },
             errorMess:{
                 type:String,
-                default:'',
-            },
+                default:''
+            }
         },
         computed:{
             ratio(){
@@ -28,8 +28,8 @@
             },
             baseUrl(){
                 return this.$store.getters.baseUrl;
-            },
-        },
+            }
+        }
     }
 </script>
 
@@ -37,16 +37,17 @@
     @import "../style/mixin";
 
     .div_hide{
+        margin:$bl;
         justify-content:center;
         align-items: center;
-        @include marginColumn($bl);
+        @include card();
     }
     .img_search{
         @include wh(280px,280px);
+        @include marginColumn($bl);
     }
     .txt_hide{
-        color: $css-grey;
-        @include fontCommon($bs,$css-grey);
         @include marginColumn($sl);
+        @include fontCommon($bs,$css-grey);
     }
 </style>

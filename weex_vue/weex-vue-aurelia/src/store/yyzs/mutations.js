@@ -3,8 +3,11 @@ var storage = weex.requireModule('storage');
 
 
 //设置token
-export function SET_TOKEN(state, {token}) {
+export function SET_TOKEN(state, {token, callback}) {
     state.selfToken = token;
+    if (callback) {
+        callback();
+    }
 }
 //设置 baseUrl
 export function SET_BASE_URL(state, {url}) {
@@ -14,57 +17,22 @@ export function SET_BASE_URL(state, {url}) {
 export function SET_RATIO(state, {ratio}) {
     state.ratio = ratio;
 }
-//设置 baseUrl
+//设置 error
 export function SET_ERROR(state, {showType, mess}) {
-    // state.errorInfo.showType=showType;
-    if(showType==0){
-        state.errorInfo.errorMess='';
-        state.errorInfo.errorImg='';
-    }else if(showType==1){
-        state.errorInfo.errorImg='/drawable/no_found.png';
-        state.errorInfo.errorMess='无数据';
-    }else {
-        state.errorInfo.errorImg=showType==2?'/drawable/loading_404.png':'';
-        state.errorInfo.errorMess=mess;
+    // console.log(showType)//showType:0-不显示；1：请求成功-没有数据；2：请求失败-请求服务器失败；3：请求失败-刷新数据失败；4：正在请求-正在请求中的loading
+    if (showType == 0) {//请求数据成功后设置
+        state.errorInfo.errorMess = '';
+        state.errorInfo.errorImg = '';
+    } else if (showType == 1) {//页面中 computed 中获取数据时判断列表为空时设置
+        // state.errorInfo.errorImg='/drawable/no_data.png';
+        state.errorInfo.errorMess = mess;
+    } else if (showType == 4) {//初始进入新界面时设置 废弃（改为 refresh 组件）
+        state.errorInfo.errorMess = '加载中...';
+    } else {//请求失败后设置
+        // state.errorInfo.errorImg=showType==2?'/drawable/loading_404.png':'';
+        state.errorInfo.errorMess = mess;
     }
 
-}
-
-
-
-
-/** -----------------SY--会员信息----------------*/
-export function GET_SY_MEMBERINFO(state, {data}) {
-    state.syMemberInfo = [];
-    var index = data.hasOwnProperty('Extras') ? data.Extras : '';
-    index = index.hasOwnProperty('TABLES_INDEX') ? index.TABLES_INDEX : '';
-    var indexArr = index.split(',');
-    var tables = data.hasOwnProperty('Tables') ? data.Tables : {};
-    for (var i = 0; i < indexArr.length; i++) {
-        for (var key in tables) {
-            if (indexArr[i] == key) {
-                var item = tables[key];
-                item.hidden = item.Extra.HIDDENCOLS.split(',');
-                item.List = [];
-                if (item.Data && item.Data.length > 0) {
-                    for (var obj in item.Data[0]) {
-                        var info = {};
-                        info.tit = obj;
-                        info.content = item.Data[0][obj];
-                        item.List.push(info);
-                        for (var j = 0; j < item.hidden.length; j++) {
-                            if (item.hidden[j] == obj) {
-                                item.List.pop();
-                            }
-                        }
-                    }
-                }
-                item.showType = true;
-                state.syMemberInfo.push(item);
-                break;
-            }
-        }
-    }
 }
 
 export function SET_MEMBER_OPERATOR(state, {data}) {
@@ -98,6 +66,51 @@ export function SET_TOKEN_SAVETIME(state, {time}) {
     state.tokens.saveTime = time;
 }
 
+/** -----------------SY--会员信息----------------*/
+/** COLSLINK 列排序队列
+ SHOWCOLS 显示的列（也包含排列顺序）
+ TABLES_INDEX 表格的排序（每个片的排列顺序）
+ DESC 表名
+ SHOWTYPE 展示格式
+ HIDDENCOLS 隐藏行 已废弃，被 SHOWCOLS 替代
+ */
+export function GET_SY_MEMBERINFO(state, {data}) {
+    // console.log(data);
+    state.syMemberInfo = [];
+    var index = data.hasOwnProperty('Extras') ? data.Extras : '';
+    index = index.hasOwnProperty('TABLES_INDEX') ? index.TABLES_INDEX : '';//每个卡片的排列顺序（表格）
+    var indexArr = index.split(',');
+    var tables = data.hasOwnProperty('Tables') ? data.Tables : {};
+    for (var i = 0; i < indexArr.length; i++) {
+        for (var key in tables) {
+            if (indexArr[i] == key) {
+                var item = tables[key];
+                var colsLink = item.Extra.SHOWCOLS.split(',');
+                item.List = [];
+                if (item.Data && item.Data.length > 0) {
+                    for (var col = 0; col < colsLink.length; col++) {
+                        for (var obj in item.Data[0]) {
+                            if (colsLink[col] == obj) {
+                                var info = {};
+                                info.tit = obj;
+                                info.content = item.Data[0][obj];
+                                item.List.push(info);
+                            }
+                        }
+                    }
+                }
+                item.showed = true;
+                state.syMemberInfo.push(item);
+                break;
+            }
+        }
+    }
+    if (state.syMemberInfo.length < 1) {
+        SET_ERROR(state, {showType: 1, mess: '暂无会员信息'});
+    }
+    // console.log(state.syMemberInfo)
+}
+
 /*-----------------yyzs-营销活动详情--------------*/
 export function SET_CRM(state, {retdata}) {
     state.memberInfo = [];
@@ -112,13 +125,18 @@ export function SET_CRM(state, {retdata}) {
             for (var key in tables) {
                 if (indexArr[i] == key) {
                     var item = tables[key];
+                    var colsLink = item.Extra.SHOWCOLS.split(',');
                     item.List = [];
                     if (item.Data && item.Data.length > 0) {
-                        for (var obj in item.Data[0]) {
-                            var info = {};
-                            info.tit = obj;
-                            info.content = item.Data[0][obj];
-                            item.List.push(info);
+                        for (var col = 0; col < colsLink.length; col++) {
+                            for (var obj in item.Data[0]) {
+                                if (colsLink[col] == obj) {
+                                    var info = {};
+                                    info.tit = obj;
+                                    info.content = item.Data[0][obj];
+                                    item.List.push(info);
+                                }
+                            }
                         }
                     }
                     item.showed = true;
@@ -127,7 +145,10 @@ export function SET_CRM(state, {retdata}) {
                 }
             }
         }
-        console.log(state.memberInfo)
+        // console.log(state.memberInfo)
+    }
+    if (state.memberInfo.length < 1) {
+        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
     }
 }
 /*-----------------yyzs-营销活动 label 选中项--------------*/
@@ -147,7 +168,10 @@ export function SET_ONGOING_ACT(state, {retdata}) {
                 state.ongoingAct.push(item);
             }
         }
-        console.log(state.ongoingAct);
+        // console.log(state.ongoingAct);
+    }
+    if (state.ongoingAct.length < 1) {
+        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
     }
 }
 /*-----------------yyzs-营销活动 历史--------------*/
@@ -163,6 +187,9 @@ export function SET_HISTORY_ACT(state, {retdata}) {
                 state.historyAct.push(item);
             }
         }
-        console.log(state.historyAct);
+        // console.log(state.historyAct);
+    }
+    if (state.historyAct.length < 1) {
+        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
     }
 }

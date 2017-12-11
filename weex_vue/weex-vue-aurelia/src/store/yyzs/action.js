@@ -22,10 +22,12 @@ export function FETCH_SY_MEMBERINFO({commit, state}, {params}) {
     return fetchByPost(apiURL.syUrl + 'handle', body)
         .then(
             data => {
+                commit('SET_ERROR', {showType:0});
                 commit('GET_SY_MEMBERINFO', {data});
             },
             error => {
                 state.syMemberInfo = [];
+                commit('SET_ERROR', {showType:2 ,mess: error});
                 // commit('SET_ERROR', {showType:1,mess: error});//会员信息，不许刷新-showType=1
             }
         )

@@ -7,7 +7,7 @@
         <!--<cell-time style="padding: 10px;" :txtLeft="info.TIT" :txtRight="info.CONTENT"></cell-time>-->
         <!--</div>-->
         <!--</div>-->
-        <cell-error v-if="memberInfo.length<1" :errorImg="errorInfo.errorImg"
+        <cell-error v-if="errorInfo.errorMess" :errorImg="errorInfo.errorImg"
                     :errorMess="errorInfo.errorMess"></cell-error>
         <div v-ratio="ratio" v-for="item in memberInfo">
             <cell-card :tit="item.Extra.DESC" :txtElse="item.showed?'折叠':'展开'" :item="item"></cell-card>
@@ -47,7 +47,7 @@
         },
         methods: {
             clickShow(item, index){
-                item.showType = !item.showType;
+                item.showed = !item.showed;
             },
             setRatio(){
                 let self = this;
@@ -60,14 +60,14 @@
         },
         created(e){
             let self = this;
-//            var bundleUrl = self.$getConfig().bundleUrl || '';
-            //memberid=1001502924
-            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?memberid=1000084096&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
+            var bundleUrl = self.$getConfig().bundleUrl || '';
+//            memberid=1001502924
+//            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?memberid=1000084096&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/sy-member.js?memberid=1000084096&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
             let urlArr = bundleUrl.split("?");
             self.baseUrl = urlArr[0].split('/').slice(0, -1).join('/');
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
-            self.setRatio();
+//            self.setRatio();
             if (urlArr.length > 1) {
                 let paramsArr = urlArr[1].split("&");
                 let params = {};
@@ -81,7 +81,7 @@
 //                console.log(JSON.stringify(params));
                 self.$store.dispatch('FETCH_SY_MEMBERINFO', {params: JSON.stringify(params)});
             } else {
-                modal.toast({message: "error: 参数缺失！", doation: 1})
+                self.$store.commit('SET_ERROR', {showType:2 ,mess: "ERROR: 参数缺失"});
             }
         }
     }

@@ -2,46 +2,46 @@
     <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"></app-header>
         <scroller>
-            <cell-peo v-ratio="ratio"
+            <cell-peo 
                     class="div_item"
                     txtTit="周报日期"
                     bottomBorder="1"
                     :txtExplain="startDate+' - '+endDate"
             >
-                <div v-ratio="ratio"
+                <div 
                      slot="option"
                      style="flex-direction: row;flex:1;justify-content: flex-end;">
-                    <div v-ratio="ratio"
+                    <div 
                          :class="['option_selected_'+!isEdited]"
                          @click="clickDate(false)">
-                        <text v-ratio="ratio"
+                        <text 
                               class="txt_add">上周</text>
                     </div>
-                    <div v-ratio="ratio"
+                    <div 
                          :class="['option_selected_'+isEdited]"
                          @click="clickDate(true)">
-                        <text v-ratio="ratio"
+                        <text 
                               class="txt_add">本周</text>
                     </div>
                 </div>
             </cell-peo>
-            <cell-peo v-ratio="ratio"
+            <cell-peo 
                     class="div_item border"
                     txtTit="审阅者"
                     :btnName="isEdited?'添加':''"
                     @clickBtn="clickCellBtn"
             >
-                <scroller v-ratio="ratio"
+                <scroller 
                           slot="option"
                           scroll-direction="horizontal"
                           class="cell-scroll">
-                    <text v-ratio="ratio"
+                    <text 
                           v-for="item in readerList"
                           class="txt_tit">{{item.Name}}</text>
                 </scroller>
                 >
             </cell-peo>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-if="isEdited"
                         class="div_item"
                         txtTit="本周工作总结"
@@ -50,13 +50,13 @@
                         :txtInput="repDetails.summary?repDetails.summary:''"
                         @clickCellInput="clickSum"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-else
                         class="div_item"
                         txtTit="本周工作总结"
                         :txtInput="lastDetails.summary?lastDetails.summary:'无数据'"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-if="isEdited"
                         class="div_item"
                         txtTit="下周工作计划"
@@ -65,16 +65,16 @@
                         :txtInput="repDetails.myPlan?repDetails.myPlan:''"
                         @clickCellInput="clickPlan"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-else
                         class="div_item"
                         txtTit="下周所定工作计划"
                         :txtInput="lastDetails.myPlan?lastDetails.myPlan:'无数据'"
             ></cell-input>
-            <text v-ratio="ratio"
+            <text 
                   class="txt_grey border">最近保存时间 {{saveTime}}</text>
         </scroller>
-        <bottom-btn v-ratio="ratio"
+        <bottom-btn 
                     class="cell_bottom_btn"
                     :txtLeft="repDetails.IsPost?'提交':'保存'"
                     :txtRight="repDetails.IsPost?'':'提交'"

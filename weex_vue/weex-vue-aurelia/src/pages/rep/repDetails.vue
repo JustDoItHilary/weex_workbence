@@ -2,40 +2,40 @@
     <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"></app-header>
         <scroller>
-            <cell-justify v-ratio="ratio"
+            <cell-justify 
                     class="div_item"
                     txtLeft="汇报类型"
                     :txtRight="repDetails.ProName"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-justify v-ratio="ratio"
+            <cell-justify 
                     class="div_item"
                     txtLeft="周报日期"
                     :txtRight="repDetails.startTime+' - '+repDetails.endTime"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-justify v-ratio="ratio"
+            <cell-justify 
                     class="div_item"
                     txtLeft="周报状态"
                     :txtRight="repDetails.IsPost==1?'已提交':'未提交'"
                     bottomBorder="1"
             ></cell-justify>
-            <cell-peo v-ratio="ratio"
+            <cell-peo 
                     class="div_item border"
                     txtTit="审阅者"
                     btnName="添加"
                     @clickBtn="clickCellBtn"
             >
-                <scroller v-ratio="ratio"
+                <scroller 
                           slot="option"
                           scroll-direction="horizontal"
                           class="cell-scroll">
-                    <text v-ratio="ratio"
+                    <text 
                           v-for="item in readerList"
                           class="txt_tit">{{item.Name}}</text>
                 </scroller>
             </cell-peo>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-if="isEdited"
                         class="div_item"
                         txtTit="本周工作总结"
@@ -44,13 +44,13 @@
                         :txtInput="repDetails.repSum"
                         @clickCellInput="clickSum"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-else
                         class="div_item"
                         txtTit="本周工作总结"
                         :txtInput="repDetails.summary?repDetails.summary:' '"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-if="isEdited"
                         class="div_item"
                         txtTit="下周工作计划"
@@ -59,32 +59,32 @@
                         :txtInput="repDetails.repPlan"
                         @clickCellInput="clickPlan"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-else
                         :class="['div_item',repDetails.hasComment==1?'border':'']"
                         txtTit="下周工作计划"
                         :txtInput="repDetails.myPlan?repDetails.myPlan:' '"
             ></cell-input>
-            <cell-input v-ratio="ratio"
+            <cell-input 
                         v-if="repDetails.hasComment==1&&assessment.length>0"
                         class="div_item"
                         txtTit="审核评价"
             >
-                <div v-ratio="ratio"
+                <div 
                      slot="content"
                      v-for="item in assessment"
                      class="div_content">
-                    <text v-ratio="ratio"
+                    <text 
                           class="content">{{item.AutName}}:</text>
-                    <text v-ratio="ratio"
+                    <text 
                           class="content"
                           style="flex:1;">{{item.Content}}</text>
                 </div>
             </cell-input>
-            <text v-ratio="ratio"
+            <text 
                   class="txt_grey border">最近保存时间 {{repDetails.UpdateTime}}</text>
         </scroller>
-        <bottom-btn v-ratio="ratio"
+        <bottom-btn 
                     class="cell_bottom_btn"
                     :txtLeft="isEdited?(repDetails.IsPost?'提交':'保存'):'修改'"
                     :txtRight="isEdited&&!repDetails.IsPost?'提交':''"

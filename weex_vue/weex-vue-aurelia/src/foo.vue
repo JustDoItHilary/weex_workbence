@@ -1,27 +1,34 @@
 <template>
     <div class="root" bubble="true" style="border-width:10px;border-color: red;">
-        <cell-header tit="营销活动" ></cell-header>
-        <scroller >
-            <!--<text v-for="item in list">{{item}}  test      </text>-->
-            <div class="root" @click="click('#ff0')">
-                <text class="txt">{{getSize(28)+',,,'+width+',,,'+scale}}心若在梦就在迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +
-                    '，按旷工半天 处理。 研发部门弹性工作制要求: 研发</text>
-            </div>
-            <!--<text @click="click('#0f0')" class="txt_else" style="border-width: 10;font-size: 16;" v-ratio="ratio">1{{rootText}}</text>-->
-            <!--<text @click="click('#f0f')" v-ratio="ratio" :class="['txt']" style="border-width: 10;">2{{rootText}}</text>-->
-            <!--<text @click="click('#0ff')" v-ratio="ratio" :class="['txt']" style="border-width: 10;" v-if="showType">2{{rootText}}</text>-->
+        <list >
+            <refresh class="refresh" display="show">
+                <text class="indicator">Refreshing ...</text>
+            </refresh>
+            <cell v-for="item in list">
+                <text style="font-size:28rem;padding:30px;" >test</text>
+            </cell>
+        </list>
+        <!--<scroller >-->
+            <!--&lt;!&ndash;<text v-for="item in list">{{item}}  test      </text>&ndash;&gt;-->
+            <!--<div class="root" @click="click('#ff0')">-->
+                <!--<text class="txt">{{getSize(28)+',,,'+width+',,,'+scale}}心若在梦就在迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +-->
+                    <!--'，按旷工半天 处理。 研发部门弹性工作制要求: 研发</text>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<text @click="click('#0f0')" class="txt_else" style="border-width: 10;font-size: 16;" v-ratio="ratio">1{{rootText}}</text>&ndash;&gt;-->
+            <!--&lt;!&ndash;<text @click="click('#f0f')" v-ratio="ratio" :class="['txt']" style="border-width: 10;">2{{rootText}}</text>&ndash;&gt;-->
+            <!--&lt;!&ndash;<text @click="click('#0ff')" v-ratio="ratio" :class="['txt']" style="border-width: 10;" v-if="showType">2{{rootText}}</text>&ndash;&gt;-->
 
-            <text class="txt1">test1</text>
-            <text class="txt2">test2</text>
-            <text class="txt3">test3</text>
-            <!--<validator name="validation" style="border-width: 1px;border-color: red;">-->
-                <!--<input type="text" v-model='comment' ref='comment' v-validate:comment="{ minlength: 3, maxlength: 15 }">-->
-                <!--<div>-->
-                    <!--<span v-show="$validation.comment.minlength">不得少于3个字符</span>-->
-                    <!--<span v-show="$validation.comment.maxlength">不得大于15个字符</span>-->
-                <!--</div>-->
-            <!--</validator>-->
-        </scroller>
+            <!--<text class="txt1">test1</text>-->
+            <!--<text class="txt2">test2</text>-->
+            <!--<text class="txt3">test3</text>-->
+            <!--&lt;!&ndash;<validator name="validation" style="border-width: 1px;border-color: red;">&ndash;&gt;-->
+                <!--&lt;!&ndash;<input type="text" v-model='comment' ref='comment' v-validate:comment="{ minlength: 3, maxlength: 15 }">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span v-show="$validation.comment.minlength">不得少于3个字符</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span v-show="$validation.comment.maxlength">不得大于15个字符</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</validator>&ndash;&gt;-->
+        <!--</scroller>-->
     </div>
 </template>
 
@@ -70,6 +77,18 @@
             },
         },
         methods: {
+            onrefresh (event) {
+                let self=this;
+                console.log('is refreshing');
+                modal.toast({ message: 'refresh', duration: 1 });
+                setTimeout(function () {
+
+                } ,2000);
+            },
+            onpullingdown (event) {
+                console.log('is onpulling down')
+//                modal.toast({ message: 'pulling down', duration: 1 })
+            },
             click(c){
                 this.color=c;
                 this.showed=!this.showed;
@@ -89,13 +108,13 @@
             },
         },
         created(e){
-            console.log("created")
+            console.log("created",weex.config)
             let self = this;
             var bundleUrl = 'http://weex.yy365.cn/sy-member.js';
             self.baseUrl = self.getBaseUrl(bundleUrl);
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
-            self.width=self.$getConfig().env.hasOwnProperty('deviceWidth')?self.$getConfig().env.deviceWidth:0;
-            self.scale=self.$getConfig().env.hasOwnProperty('scale')?self.$getConfig().env.scale:2;
+            self.width=weex.config.env.hasOwnProperty('deviceWidth')?weex.config.env.deviceWidth:0;
+            self.scale=weex.config.env.hasOwnProperty('scale')?weex.config.env.scale:2;
             self.setRatio();
 
         },
@@ -145,7 +164,7 @@
     }
 
     .txt {
-        margin-top: 20dp;
+        margin-top: 20px;
         margin-left: 20px;
         /*padding-right: 20dp;*/
         border-width: 10px;
@@ -156,6 +175,29 @@
     }
     .txt1{
         font-size: dp(28);
+    }
+    .indicator {
+        color: #888888;
+        font-size: 42px;
+        text-align: center;
+    }
+    .panel {
+        width: 600px;
+        height: 250px;
+        margin-left: 75px;
+        margin-top: 35px;
+        margin-bottom: 35px;
+        flex-direction: column;
+        justify-content: center;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #DDDDDD;
+        background-color: #F5F5F5;
+    }
+    .text {
+        font-size: 50px;
+        text-align: center;
+        color: #41B883;
     }
 
 </style>

@@ -1,31 +1,31 @@
 <template>
     <div append="node">
         <apply-header tit="添加审核人员" :done="clickDone" :imgUrl="imgUrl"></apply-header>
-        <div v-ratio="ratio"
+        <div 
              class="div_search">
-            <input v-ratio="ratio"
+            <input 
                    class="txt_center input"
                    type="text"
                    placeholder="搜索"
                    @input="input"
                    :value="searchMess"/>
         </div>
-        <list v-ratio="ratio" class="list">
-            <cell  v-ratio="ratio"
+        <list  class="list">
+            <cell  
                    v-for="item in empList"
                    class="cell"
                    @click="clickMember(item)">
-                <div  v-ratio="ratio"
+                <div  
                       class="div_logo">
-                    <text v-ratio="ratio"
+                    <text 
                           class="text_logo">{{item.fir}}</text>
                 </div>
-                <div v-ratio="ratio" class="div_member">
-                    <!--<div v-ratio="ratio">-->
-                        <text v-ratio="ratio" class="text_member" style="flex:1;">{{item.Name}}</text>
+                <div  class="div_member">
+                    <!--<div >-->
+                        <text  class="text_member" style="flex:1;">{{item.Name}}</text>
                     <!--</div>-->
-                    <div v-ratio="ratio" class="div_select" v-if="getSelected(item)">
-                        <image v-ratio="ratio" class="img_select" :src="baseUrl+imgUrl"></image>
+                    <div  class="div_select" v-if="getSelected(item)">
+                        <image  class="img_select" :src="baseUrl+imgUrl"></image>
                     </div>
                 </div>
             </cell>

@@ -149,6 +149,7 @@
                     qIndex: '',
                     modelIndex: ''
                 },
+                selectedList:[]
             }
         },
         methods: {
@@ -167,10 +168,11 @@
                 }
             },
             clickCloseItem: function (item) {
-                item.showType = false;
+                item.showed = false;
             },
             clickItem: function (item) {
-                item.showType = !item.showType
+                console.log(item)
+                item.showed = !item.showed
             },
             clickCheck: function (choice, index,ansIndex) {
                 let self = this;
@@ -200,6 +202,7 @@
             addList: function (choice) {
                 let self = this;
                 let isSelected = false;
+                console.log(self.selectedList)
                 for (let i = 0; i < self.selectedList.length; i++) {
                     let item = self.selectedList[i];
                     if (item.aid === choice.aid) {

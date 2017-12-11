@@ -5,14 +5,14 @@
             <!--<text v-ratio="ratio" class="txt_else" style="padding-top: 4;padding-bottom: 4;font-size: 12;" @click="clickShow">{{txtElse}}</text>-->
         <!--</div>-->
         <!--<slot name="mess"></slot>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='CV'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
+        <!--<div v-if="item.showed&&item.Extra.SHOWTYPE=='CV'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
             <!--<cell-justify v-ratio="ratio" :txtLeft="data.tit" :txtRight="data.content"></cell-justify>-->
         <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='TS'" v-ratio="ratio">-->
+        <!--<div v-if="item.showed&&item.Extra.SHOWTYPE=='TS'" v-ratio="ratio">-->
             <!--<text v-ratio="ratio" class="txt_content div_item_ts">{{ts(item.Extra.TS_TITLE)}}</text>-->
             <!--<text v-ratio="ratio" class="txt_content div_item_ts">{{ts(item.Extra.TS_SUBTITLE)}}</text>-->
         <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='TSLR'" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
+        <!--<div v-if="item.showed&&item.Extra.SHOWTYPE=='TSLR'" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
             <!--<cell-justify v-ratio="ratio" :txtLeft="ts(item.Extra.TS_TITLE)" :txtRight="item.Name!='SEGMENT_MEMBERS'?ts(item.Extra.TS_SUBTITLE):''">-->
                 <!--<text  v-ratio="ratio"-->
                        <!--slot="else"-->
@@ -21,7 +21,7 @@
                        <!--@click="clickSign"> {{ts(item.Extra.TS_SUBTITLE)}} </text>-->
             <!--</cell-justify>-->
         <!--</div>-->
-        <!--<div v-if="item.showType&&item.Extra.SHOWTYPE=='CVMD'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
+        <!--<div v-if="item.showed&&item.Extra.SHOWTYPE=='CVMD'" v-for="(data,index) in item.List" v-ratio="ratio" :class="['div_item',index>0?'border_bottom_grey':'']">-->
             <!--<cell-justify v-ratio="ratio" :txtLeft="data.tit"></cell-justify>-->
             <!--<cell-justify v-ratio="ratio" :txtRight="data.content"></cell-justify>-->
         <!--</div>-->
@@ -91,7 +91,7 @@
         methods: {
             clickShow(){
                 let self=this;
-                self.item.showType=!self.item.showType;
+                self.item.showed=!self.item.showed;
             },
             clickSign(){
 
