@@ -38,7 +38,7 @@
 
     export default {
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             CellInput: require('../../components/cell-input.vue'),
         },
@@ -70,7 +70,7 @@
             assessment(){
                 var arr=this.$store.getters.getAssessment;
                 if(arr.length>0){
-                   return this.replaceTransfer(arr[0].Content);
+                   return this.replaceTransfer(arr[arr.length-1].Content);
                 }
                 return '';
             },

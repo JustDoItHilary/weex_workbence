@@ -1,6 +1,10 @@
 <template>
     <div style="background-color:#ebedef;" append="node">
-        <app-header tit="工作汇报" :close="clickClose"></app-header>
+        <app-header tit="工作汇报"  :close="clickClose" >
+            <div slot="right" class="div_calendar" @click="clickCalendar">
+                <image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>
+            </div>
+        </app-header>
         <label labelOneTxt="我的汇报"
                labelTwoTxt="团队汇报"
                :twoInfo="lastWeekReviewNum==0?'':lastWeekReviewNum"
@@ -49,7 +53,6 @@
             </cell>
         </list>
         <bottom-btn v-if="isSelected"
-                    
                     class="cell_bottom_btn"
                     txtLeft="新建"
                     txtRight="提交统计"
@@ -69,7 +72,7 @@
 
     export default{
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             Label: require('../../components/label.vue'),
             DateLogo: require('../../components/cell-date-logo.vue'),
@@ -83,11 +86,14 @@
                 searchMess: '',
                 selectedList: [],
                 imgLogoUrl: '/drawable/review.png',
+                imgCalendarUrl: '/drawable/calendar_white.png',
+                imgCalendarUrl_ios: '/drawable/calendar_green.png',
                 baseUrl: '',
                 date: '',
                 month: '',
                 year: '',
                 ratio:1,
+                isiOS:false,
             }
         },
         computed: {
@@ -98,7 +104,7 @@
                 return this.$store.getters.getUserPlatformCode
             },
             repList(){/*我的周报*/
-//                console.log("repList",this.$store.getters.getRepList.length)
+//                console.log("repList",this.$store.getters.getRepList[0])
                 return this.$store.getters.getRepList
             },
             reviewList(){/*所有可审核的人员名单*/
@@ -118,6 +124,10 @@
         methods: {
             clickClose(){
                 configModule.finish();
+            },
+            clickCalendar(){
+                let self=this;
+                self.$router.push('/repHistory');
             },
             clickLabelOne: function (e) {
                 let self = this;
@@ -144,9 +154,7 @@
                 var todayOfWeek = (new Date(date - 86400000)).getDay();
                 //本周的开始日期
                 var startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - todayOfWeek);
-                var lastMon = new Date(date.getFullYear(), date.getMonth(), date.getDate() - todayOfWeek - 7);
                 startDate = self.formatDate(startDate, 'yyyy-MM-dd');
-                lastMon = self.formatDate(lastMon, 'yyyy-MM-dd');
                 let lastDetails = self.repList[0];
                 if (lastDetails.hasOwnProperty("Auditors")) {
                     self.$store.commit('GET_READER', {auditors: lastDetails.Auditors});
@@ -154,16 +162,14 @@
                     self.$store.commit('GET_READER', {auditors: ''});
                 }
                 self.$store.commit('SET_REP_DETAILS', {item: {}});
-                self.$store.commit('SET_REP_LAST_DETAILS', {item:{}});
                 for (let i = 0; i < self.repList.length; i++) {
                     let details = self.repList[i];
                     if (details.startTime == startDate) {
                         self.$store.commit('SET_REP_DETAILS', {item: details});
-                    } else if (details.startTime == lastMon) {
-                        self.$store.commit('SET_REP_LAST_DETAILS', {item: details});
+                        break;
                     }
                 }
-                self.$router.push('/newRep')
+                self.$router.push(`/newRep/${JSON.stringify({index:0})}`)
             },
             clickItem(index){
                 let self = this;
@@ -176,15 +182,13 @@
             },
             longPressItem(item){
                 let self = this;
-                modal.confirm({'message': '确定删除?', 'doation': 0.3}, function (ret) {
-                    if (ret == 'OK') {
-                        if (item.IsPost == 1) {
-                            self.toToast('已经提交不可删除！')
-                        } else {
-                            self.deleteRep(item.Guid);
-                        }
+                self.toConfirm('确定删除?',function () {
+                    if (item.IsPost == 1) {
+                        self.toToast('已经提交不可删除！')
+                    } else {
+                        self.deleteRep(item.Guid);
                     }
-                });
+                })
             },
             //删除已经保存但未提交的周报
             deleteRep(guid){
@@ -205,7 +209,10 @@
                 let params = {};
                 params.Name = item.Name;
                 params.Guid = item.Guid;
-                self.$router.push(`/repTime/${JSON.stringify(params)}`)
+                self.$router.push(`/repTime/${JSON.stringify(params)}`);
+                self.$store.commit('SET_REP_LIST', {retdata:[], callback:function () {
+
+                }});
             },
             /*tui*/
             input: function (e) {
@@ -214,7 +221,7 @@
             },
             searchMemberList(list){
                 let self = this;
-                console.log(self.searchMess)
+//                console.log(self.searchMess)
                 let readerList = [];
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].Name.indexOf(self.searchMess) > -1) {
@@ -301,6 +308,7 @@
         created: function (e) {
             let self = this;
 //            self.setRatio();
+            self.isiOS=weex.config.env.platform.toLowerCase() == 'ios';
             var bundleUrl = self.$getConfig().bundleUrl || '';
 //            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
@@ -334,6 +342,14 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../style/mixin.scss";
 
+    .div_calendar{
+        padding:$cl;
+    }
+    .img_calendar{
+        @include wh();
+        @include marginRow($bl);
+        @include marginColumn($cl);
+    }
     .list {
         @include marginRow($bl);
     }
@@ -393,7 +409,7 @@
 
     .text_mulit {
         @include fontLines;
-        @include marginRow($cl);
+        @include marginRow($ss);
         @include fontCommon($ss);
     }
 

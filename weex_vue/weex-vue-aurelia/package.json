@@ -15,11 +15,13 @@
     "debug": "weex-devtool"
   },
   "dependencies": {
+    "lib-flexible": "^0.3.2",
     "vue": "^2.1.8",
     "vue-router": "^2.1.1",
     "vuex": "^2.1.1",
     "vuex-router-sync": "^4.0.1",
     "weex-tabbar": "^1.1.1",
+    "weex-toolkit": "^1.1.0-beta.7",
     "weex-vue-render": "^0.12.4"
   },
   "devDependencies": {
@@ -52,6 +54,7 @@
     "opn": "^4.0.2",
     "ora": "^0.3.0",
     "postcss-cssnext": "^3.0.2",
+    "px2rem-loader": "^0.1.7",
     "sass": "^0.5.0",
     "sass-loader": "^4.1.1",
     "scss": "^0.2.4",
@@ -62,8 +65,10 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.9",
     "vue-loader": "^10.0.2",
+    "vue-schart": "^0.1.4",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.1.8",
+    "vue-validator": "^3.0.0-alpha.2",
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-dev-server": "^1.16.2",

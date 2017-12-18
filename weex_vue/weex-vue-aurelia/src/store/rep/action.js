@@ -10,6 +10,8 @@ const apiURL = {
 
 }
 import {
+    URL_YIYAO,
+    URL_BASE,
     URL_REP_GET_USERPLATFORMCODE,
     URL_REP_GET_LIST,
     URL_REP_UPLOAD,
@@ -22,7 +24,7 @@ import {
     URL_REP_GET_COMMENTS,
     URL_REP_GET_STATISTICS,
     URL_REP_GET_ALL_AUDITED,
-} from './api'
+} from './rep-api'
 
 /** -----------------rep------------------*/
 export function FETCH_USERPLATEFORMCODE({commit, state}, {params, callback}) {
@@ -47,7 +49,7 @@ export function FETCH_REP_LIST({commit, state}, {body, callback}) {
     return fetchRep(URL_REP_GET_LIST, body)
         .then(retdata => {
             commit('SET_ERROR', {showType:0});
-            commit('SET_REP_LIST', {retdata, callback})
+            commit('SET_REP_LIST', {retdata, callback});
         }, error => {
             state.repList = [];
             commit('SET_ERROR', {showType:2 ,mess: error});

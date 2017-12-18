@@ -11,6 +11,8 @@
             <!--<img class="img" src="../../assets/img/ic_keyboard_arrow_right_black_48dp.png" @click="clickPick"/>-->
         </div>
         <textarea v-if="txtHide"
+                  ref="inputArea"
+                  type="text"
                   class="content input_content"
                   :value="txtInput"
                   :rows="txtLines"
@@ -99,8 +101,14 @@
                 self.txtInput=e.value;
                 self.$emit('clickCellInput',self.txtList.length>0?self.txtList[self.index].GUID:'',self.txtInput,self.type);
 //                console.log(self.txtInput,self.index)
-            }
-        }
+            },
+            clickBlur(){
+//                console.log("clickBlur",this.$refs['inputArea']);
+                if(this.txtHide){
+                    this.$refs['inputArea'].blur();
+                }
+            },
+        },
     }
 </script>
 

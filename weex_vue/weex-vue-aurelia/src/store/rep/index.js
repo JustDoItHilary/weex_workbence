@@ -29,9 +29,9 @@ const store = new Vuex.Store({
         // userPlatformCode:'1691439ac13a4e53a69ba7c1cc508ad0',//
         // userPlatformCode:'8b107c27c2b84630b5d12cad65d6e13b',//me
         // userPlatformCode:'133a751178924c7f936fb70b4b306e46',//ZHOULISI
-        // userPlatformCode:'545e1ced3b364bbabf44bb2b72903862',//测试-大波
+        // userPlatformCode:'545e1ced3b364bbabf44bb2b72903862',//废弃：测试-大波
         // userPlatformCode:'fd6d8670cc9946a19b1fc92605a77347',
-        // userPlatformCode:'cd47e31df52647a0bdb5fffc6c8d6718',
+        // userPlatformCode:'cd47e31df52647a0bdb5fffc6c8d6718',//大波
         userPlatformCode:'',
         repList:[], //我的汇报列表
         lastWeekRepDetails:{}, //上周 rep 详情

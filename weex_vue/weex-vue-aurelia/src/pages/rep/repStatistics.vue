@@ -62,7 +62,7 @@
 
     export default{
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
         },
         computed: {
@@ -70,6 +70,7 @@
                 return this.$store.getters.ratio;
             },
             statistics(){
+//                console.log(this.$store.getters.getRepStatistics);
                 return this.$store.getters.getRepStatistics;
             },
         },
@@ -126,7 +127,7 @@
                 }, function (ret) {
                     if (ret.result == 'success') {
                         self.date = new Date(Date.parse(ret.data.replace(/-/g, '/')));
-                        self.getWeekDate(0)
+                        self.getWeekDate(0);
                         self.getList();
                     }
                 });
@@ -135,6 +136,7 @@
                 let self = this;
                 self.date = new Date(self.date.getTime() + 86400000 * days);
                 var todayOfWeek = (new Date(self.date.getTime() - 86400000)).getDay();
+//                console.log(todayOfWeek)
                 var year = self.date.getFullYear();
                 var month = self.date.getMonth();
                 self.startDate = new Date(year, month, self.date.getDate() - todayOfWeek);
@@ -153,12 +155,14 @@
         created(e){
             let self = this;
             self.date = new Date();
+//            self.date=self.toDate("2017-12-9");
             var todayOfWeek = (new Date(self.date.getTime() - 86400000)).getDay();
             if(todayOfWeek>4){
                 self.getWeekDate(0);
-            }else {
+            }else{
                 self.getWeekDate(-7);
             }
+//            console.log(todayOfWeek)
             self.getList();
         }
     }

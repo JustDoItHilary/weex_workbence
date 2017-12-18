@@ -104,7 +104,7 @@
 
     export default {
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             CellPeo: require('../../components/cell-txt-btn.vue'),
             CellInput: require('../../components/cell-input.vue'),
@@ -225,9 +225,11 @@
                 })
             }
         },
-        destroyed(e){
+        beforeDestroy(e){
             let self = this;
             self.$store.commit('SET_REP_ASSESSMENT', {retdata: []});
+//            self.$store.commit('GET_READER', {auditors: ''});
+//            self.$store.commit('SET_REP_DETAILS', {item: {}});
         },
     }
 </script>

@@ -22,15 +22,16 @@
                 console.log(self.data);
             },
             search(){
-                var url='http://192.168.100.120:8888/weex/'+this.data+'.js';
-                console.log(url);
-                var option={
-                    url:url,
-                    animated:true
-                };
-                navigator.push(option,function () {
-
-                });
+                this.$router.back();
+//                var url='http://192.168.100.120:8888/weex/'+this.data+'.js';
+//                console.log(url);
+//                var option={
+//                    url:url,
+//                    animated:true
+//                };
+//                navigator.push(option,function () {
+//
+//                });
 //                event.openURL(url);
             }
         },

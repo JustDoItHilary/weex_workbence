@@ -87,6 +87,12 @@ function getBaseConfig() {
                 {
                     test: /\.(scss|sass)$/,
                     loader: 'style-loader!css-loader!sass-loader'
+                },{
+                    test: /\.px2rem$/,
+                    loader: 'style-loader!px2rem-loader',
+                    options:{
+                        remUnit:75
+                    }
                 }
             ]
         },

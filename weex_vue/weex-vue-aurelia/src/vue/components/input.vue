@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <text style="font-size: 40px;padding:20px;background-color: greenyellow;text-align: center" @click="push">push</text>
       <text style="font-size: 40px">oninput: {{txtInput}}</text>
       <text style="font-size: 40px">onchange: {{txtChange}}</text>
       <text style="font-size: 40px">onreturntype: {{txtReturnType}}</text>
@@ -170,6 +171,9 @@
       };
     },
     methods: {
+        push(){
+            this.$router.push(`/aurelia`)
+        },
       ready: function () {
         var self = this;
         setTimeout(function () {

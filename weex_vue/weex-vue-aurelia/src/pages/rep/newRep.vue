@@ -2,79 +2,79 @@
     <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"></app-header>
         <scroller>
-            <cell-peo 
+            <cell-peo
                     class="div_item"
                     txtTit="周报日期"
                     bottomBorder="1"
-                    :txtExplain="startDate+' - '+endDate"
+                    :txtExplain="isEdited?startDate+' - '+endDate:lastWeekMon+' - '+lastWeekSun"
             >
-                <div 
-                     slot="option"
-                     style="flex-direction: row;flex:1;justify-content: flex-end;">
-                    <div 
-                         :class="['option_selected_'+!isEdited]"
-                         @click="clickDate(false)">
-                        <text 
-                              class="txt_add">上周</text>
+                <div
+                        slot="option"
+                        style="flex-direction: row;flex:1;justify-content: flex-end;">
+                    <div
+                            :class="['option_selected_'+!isEdited]"
+                            @click="clickDate(false)">
+                        <text class="txt_add">上周</text>
                     </div>
-                    <div 
-                         :class="['option_selected_'+isEdited]"
+                    <div :class="['option_selected_'+isEdited]"
                          @click="clickDate(true)">
-                        <text 
-                              class="txt_add">本周</text>
+                        <text class="txt_add">本周</text>
                     </div>
                 </div>
             </cell-peo>
-            <cell-peo 
+            <cell-peo
                     class="div_item border"
                     txtTit="审阅者"
                     :btnName="isEdited?'添加':''"
                     @clickBtn="clickCellBtn"
             >
-                <scroller 
-                          slot="option"
-                          scroll-direction="horizontal"
-                          class="cell-scroll">
-                    <text 
-                          v-for="item in readerList"
-                          class="txt_tit">{{item.Name}}</text>
+                <scroller
+                        slot="option"
+                        scroll-direction="horizontal"
+                        class="cell-scroll">
+                    <text
+                            v-for="item in readerList"
+                            class="txt_tit">{{item.Name}}</text>
                 </scroller>
                 >
             </cell-peo>
-            <cell-input 
-                        v-if="isEdited"
-                        class="div_item"
-                        txtTit="本周工作总结"
-                        txtHide="请输入工作总结"
-                        txtLines="6"
-                        :txtInput="repDetails.summary?repDetails.summary:''"
-                        @clickCellInput="clickSum"
+            <cell-input
+                    v-if="isEdited"
+                    ref="cellInput"
+                    class="div_item"
+                    txtTit="本周工作总结"
+                    txtHide="请输入工作总结"
+                    txtLines="6"
+                    :txtInput="repDetails.summary?repDetails.summary:''"
+                    @clickCellInput="clickSum"
             ></cell-input>
-            <cell-input 
-                        v-else
-                        class="div_item"
-                        txtTit="本周工作总结"
-                        :txtInput="lastDetails.summary?lastDetails.summary:'无数据'"
+            <cell-input
+                    v-else
+                    class="div_item"
+                    txtTit="本周工作总结"
+                    :txtInput="lastDetails.summary?lastDetails.summary:'无数据'"
             ></cell-input>
-            <cell-input 
-                        v-if="isEdited"
-                        class="div_item"
-                        txtTit="下周工作计划"
-                        txtHide="请输入工作计划"
-                        txtLines="6"
-                        :txtInput="repDetails.myPlan?repDetails.myPlan:''"
-                        @clickCellInput="clickPlan"
+            <cell-input
+                    v-if="isEdited"
+                    ref="cellInput"
+                    class="div_item"
+                    txtTit="下周工作计划"
+                    txtHide="请输入工作计划"
+                    txtLines="6"
+                    :txtInput="repDetails.myPlan?repDetails.myPlan:''"
+                    @clickCellInput="clickPlan"
             ></cell-input>
-            <cell-input 
-                        v-else
-                        class="div_item"
-                        txtTit="下周所定工作计划"
-                        :txtInput="lastDetails.myPlan?lastDetails.myPlan:'无数据'"
+            <cell-input
+                    v-else
+                    class="div_item"
+                    txtTit="下周所定工作计划"
+                    :txtInput="lastDetails.myPlan?lastDetails.myPlan:'无数据'"
             ></cell-input>
-            <text 
-                  class="txt_grey border">最近保存时间 {{saveTime}}</text>
+            <text
+                    class="txt_grey border">最近保存时间 {{saveTime}}
+            </text>
         </scroller>
-        <bottom-btn 
+        <bottom-btn v-if="isEdited"
                     class="cell_bottom_btn"
                     :txtLeft="repDetails.IsPost?'提交':'保存'"
                     :txtRight="repDetails.IsPost?'':'提交'"
@@ -90,11 +90,18 @@
     const configModule = weex.requireModule('configModule');
     const storage = weex.requireModule('storage');
     const stream = weex.requireModule('stream');
-    const global = weex.requireModule('globalEvent');
+
+    import {
+        fetchByPost, fetch
+    } from '../../store/fetch';
+    import {
+        URL_BASE,
+        URL_REP_GET_LIST
+    } from '../../store/rep/rep-api'
 
     export default {
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             Label: require('../../components/label.vue'),
             DateLogo: require('../../components/cell-date-logo.vue'),
@@ -105,11 +112,18 @@
             ratio(){
                 return this.$store.getters.ratio;
             },
+            getParams(){
+                if (this.$route && this.$route.params) {
+//                    console.log(this.$route.params)
+                    return JSON.parse(this.$route.params.params)
+                }
+                return ''
+            },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
             },
             lastDetails(){
-                return this.$store.getters.getLastWeekDetails;
+                return this.lastDetail;
             },
             repDetails(){
                 return this.$store.getters.getRepDetails;
@@ -122,7 +136,7 @@
                 if (self.isEdited) {
                     return self.repDetails.UpdateTime ? self.repDetails.UpdateTime : self.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
                 } else {
-                    return self.lastDetails.UpdateTime;
+                    return self.lastDetails.UpdateTime?self.lastDetails.UpdateTime:'';
                 }
             }
         },
@@ -130,17 +144,44 @@
             return {
                 isEdited: true, /*上周：不可编辑；本周：可编辑*/
                 startDate: '',
-                endDate: ''
+                endDate: '',
+                lastWeekMon:'',
+                lastWeekSun:'',
+                lastDetail:{},
             }
         },
         methods: {
             clickCellBtn(){
                 let self = this;
+//                console.log("cell",this.$refs['cellInput']);
+                self.$refs.cellInput.clickBlur();
                 self.$router.push('/repReader')
             },
             clickDate(bol){
                 let self = this;
+                if (!bol&&!self.lastDetail.Guid){
+                    var body = 'code=' + self.userPlatformCode +
+                        '&startDate=' + self.lastWeekMon + '&endDate=' + self.lastWeekSun + '&type=1&cros=';
+//                    console.log(body, URL_BASE + URL_REP_GET_LIST);
+                    fetchByPost(URL_BASE + URL_REP_GET_LIST, body)
+                        .then(retdata => {
+                            self.setLastDetails(retdata);
+//                            console.log(retdata)
+                        },error=>{
+                        });
+                }else{
+                    self.isEdited = bol;
+                }
                 self.isEdited = bol;
+            },
+            setLastDetails(retdata){
+                let self = this;
+                if(retdata.length>0){
+                    var last =retdata[0];
+                    last.summary = self.replaceTransfer(last.summary);
+                    last.myPlan = self.replaceTransfer(last.myPlan);
+                    self.lastDetail=last;
+                }
             },
             clickSum(par1, par2, par3){
                 let self = this;
@@ -152,6 +193,7 @@
             },
             clickLeft(){
                 let self = this;
+                self.$refs.cellInput.clickBlur();
                 if (self.repDetails.IsPost) {
                     self.subRep();
                 } else {
@@ -159,6 +201,7 @@
                 }
             },
             clickRight(){
+                this.$refs.cellInput.clickBlur();
                 this.subRep();
             },
             subRep(){
@@ -177,8 +220,8 @@
                 let self = this;
                 var plan;
                 var sum;
-                plan = self.escapeHtml(self.repDetails.myPlan?self.repDetails.myPlan:'');
-                sum = self.escapeHtml(self.repDetails.summary?self.repDetails.summary:'');
+                plan = self.escapeHtml(self.repDetails.myPlan ? self.repDetails.myPlan : '');
+                sum = self.escapeHtml(self.repDetails.summary ? self.repDetails.summary : '');
                 var selected_autitors = '';
                 if (self.readerList != null && self.readerList.length > 0) {
                     for (var i = 0; i < self.readerList.length; i++) {
@@ -203,11 +246,11 @@
                 params.guid = self.repDetails.Guid ? self.repDetails.Guid : '';
                 params.autitors = selected_autitors;
                 let body = 'json=' + JSON.stringify(params) + '&version=1';
-                console.log('REP: ', body);
+//                console.log('REP: ', body);
                 self.$store.dispatch('FETCH_REP_SAVE', {
                     body: body, callback: function (retdata) {
                         if (retdata != null) {
-                            console.log(retdata)
+//                            console.log(retdata)
                             if (retdata == true) {
                                 self.$router.back()
                             } else {
@@ -247,17 +290,33 @@
                 self.endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6 - todayOfWeek);
                 self.startDate = self.formatDate(self.startDate, 'yyyy-MM-dd');
                 self.endDate = self.formatDate(self.endDate, 'yyyy-MM-dd');
-            }
+            },
+            setLastWeekDate(){
+                let self=this;
+                var startDate = self.toDate(self.startDate);
+                var endDate = self.toDate(self.endDate);
+                self.lastWeekMon=self.formatDate(new Date(startDate - 86400000 * 7), 'yyyy-MM-dd');
+                self.lastWeekSun = self.formatDate(new Date(endDate - 86400000 * 7), 'yyyy-MM-dd');
+            },
         },
         created(){
             let self = this;
-            if(self.repDetails.Guid){
-                self.startDate=self.repDetails.startTime;
-                self.endDate=self.repDetails.endTime;
-            }else{
-                self.setDate();
+            var params=self.getParams;
+            if (params.index == 0) {
+                if (self.repDetails.Guid) {
+                    self.startDate = self.repDetails.startTime;
+                    self.endDate = self.repDetails.endTime;
+                    self.setLastWeekDate();
+                } else {
+                    self.setDate();
+                    self.setLastWeekDate();
+                }
+            } else if (params.index == 1) {
+                self.startDate = params.startTime;
+                self.endDate = params.endTime;
+                self.setLastWeekDate();
             }
-        }
+        },
     }
 </script>
 
@@ -281,13 +340,13 @@
     }
 
     .txt_add {
-        @include fontCommon($cs,#fafafa);
+        @include fontCommon($cs, #fafafa);
         @include marginRow();
         text-align: center;
     }
 
     .txt_tit {
-        @include fontCommon($cs,$colorCommon);
+        @include fontCommon($cs, $colorCommon);
         margin-right: $cl;
     }
 

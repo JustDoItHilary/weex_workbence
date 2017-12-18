@@ -5,7 +5,7 @@
                 <text class="indicator">Refreshing ...</text>
             </refresh>
             <cell v-for="item in list">
-                <text style="font-size:28rem;padding:30px;" >test</text>
+                <text style="font-size:28px;padding:30px;"  :class="$style.red" :style="sty">test</text>
             </cell>
         </list>
         <!--<scroller >-->
@@ -72,6 +72,9 @@
             cellHeader:require('./components/header/apply-header.vue')
         },
         computed: {
+            sty(){
+                return ``
+            },
             toDpw(){
                 return '48dp';
             },
@@ -109,6 +112,7 @@
         },
         created(e){
             console.log("created",weex.config)
+            console.log("created",this.$style)
             let self = this;
             var bundleUrl = 'http://weex.yy365.cn/sy-member.js';
             self.baseUrl = self.getBaseUrl(bundleUrl);
@@ -134,7 +138,7 @@
             this.setRatio();
             console.log('UPDATED')
         },
-        beforeDestroyed(){
+        beforeDestroy(){
             console.log("beforeDestroyed")
         },
         destroyed(){
@@ -148,6 +152,18 @@
         },
     }
 </script>
+
+<style module>
+    .red{
+        color:red;
+        border-width: 1px;
+    }
+</style>
+<style module="b">
+    .red{
+        color:greenyellow;
+    }
+</style>
 
 <style lang="sass" rel="stylesheet/scss" >
     @import "./style/mixin";

@@ -15,6 +15,7 @@ import RepDetails from './pages/rep/repDetails.vue'
 import RepAssessment from './pages/rep/repAssessment.vue'
 import RepReader from './pages/rep/repReader.vue'
 import RepTime from './pages/rep/repTime.vue'
+import RepHistory from './pages/rep/repHistory.vue'
 import RepStatistics from './pages/rep/repStatistics.vue'
 
 /*slsj*/
@@ -44,9 +45,9 @@ import RepStatistics from './pages/rep/repStatistics.vue'
 // //
 // import Error from './pages/ww/error.vue'
 
-// import TestAurelia from './testAurelia.vue'
+import TestAurelia from './testAurelia.vue'
 // import Test from './foo.vue'
-// import Test from './vue/components/slider.vue'
+import Test from './vue/components/input.vue'
 
 
 Vue.use(Router)
@@ -107,7 +108,7 @@ export default new Router({
             }
         },
         {
-            path: '/newRep',
+            path: '/newRep/:params',//params: 0-新建 1-新建已经保存过 2-补交
             component: NewRep,
             name: 'newRep',
             meta: {
@@ -147,7 +148,15 @@ export default new Router({
             }
         },
         {
-            path: '/RepStatistics',
+            path: '/repHistory',
+            component: RepHistory,
+            name: 'repHistory',
+            meta: {
+                keepAlive: false
+            }
+        },
+        {
+            path: '/repStatistics',
             component: RepStatistics,
             name: 'RepStatistics',
             meta: {
@@ -234,17 +243,17 @@ export default new Router({
         //         keepAlive: false
         //     }
         // },
-        // {
-        //     path: '/aurelia', component: TestAurelia,
-        // },
-        // {
-        //     path: '/test', component: Test,
-        //     meta: {
-        //         keepAlive: false
-        //     }
-        // },
+        {
+            path: '/aurelia', component: TestAurelia,
+        },
+        {
+            path: '/test', component: Test,
+            meta: {
+                keepAlive: false
+            }
+        },
 
-        {path: '/', redirect: '/workRep'}
+        {path: '/', redirect: '/test'}
         // {path: '/', redirect:`/applyList/${JSON.stringify({GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'})}`}
     ]
 })

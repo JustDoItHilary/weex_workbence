@@ -1,52 +1,44 @@
 <template>
     <div>
-        <div
-             class="div_titBar bg_android"
-             :style="{ height: actionBarHeight }"
-             data-role="none"
-             v-if="!isiOS">
+        <div class="div_titBar bg_android"
+                :style="{ height: actionBarHeight }"
+                data-role="none"
+                v-if="!isiOS">
             <!--回退按钮，监听事件放于子组件内部-->
-            <div
-                 class="div_close"
-                 @click="clickClose">
-                <image
-                       class="img_back"
-                       :src="baseUrl+imgBackUrl"></image>
+            <div class="div_close"
+                    @click="clickClose">
+                <image class="img_back"
+                        :src="baseUrl+imgBackUrl"></image>
             </div>
-            <text
-                  class="text_titBar">{{tit}}</text>
+            <text class="text_titBar">{{tit}}</text>
             <slot name="right"></slot>
             <!--完成按钮，需要同时设置 iOS 端，监听事件放于父组件-->
-            <div
-                 @click="done"
-                 v-if="done">
-                <image
-                       class="img_back"
-                       :src="baseUrl+imgDoneUrl"></image>
+            <div @click="done"
+                    v-if="done">
+                <image class="img_back"
+                        :src="baseUrl+imgDoneUrl"></image>
             </div>
         </div>
 
         <div class="div_titBar bg_ios"
-             :style="{ height: actionBarHeight }"
-             data-role="none"
-             v-if="isiOS">
-            <div class="div_titBar_iOS"
-                 :style="{ height: actionBarHeight}">
-                <text class="text_titBar_iOS">{{tit}}</text>
+                :style="{ height: actionBarHeight }"
+                data-role="none"
+                v-if="isiOS">
+            <div class="div_tit_iOS"
+                    :style="{ height: actionBarHeight}">
+                <text class="text_tit_iOS">{{tit}}</text>
             </div>
             <!--回退按钮，监听事件放于子组件内部-->
-            <div class="div_titBar_iOS_def"
-                 @click="clickClose">
+            <div class="div_left_ios" @click="clickClose">
                 <image class="img_back_iOS"
                         :src="baseUrl+imgBackUrl_iOS"></image>
                 <!--<text class="text_titBar_def_iOS">工作台</text>-->
             </div>
-            <slot name="right"></slot>
+            <slot class="right_ios" name="right"></slot>
             <!--完成按钮，需要同时设置 Android 端，监听事件放于父组件-->
-            <text 
-                  class="text_titBar_def_iOS"
-                  @click="done"
-                  v-if="done">{{titRight}}</text>
+            <text class="right_ios text_active"
+                    @click="done"
+                    v-if="done">{{titRight}}</text>
         </div>
     </div>
 </template>
@@ -98,8 +90,8 @@
                 isiOS: false,
                 imgBackUrl:'/drawable/ic_back_white_48dp.png',
                 imgDoneUrl:'/drawable/ic_done_white_48dp.png',
-                imgBackUrl_iOS:'/drawable/arrow-left.png',
-//                imgBackUrl_iOS:'/drawable/arrowLeft.png',
+//                imgBackUrl_iOS:'/drawable/arrow-left.png',
+                imgBackUrl_iOS:'/drawable/arrow_left_green.png',
             }
         },
         methods: {
@@ -142,7 +134,7 @@
         created: function (e) {
             let self = this;
             self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
-//            self.getMeasure();
+            self.getMeasure();
         }
 
     };</script>
@@ -151,15 +143,11 @@
 
     .div_titBar {
         flex-direction: row;
-        /*justify-content: space-between;*/
+        justify-content: space-between;
         align-items: center;
     }
     .bg_android{
         background-color: $colorCommon;
-    }
-    .bg_ios{
-        background-color: $colorCommon;
-       // @include sideBorder(bottom,$bc);
     }
     .div_close {
         justify-content: center;
@@ -169,10 +157,6 @@
         @include wh();
         @include marginRow($bl);
         @include marginColumn($cl);
-    }
-    .img_back_iOS {
-        @include wh(64px,64px);
-        /*border-width: 1;*/
     }
     .text_close {
         margin: $cl;
@@ -184,20 +168,33 @@
         @include marginRow();
         flex:1;
     }
-    .text_titBar_def_iOS {
+
+    .bg_ios{
+        background-color:$fc;
+        @include sideBorder(bottom,$bc);
+    }
+    .img_back_iOS {
+        @include wh(80px,80px);
+        /*border-width: 1;*/
+    }
+    .text_active{
         @include fontCommon($bs,$colorCommon);
+    }
+    .right_ios{
         margin-right: $cl;
     }
-    .text_titBar_iOS {
+    .text_tit_iOS {
         text-align: center;
-        @include fontCommon($bs,#fff);
+        @include fontCommon($bs);
         font-family: HelveticaNeue-CondensedBlack;
     }
-    .div_titBar_iOS_def {
+    .div_left_ios{
         flex-direction: row;
         align-items: center;
+        padding-right: $cl;
+        @include paddingColumn();
     }
-    .div_titBar_iOS {
+    .div_tit_iOS {
         position: absolute;
         left: 0;
         right: 0;

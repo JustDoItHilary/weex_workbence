@@ -1,10 +1,8 @@
 <template>
     <div append="node">
         <apply-header tit="添加审核人员" :done="clickDone" :imgUrl="imgUrl"></apply-header>
-        <div 
-             class="div_search">
-            <input 
-                   class="txt_center input"
+        <div class="div_search">
+            <input class="txt_center input"
                    type="text"
                    placeholder="搜索"
                    @input="input"
@@ -20,14 +18,14 @@
                     <text 
                           class="text_logo">{{item.fir}}</text>
                 </div>
-                <div  class="div_member">
+                <!--<div  class="div_member">-->
                     <!--<div >-->
                         <text  class="text_member" style="flex:1;">{{item.Name}}</text>
                     <!--</div>-->
                     <div  class="div_select" v-if="getSelected(item)">
                         <image  class="img_select" :src="baseUrl+imgUrl"></image>
                     </div>
-                </div>
+                <!--</div>-->
             </cell>
         </list>
     </div>
@@ -97,7 +95,7 @@
 //            },
             clickMember: function (item) {
                 let self = this;
-                let selected = false;
+                var selected = false;
                 for (let i = 0; i < self.selectedList.length; i++) {
                     if (item.Guid == self.selectedList[i].Guid) {
                         self.selectedList.splice(i, 1);
@@ -112,11 +110,11 @@
             input: function (e) {
                 let self = this;
                 self.searchMess = e.value;
-                console.log("input: ", self.searchMess)
+//                console.log("input: ", self.searchMess)
             },
             searchMemberList(list){
                 let self = this;
-                console.log(self.searchMess)
+//                console.log(self.searchMess)
                 let readerList = [];
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].Name.indexOf(self.searchMess) > -1) {
@@ -153,7 +151,7 @@
     }
 
     .input {
-        height: 32px;
+        height: 64px;
         flex: 1;
         background-color: #ebedef;
         align-items: center;
@@ -181,31 +179,29 @@
         justify-content: center;
         align-items: center;
         @include paddingColumn($sl);
-        @include paddingRow($bl);
+        border-bottom-width: 1px;
+        border-color: #bbbbbb;
     }
 
     .div_logo {
-        @include wh(40px,40px);
+        @include wh(80px,80px);
         align-items: center;
         justify-content: center;
         background-color: $colorCommon;
-        border-radius: 50px;
+        border-radius: 100px;
     }
 
     .text_logo {
-        font-size: 18px;
-        color: #ffffff;
-        font-weight: bold;
+        @include fontCommon(42px,#fff);
     }
 
     .text_member {
         font-size: $bs;
-        margin-left: $cl;
-        margin-top: $bl;
-        margin-bottom: $cl;
+        margin-left: $bl;
+        flex:1;
     }
 
-    .div_member {
+ /*   .div_member {
         flex: 1;
         flex-direction: row;
         margin-left: $cl;
@@ -213,8 +209,8 @@
         border-color: #bbbbbb;
         align-items: center;
         justify-content: center;
-        @include marginColumn($sl);
-    }
+        @include paddingColumn($sl);
+    } */
 
     .div_select {
         align-items: center;

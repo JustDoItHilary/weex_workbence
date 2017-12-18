@@ -20,8 +20,7 @@
             <image  
                     class="img_search"
                     :src="baseUrl+imgUrl"></image>
-            <text  
-                   class="txt_hide">没有待审核周报</text>
+            <text class="txt_hide">没有待审核周报</text>
         </div>
         <scroller>
             <div  
@@ -29,10 +28,11 @@
                   v-for="(item,index) in repList"
                   @click="clickItem(index)">
                 <text 
-                      class="cell_txt_center "
-                      :style="{color:item.AuditFlag==1?'#000':colorCommon,flex:1}">{{item.startTime+' ~ '+item.endTime}}</text>
+                      :class="[item.AuditFlag==1?'txt_active_false':'txt_active_true'] "
+                >{{item.startTime+' ~ '+item.endTime}}</text>
                 <text 
-                      :class="['cell_txt_center','div_logo','select_bg_'+String(item.AuditFlag==1)]">{{item.AuditFlag==1?'已审核':'未审核'}}</text>
+                      :class="['cell_txt_center','div_logo','select_bg_'+String(item.AuditFlag==1)]"
+                >{{item.AuditFlag==1?'已审核':'未审核'}}</text>
             </div>
         </scroller>
     </div>
@@ -47,7 +47,7 @@
 
     export default {
         components: {
-            appHeader: require('../../components/header/apply-header.vue'),
+            appHeader: require('../../components/header/rep-header.vue'),
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
         },
         computed: {
@@ -78,7 +78,6 @@
                 date: '',
                 thisMonth: '',
                 firstDate: '',
-                colorCommon:'#58D68D',
                 imgUrl:'/drawable/no_data.png',
             }
         },
@@ -126,7 +125,6 @@
             day = new Date(day.getFullYear(), day.getMonth() + 1, 1);
             self.date = new Date(day - 86400000);
             self.getRepList();
-            console.log(self.baseUrl+self.imgUrl)
         },
         destroyed(e){
             this.$store.commit('SET_REP_LIST',{retdata:[],callback:function () {}});
@@ -182,6 +180,20 @@
 
     .select_bg_false {
         background-color: $colorCommon;
+    }
+    .txt_active_true{
+        flex:1;
+        @include fontCommon($cs,$colorCommon);
+        text-align: center;
+        margin-bottom: $cl;
+        margin-top: $bl;
+    }
+    .txt_active_false{
+        flex:1;
+        @include fontCommon();
+        text-align: center;
+        margin-bottom: $cl;
+        margin-top: $bl;
     }
 
 </style>
