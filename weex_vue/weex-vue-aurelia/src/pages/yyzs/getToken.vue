@@ -1,7 +1,6 @@
 <template>
     <div class="div_root">
         <text class="txt_loading">令牌请求中</text>
-        <text class="txt_loading">loading...</text>
     </div>
 </template>
 
@@ -26,9 +25,16 @@
 //                    'animated' : 'true',
 //                };
 //                navigator.push(params, function () {});
+//                var options={
+//                    'animated':true
+//                };
+//                navigator.pop(options,function () {
+//
+//                });
 //                event.openURL(self.nextUrl);
-                self.$router.push(`/${self.nextUrl}`);
+//                self.$router.push(`/${self.nextUrl}`);
 //                self.$router.push(`/memberOperator`);
+                self.$router.back();
             },
             getToken(){
                 let self = this;
@@ -98,17 +104,17 @@
             },
         },
         created: function (e) {
-            console.log("created")
             let self = this;
-            self.getParams();
-            self.getStorage();
+            self.getToken();
+//            self.getParams();
+//            self.getStorage();
         },
     }
 </script>
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_root {
         justify-content: center;

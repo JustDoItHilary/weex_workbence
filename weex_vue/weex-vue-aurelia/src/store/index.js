@@ -23,7 +23,7 @@ const store = new Vuex.Store({
             modelIndex:''
         },
 
-        baseUrl:'',
+        // baseUrl:'',
 
         applyTypes:[
             // {GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '加班'},
@@ -41,18 +41,18 @@ const store = new Vuex.Store({
             // "APPLOYCONTENT":"了了了了了了了了","APPNAME":"张海月","APPROVER":"579ef2e0ee5f6","DATA":[{"GUID":"2a3cd03f9412a50e3dabdb91429e63c3","USERNAME":"张海月"}],"ENDTIME":"","EXCEPTTIME":"2017-07-05","FINISHNAME":"未完成","GUID":"12dbecfaacd1a4609af8991ab853b283","ISAPPLED":"0","ISAPPLEDNAME":"未审批","ISFINISH":"0","STARTTIME":"2017-07-05","TYPE":"e35ac823-5a4e-11e7-af47-ec388f6f5b1d","TYPENAME":"团建","UPDATED":"1499205955","USERID":"579ef2e0ee5f6"
         },
         applyMemberLists:[],
-        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
-        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        selfToken:'',
+        // // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
+        // // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
+        // selfToken:'',
 
         syMemberInfo:[],
     },
 
     getters: {
-        /*------ base ------*/
-        baseUrl(state){
-            return state.baseUrl
-        },
+        // /*------ base ------*/
+        // baseUrl(state){
+        //     return state.baseUrl
+        // },
 
         /** -----------------notice------------------*/
         notices(state){
@@ -94,10 +94,10 @@ const store = new Vuex.Store({
         applyGetInput(state){
             return state.applyInput
         },
-        //本人token
-        selfToken(state){
-            return state.selfToken
-        },
+        // //本人token
+        // selfToken(state){
+        //     return state.selfToken
+        // },
 
         syMemberInfo(state){
             return state.syMemberInfo

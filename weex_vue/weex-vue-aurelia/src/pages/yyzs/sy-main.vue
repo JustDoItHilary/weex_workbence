@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import CellTab from '../../../components/footer/cell-tab.vue'
+    import CellTab from '../../components/footer/cell-tab.vue'
     import MemberInfo from './sy-member.vue'
     import PhoneInfo from './sy-phone-info.vue'
     import ShopInfo from './sy-shop-info.vue'
@@ -81,7 +81,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_par{
         flex:1;

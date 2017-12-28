@@ -1,6 +1,6 @@
 <template>
     <div >
-        <text class="txt_tit">消费记录</text>
+        <text class="txt_tit">回访记录</text>
         <scroller>
             <div v-for="(item,index) in list" class="div_item">
                 <cell-multi txtBig="tit" txtSmall="content"></cell-multi>
@@ -12,7 +12,7 @@
 <script>
     export default{
         components:{
-            CellMulti:require('../../../components/cell-multiline.vue'),
+            CellMulti:require('../../components/cell-multiline.vue'),
         },
         data(){
             return {
@@ -24,7 +24,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_root{
         justify-content:center;

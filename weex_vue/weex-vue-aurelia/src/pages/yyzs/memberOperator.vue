@@ -14,7 +14,7 @@
 
     export default{
         components: {
-            CellJustify: require('../../../components/cell-justify.vue'),
+            CellJustify: require('../../components/cell-justify.vue'),
         },
         data(){
             return {
@@ -68,7 +68,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_bottom {
         /*border-bottom-width: 10px;*/

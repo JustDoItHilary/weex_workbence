@@ -1,13 +1,9 @@
 const modal=weex.requireModule('modal')
 var config=require('../mixins')
 import {
-    fetchItems, fetchIdsByType, fetchUser,
     fetchNotices, fetchNoticeItem,
     fetchSlsjTemp,
     fetchSlsjNew,
-    fetchRep,
-    fetchApply,
-    fetchSy,
     fetchByPostWithHeader
 } from './fetch'
 import {

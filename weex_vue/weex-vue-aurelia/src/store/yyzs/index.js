@@ -2,6 +2,7 @@
 import Vuex from 'vuex'
 import * as actions from './action'
 import * as mutations from './mutations'
+import base from '../modules/base'
 
 // Vuex is auto installed on the web
 if (WXEnvironment.platform !== 'Web') {
@@ -11,52 +12,44 @@ if (WXEnvironment.platform !== 'Web') {
 const store = new Vuex.Store({
     actions,
     mutations,
+    modules:{
+        base
+    },
 
     state: {
-        baseUrl: '',
-        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
-        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        // selfToken: '@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjMuM2MxNzEwMTZ8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJ',
-        selfToken:'',
-        ratio:1,
-        errorInfo:{
-            errorImg:'',
-            errorMess:'加载中...',
-        },
-
         syMemberInfo: [],
-        tabs: [
-            {
-                index: 0,
-                tit: "会员详细信息",
-                titColor: "#000",
-                activeTitColor: "#3190e8",
-                // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_people_white_48dp.png",
-                selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_people_white_48dp.png",
-                src: "/memberInfo",
-                visiable: true
-            },
-            {
-                index: 1,
-                tit: "消费记录",
-                titColor: "#000",
-                activeTitColor: "#3190e8",
-                // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_shopping_cart_white_48dp.png",
-                selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_shopping_cart_white_48dp.png",
-                src: "/shopInfo",
-                visiable: false
-            },
-            {
-                index: 2,
-                tit: "回访记录",
-                titColor: "#000",
-                activeTitColor: "#3190e8",
-                // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_local_phone_white_48dp.png",
-                selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_local_phone_white_48dp.png",
-                src: "/phoneInfo",
-                visiable: false
-            },
-        ],
+        // tabs: [
+        //     {
+        //         index: 0,
+        //         tit: "会员详细信息",
+        //         titColor: "#000",
+        //         activeTitColor: "#3190e8",
+        //         // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_people_white_48dp.png",
+        //         selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_people_white_48dp.png",
+        //         src: "/memberInfo",
+        //         visiable: true
+        //     },
+        //     {
+        //         index: 1,
+        //         tit: "消费记录",
+        //         titColor: "#000",
+        //         activeTitColor: "#3190e8",
+        //         // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_shopping_cart_white_48dp.png",
+        //         selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_shopping_cart_white_48dp.png",
+        //         src: "/shopInfo",
+        //         visiable: false
+        //     },
+        //     {
+        //         index: 2,
+        //         tit: "回访记录",
+        //         titColor: "#000",
+        //         activeTitColor: "#3190e8",
+        //         // imgUrl: "http://192.168.100.120:8888/weex/drawable/ic_local_phone_white_48dp.png",
+        //         selectedImgUrl: "http://192.168.100.120:8888/weex/drawable/ic_local_phone_white_48dp.png",
+        //         src: "/phoneInfo",
+        //         visiable: false
+        //     },
+        // ],
 
         memberOperatorList: [],
         memberOperatorCode: '',
@@ -66,6 +59,8 @@ const store = new Vuex.Store({
         actSelected:true,
         ongoingAct:[],
         historyAct:[],
+
+        orderDetail:[],
 
         /*{".expires":"Wed, 29 Nov 2017 09:42:05 GMT",".issued":"Mon, 30 Oct 2017 09:42:05 GMT",
          "access_token":"wd158S_Kt7PVs7sqyqo6-eF-K0qmRhm4s5UPf2D8npqTmd46RIDzeJ0ScUTDbPQsSdKYN9TOFviYLKaRDwtoP_
@@ -84,28 +79,12 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        /*------ base ------*/
-        baseUrl(state){
-            return state.baseUrl
-        },
-        //本人token
-        selfToken(state){
-            return state.selfToken
-        },
-        //不同平台的放大比例
-        ratio(state){
-            return state.ratio
-        },
-        errorInfo(state){
-            return state.errorInfo
-        },
-
-        syMemberInfo(state){
+        getSyMemberInfo(state){
             return state.syMemberInfo
         },
-        getTab(state){
-            return state.tabs
-        },
+        // getTab(state){
+        //     return state.tabs
+        // },
         // getTokens(state){
         //     return state.tokens
         // },
@@ -127,6 +106,9 @@ const store = new Vuex.Store({
         getHistoryAct(state){
             return state.historyAct;
         },
+        getOrderDetail(state){
+            return state.orderDetail;
+        }
     }
 })
 

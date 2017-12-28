@@ -27,8 +27,8 @@
 
     export default{
         components: {
-           ApplyHeader : require('../../../components/header/apply-header.vue'),
-            LoadingCircle:require('../../../components/loading/loading-circle.vue')
+           ApplyHeader : require('../../components/header/apply-header.vue'),
+            LoadingCircle:require('../../components/loading/loading-circle.vue')
         },
         data(){
             return {
@@ -136,7 +136,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin.scss";
+    @import "../../style/mixin.scss";
     .header{
         width: 750px;
     }

@@ -7,7 +7,7 @@ export default {
         toAlert(mess, oktit, callback){
             modal.alert({message: mess, okTitle: oktit ? oktit : 'OK'}, callback)
         },
-        toConfirm(mess,callback){
+        toConfirm(mess, callback){
             modal.confirm({'message': mess, 'duration': 0.3}, function (ret) {
                 if (ret == 'OK') {
                     callback();
@@ -46,7 +46,7 @@ export default {
         },
         toDate(str){
             // if (type == 'yyyy-MM-dd') {
-                return new Date(Date.parse(str.replace(/-/g, "/")));
+            return new Date(Date.parse(str.replace(/-/g, "/")));
             // } else if (type == 'yyyy-MM-dd HH:mm:ss') {
             //
             // }
@@ -65,17 +65,20 @@ export default {
             }
             return time;
         },
-        getWeekDate(date,days){
+        getWeekDate(date, days){
             date = new Date(date.getTime() + 86400000 * days);
             var todayOfWeek = (new Date(date.getTime() - 86400000)).getDay();
             var year = date.getFullYear();
             var month = date.getMonth();
             var startDate = new Date(year, month, date.getDate() - todayOfWeek);
             var endDate = new Date(year, month, date.getDate() - todayOfWeek + 6);
-            var params={};
+            var params = {};
             params.startDate = this.formatDate(startDate, 'yyyy-MM-dd');
             params.endDate = this.formatDate(endDate, 'yyyy-MM-dd');
             return params;
+        },
+        compareTime(time){
+            return Date.parse(new Date())<time;
         },
         toArr(string) {
             return (string.match(/\{(.*?)\}/g) || []).map(function (text) {

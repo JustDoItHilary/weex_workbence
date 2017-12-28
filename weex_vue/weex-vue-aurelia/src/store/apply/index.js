@@ -2,6 +2,7 @@
 import Vuex from 'vuex'
 import * as actions from './action'
 import * as mutations from './mutations'
+import base from '../modules/base'
 
 // Vuex is auto installed on the web
 if (WXEnvironment.platform !== 'Web') {
@@ -11,13 +12,11 @@ if (WXEnvironment.platform !== 'Web') {
 const store = new Vuex.Store({
     actions,
     mutations,
+    modules:{
+        base
+    },
 
     state: {
-        baseUrl:'',
-        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
-        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        selfToken:'',
-
         applyTypes:[
             // {GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '加班'},
             // {GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'}
@@ -38,10 +37,6 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        /*------ base ------*/
-        baseUrl(state){
-            return state.baseUrl
-        },
         /** -----------------apply------------------*/
         //申请类型列表
         applyType(state){
@@ -66,10 +61,6 @@ const store = new Vuex.Store({
         //新增申请的内容（解决跳转到添加人员页后所输入的内容消失问题）
         applyGetInput(state){
             return state.applyInput
-        },
-        //本人token
-        selfToken(state){
-            return state.selfToken
         },
     }
 })

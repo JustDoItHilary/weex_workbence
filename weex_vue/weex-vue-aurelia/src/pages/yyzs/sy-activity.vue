@@ -31,10 +31,10 @@
 
     export default{
         components: {
-            cellHeader: require('../../../components/header/apply-header.vue'),
-            cellBtn: require('../../../components/btn.vue'),
-            label: require('../../../components/label.vue'),
-            cellError: require('../../../components/error.vue'),
+            cellHeader: require('../../components/header/apply-header.vue'),
+            cellBtn: require('../../components/btn.vue'),
+            label: require('../../components/label.vue'),
+            cellError: require('../../components/error.vue'),
         },
         data(){
             return {
@@ -148,7 +148,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_root {
         background-color: $wg;

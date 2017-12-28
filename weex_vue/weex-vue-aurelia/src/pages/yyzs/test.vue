@@ -19,8 +19,8 @@
 
     module.exports={
         components: {
-            LogoText:require('../../../components/cell-logo-text.vue'),
-            CellTime:require('../../../components/cell-justify.vue'),
+            LogoText:require('../../components/cell-logo-text.vue'),
+            CellTime:require('../../components/cell-justify.vue'),
         },
         computed:{
             memberInfo(){
@@ -68,7 +68,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../../style/mixin";
+    @import "../../style/mixin";
 
     .div_bottom{
         /*border-bottom-width: 10px;*/

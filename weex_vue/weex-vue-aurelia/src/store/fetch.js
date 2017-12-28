@@ -48,28 +48,28 @@ export function fetchByPost(path, body) {
             method: 'POST',
             url: path,
             type: 'json',
+            timeout:50000,
             body: body
         }, (response) => {
-            // modal.alert({'message':JSON.stringify(response),'doation':1})
-            // console.log('----------> post response: ' + response)
             // console.log('----------> post response: ' + JSON.stringify(response))
             if (response.status == 200 && response.ok && response.hasOwnProperty("data")) {
                 resolve(response.data)
             } else {
                 reject(response.hasOwnProperty("data") ? "请求失败：" + response.data : "请求服务器失败");
-                // reject(path+body+JSON.stringify(response));
             }
         }, (progresscallback) => {
         })
     })
 }
 export function fetchByPostWithHeader(path, body, header) {
+    console.log(path,body);
     return new Promise((resolve, reject) => {
         stream.fetch({
             method: 'POST',
             url: path,
             headers: header,
             type: 'json',
+            timeout:30000,
             body: body
         }, (response) => {
             // console.log('----------> post response: ' + response)

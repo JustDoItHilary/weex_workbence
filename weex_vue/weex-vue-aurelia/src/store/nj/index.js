@@ -2,6 +2,7 @@
 import Vuex from 'vuex'
 import * as actions from './action'
 import * as mutations from './mutations'
+import base from '../modules/base'
 
 // Vuex is auto installed on the web
 if (WXEnvironment.platform !== 'Web') {
@@ -11,13 +12,11 @@ if (WXEnvironment.platform !== 'Web') {
 const store = new Vuex.Store({
     actions,
     mutations,
+    modules:{
+        base
+    },
 
     state: {
-        baseUrl: '',
-        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
-        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        selfToken: '',
-
         tabs: [
             {
                 index: 0,
@@ -63,14 +62,6 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        /*------ base ------*/
-        baseUrl(state){
-            return state.baseUrl
-        },
-        //本人token
-        selfToken(state){
-            return state.selfToken
-        },
         getTab(state){
             return state.tabs
         }

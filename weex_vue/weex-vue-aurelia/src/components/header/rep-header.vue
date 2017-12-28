@@ -34,7 +34,7 @@
                         :src="baseUrl+imgBackUrl_iOS"></image>
                 <!--<text class="text_titBar_def_iOS">工作台</text>-->
             </div>
-            <slot class="right_ios" name="right"></slot>
+            <slot name="right" class="right_ios"></slot>
             <!--完成按钮，需要同时设置 Android 端，监听事件放于父组件-->
             <text class="right_ios text_active"
                     @click="done"
@@ -134,7 +134,7 @@
         created: function (e) {
             let self = this;
             self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
-            self.getMeasure();
+//            self.getMeasure();
         }
 
     };</script>
@@ -174,7 +174,7 @@
         @include sideBorder(bottom,$bc);
     }
     .img_back_iOS {
-        @include wh(80px,80px);
+        @include wh(72px,72px);
         /*border-width: 1;*/
     }
     .text_active{
@@ -191,8 +191,9 @@
     .div_left_ios{
         flex-direction: row;
         align-items: center;
-        padding-right: $cl;
+
         @include paddingColumn();
+        padding:$cl;
     }
     .div_tit_iOS {
         position: absolute;

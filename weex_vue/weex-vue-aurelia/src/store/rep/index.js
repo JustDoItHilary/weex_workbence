@@ -2,6 +2,7 @@
 import Vuex from 'vuex'
 import * as actions from './action'
 import * as mutations from './mutations'
+import base from '../modules/base'
 
 // Vuex is auto installed on the web
 if (WXEnvironment.platform !== 'Web') {
@@ -11,18 +12,11 @@ if (WXEnvironment.platform !== 'Web') {
 const store = new Vuex.Store({
     actions,
     mutations,
+    modules:{
+        base
+    },
 
     state: {
-        baseUrl:'',
-        // selfToken:'@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--',
-        // selfToken:'@@OTk5OTk5fEAxNTYyMTg1NjUzM3xAMTFhOGY0MDZiYzc5OWMwOTRjNzFiMmEwYjg5OWU4YWZ8QHYzLjIuMWMxNzA4Mjl8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi',
-        selfToken:'',
-        ratio:1,
-        errorInfo:{
-            errorImg:'',
-            errorMess:'加载中...',
-        },
-
         //大平台账号
         // userPlatformCode:'58ba8990f0e2467ab167b5a002fb13cd',
         // userPlatformCode:'0b746d1651c04b569471db9bc18117cc',
@@ -46,22 +40,6 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        /*------ base ------*/
-        baseUrl(state){
-            return state.baseUrl
-        },
-        //本人token
-        selfToken(state){
-            return state.selfToken
-        },
-        ratio(state){
-            return state.ratio;
-        },
-        errorInfo(state){
-            return state.errorInfo
-        },
-
-
         /** -----------------REP------------------*/
         getUserPlatformCode(state){
             return state.userPlatformCode;

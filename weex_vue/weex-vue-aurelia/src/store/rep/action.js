@@ -29,7 +29,7 @@ import {
 /** -----------------rep------------------*/
 export function FETCH_USERPLATEFORMCODE({commit, state}, {params, callback}) {
     // var body='QueryType=getUserPlatFormCode&Params=%7B%7D&UserGuid=ODg4ODg4fEA1NzllZjJlMGVlNWY2fEA2YTkxYTg0MmU1ZDkwNzBhNDNkZDlkYzM5ZDljNTY1OQ--';
-    var body = 'QueryType=' + URL_REP_GET_USERPLATFORMCODE + '&Params=' + params + '&UserGuid=' + state.selfToken;
+    var body = 'QueryType=' + URL_REP_GET_USERPLATFORMCODE + '&Params=' + params + '&UserGuid=' + state.base.selfToken;
     state.userPlatformCode = '';
     return fetchUserPlatformCode(body)
         .then(retdata => {
