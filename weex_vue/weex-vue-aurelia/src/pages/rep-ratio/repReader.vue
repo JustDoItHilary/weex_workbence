@@ -9,11 +9,14 @@
                    :value="searchMess"/>
         </div>
         <list  class="list">
-            <cell v-for="item in empList"
+            <cell  
+                   v-for="item in empList"
                    class="cell"
                    @click="clickMember(item)">
-                <div class="div_logo">
-                    <text class="text_logo">{{item.fir}}</text>
+                <div  
+                      class="div_logo">
+                    <text 
+                          class="text_logo">{{item.fir}}</text>
                 </div>
                 <!--<div  class="div_member">-->
                     <!--<div >-->
@@ -148,14 +151,18 @@
     }
 
     .input {
+        height: 64px;
         flex: 1;
-        margin-top: $cl;
-        @include searchBox($bg);
+        background-color: #ebedef;
+        align-items: center;
+        justify-content: center;
+        @include marginColumn($cl);
         @include marginRow($bl);
+        @include borderRadius();
     }
 
     .txt_center {
-        height: $lh;
+        height: $ls;
         text-align: center;
         font-weight: bold;
         @include fontCommon($cs);
@@ -172,20 +179,20 @@
         justify-content: center;
         align-items: center;
         @include paddingColumn($sl);
-        border-bottom-width: $borderW;
+        border-bottom-width: 1px;
         border-color: #bbbbbb;
     }
 
     .div_logo {
-        @include wh($bh,$bh);
+        @include wh(80px,80px);
         align-items: center;
         justify-content: center;
         background-color: $colorCommon;
-        border-radius: $bRadius;
+        border-radius: 100px;
     }
 
     .text_logo {
-        @include fontCommon($hs,#fff);
+        @include fontCommon(42px,#fff);
     }
 
     .text_member {
@@ -193,6 +200,17 @@
         margin-left: $bl;
         flex:1;
     }
+
+ /*   .div_member {
+        flex: 1;
+        flex-direction: row;
+        margin-left: $cl;
+        border-bottom-width: 1px;
+        border-color: #bbbbbb;
+        align-items: center;
+        justify-content: center;
+        @include paddingColumn($sl);
+    } */
 
     .div_select {
         align-items: center;

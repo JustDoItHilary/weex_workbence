@@ -115,8 +115,8 @@ export default {
             str = str.replace(/&apos;/g, '\'');
             str = str.replace(/&lt;/g, '<');
             str = str.replace(/&gt;/g, '>');
-            str = str.replace(/\//g, '\\');
-            str = str.replace(/\\/g, '&#39;');
+            // str = str.replace(/\//g, '\\');
+            // str = str.replace(/\\/g, '&#39;');
             str = str.replace(/&nbsp;/g, ' ');
             str = str.replace(/&lowast;/g, '*');
             str = str.replace(/&minus;/g, '−');
@@ -125,13 +125,6 @@ export default {
             str = str.replace(/&brvbar;/g, '|');
             str = str.replace(/&laquo;/g, '?');
             str = str.replace(/&not;/g, '?');
-            // str=str.replace(/&reg;/g,'®');
-            // str=str.replace(/&deg;/g,'ˉ');
-            // str=str.replace(/&plusmn;/g,'±');
-            // str=str.replace(/&copy;/g,'©');
-            // str=str.replace(/&times;/g,'×');
-            // str=str.replace(/&divide;/g,'÷');
-            // str=str.replace(/&copy;/g,'©');
             return str;
         },
         escapeHtml: function (str) {
@@ -186,8 +179,8 @@ export function replaceTransfer(str) {
     str = str.replace(/&apos;/g, '\'');
     str = str.replace(/&lt;/g, '<');
     str = str.replace(/&gt;/g, '>');
-    str = str.replace(/\//g, '\\');
-    str = str.replace(/\\/g, '&#39;');
+    // str = str.replace(/\//g, '\\');
+    // str = str.replace(/\\/g, '&#39;');
     str = str.replace(/&nbsp;/g, ' ');
     str = str.replace(/&lowast;/g, '*');
     str = str.replace(/&minus;/g, '−');
@@ -196,6 +189,24 @@ export function replaceTransfer(str) {
     str = str.replace(/&brvbar;/g, '|');
     str = str.replace(/&laquo;/g, '?');
     str = str.replace(/&not;/g, '?');
+    return str;
+}
+/*----正则获取 [] 间的文本-----*/
+export function toArr(string)  {
+    return (string.match(/\{(.*?)\}/g) || []).map(function (text) {
+        return text.substring(1, text.length - 1);
+    });
+}
+/*----SHOWTYPE=="TS"/"TSLR" 时进行替换-----*/
+export function replaceTS(str,itemData) {
+    var arr = toArr(str);
+    for (var i = 0; i < arr.length; i++) {
+        for (var key in itemData) {
+            if (key == arr[i]) {
+                str = str.replace(new RegExp('{' + arr[i] + '}', 'g'), itemData[key]);
+            }
+        }
+    }
     return str;
 }
 export function toParam(obj) {

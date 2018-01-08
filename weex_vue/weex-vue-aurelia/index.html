@@ -8,7 +8,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-touch-fullscreen" content="yes">
   <meta name="format-detection" content="telephone=no, email=no">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="./assets/style.css">
+  <link rel="stylesheet" href="src/style/mixin.scss">
   <script src="./config.js"></script>
   <script src="./assets/url.js"></script>
   <script src="./assets/qrcode.js"></script>
@@ -17,7 +21,7 @@
 </head>
 <body>
   <h1>Weex Preview</h1>
-  <div id="root"></div>
+  <div id="app"></div>
   <template id="app-template">
     <div>
       <div class="mock-phone">
@@ -38,7 +42,7 @@
   <script>
     console.log('QR CODE URL: ' + url)
     new Vue({
-      el: '#root',
+      el: '#app',
       template: '#app-template',
       data: { val: url },
       mounted: function () {

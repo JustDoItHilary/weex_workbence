@@ -82,7 +82,7 @@
     right: 0;
     bottom: 0;
     margin-top: 0;
-    margin-bottom: 88;
+    margin-bottom: 44wx;
   }
   .tabbar {
     flex-direction: row;
@@ -90,6 +90,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 88;
+    height: 44wx;
   }
 </style>

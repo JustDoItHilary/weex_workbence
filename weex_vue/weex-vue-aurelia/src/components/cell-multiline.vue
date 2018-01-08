@@ -1,30 +1,26 @@
 <template>
     <div>
-        <text   
-              class="txt-big">{{txtBig}}</text>
-        <text   
-              class="txt-small">{{txtSmall}}</text>
+        <text class="txt_content">{{tit}}</text>
+        <text v-if="content"
+              class="txt_content txt_div">{{content}}</text>
     </div>
 </template>
 
 <script>
     module.exports={
         props:{
-            txtBig:{
+            tit:{
                 type:String,
                 required:false,
                 default:''
             },
-            txtSmall:{
+            content:{
                 type:String,
                 required:false,
                 default:''
             },
         },
         computed:{
-            ratio(){
-                return this.$store.getters.ratio;
-            }
         },
     }
 </script>
@@ -32,10 +28,16 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../style/mixin.scss";
 
-    .txt-big{
+    .txt_content {
+        @include fontCommon();
+    }
+    .txt_div{
+        margin-top: $cl;
+    }
+   /* .txt-big{
         @include fontCommon($bs);
     }
     .txt-small{
         @include fontCommon($ss,$css-grey);
-    }
+    }*/
 </style>

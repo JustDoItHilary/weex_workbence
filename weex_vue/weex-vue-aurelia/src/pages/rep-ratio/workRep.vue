@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color:#ebedef;" append="tree">
+    <div style="background-color:#ebedef;" append="node">
         <app-header tit="工作汇报"  :close="clickClose" >
             <div slot="right" class="div_calendar" @click="clickCalendar">
                 <image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>
@@ -19,6 +19,9 @@
         <!--<cell-error v-if="repList.length<1" :errorImg="errorInfo.errorImg"-->
                     <!--:errorMess="errorInfo.errorMess"></cell-error>-->
         <list  class="list">
+            <!--<refresh>-->
+                <!--<text class="t">加载中...</text>-->
+            <!--</refresh>-->
             <!--我的汇报-->
             <cell v-if="isSelected"  class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
                   @longpress="longPressItem(item)">
@@ -39,6 +42,7 @@
             </cell>
             <!--团队汇报-->
             <cell v-if="!isSelected"
+
                   class="cell_member"
                   v-for="(item,index) in reviewList"
                   @click="clickReview(item)">
@@ -152,7 +156,7 @@
                 var startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - todayOfWeek);
                 startDate = self.formatDate(startDate, 'yyyy-MM-dd');
                 let lastDetails = self.repList[0];
-                if (lastDetails&&lastDetails.hasOwnProperty("Auditors")) {
+                if (lastDetails.hasOwnProperty("Auditors")) {
                     self.$store.commit('GET_READER', {auditors: lastDetails.Auditors});
                 }else{
                     self.$store.commit('GET_READER', {auditors: ''});
@@ -382,7 +386,7 @@
         position: absolute;
         right: $ss;
         bottom: $ss;
-        @include wh($hh,$hh);
+        @include wh($hs,$hs);
     }
 
     .flex_left {
@@ -410,8 +414,8 @@
     }
 
     .cell_bottom_btn {
-        @include paddingColumn($clw);
-        @include paddingRow($slw);
+        @include paddingColumn($cl);
+        @include paddingRow($sl);
     }
 
     .div_search {
@@ -419,21 +423,25 @@
     }
 
     .input {
-        @include searchBox();
+        height: 64px;
+        background-color: #fff;
+        border-radius: 12px;
+        align-items: center;
+        justify-content: center;
         @include marginColumn();
-        @include marginRow($bl);
+        @include marginRow($bs);
     }
 
     .cell_member {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        border-bottom-width: $borderW;
+        border-bottom-width: 1px;
         border-color: #bbbbbb;
     }
 
     .txt_center {
-        height: $lh;
+        height: $ls;
         text-align: center;
         font-weight: bold;;
         font-size: $cs;
@@ -441,7 +449,7 @@
 
     .div_logo {
         padding: $sl;
-        border-radius: $bRadius;
+        border-radius: 100px;
         text-align: center;
         @include fontCommon($ss, #fff);
     }

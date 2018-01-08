@@ -7,12 +7,12 @@
             <div class="div_order" @click="clickOrder">
                 <image class="img_order" :src="baseUrl+imgOrderUrl"></image>
             </div>
-            <input  class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
+            <input  class="txt_center input" type="text" placeholder="搜索" @input="input($event)" @blur="blur" v-on:keyup.enter="onEnter" :value="searchMess"/>
         </div>
         <scroller class="scroll">
-            <div v-for="(item,i) in list" class="div_item" @click="clickItem">
-                <cell-logo :imgLogoUrl="baseUrl+imgUrl" tit="我上传的" content="test test">
-                    <image slot="endImg" class="img_logo" :src="baseUrl+imgArrowRightUrl"></image>
+            <div v-for="(item,i) in cloudList" class="div_item" @click="clickItem">
+                <cell-logo :imgLogoUrl="baseUrl+(item.FolderName?imgOrderUrl:imgUrl)" :tit="item.FolderName?item.FolderName:item.F_Name" :content="item.UpdateTime">
+                    <image slot="endImg" class="img_logo" :src="baseUrl+(item.FolderName?imgArrowRightUrl:imgDropDownUrl)"></image>
                 </cell-logo>
             </div>
         </scroller>
@@ -34,8 +34,8 @@
             cellLogo: require('../../components/cell-logo-text.vue'),
         },
         computed: {
-            folderList(){
-//                return
+            cloudList(){
+                return this.$store.getters.getCloudFolder.concat(this.$store.getters.getCloudFile);
             },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
@@ -49,14 +49,37 @@
                 imgBgUrl:'/drawable/mess_bg.png',
                 imgOrderUrl:'/drawable/calendar_green.png',
                 imgArrowRightUrl:'/drawable/ic_keyboard_arrow_right_black_48dp.png',
+                imgDropDownUrl:'/drawable/ic_arrow_drop_down_black_48dp.png',
                 isShow:false,
 
             }
         },
         methods: {
+            onEnter(){
+                console.log("onenter")
+            },
+            blur(){
+                console.log("blur")
+            },
             clickMore(){//更多选项
                 let self=this;
                 self.isShow=!self.isShow;
+            },
+            input(e){
+                console.log(e,e.value);
+                let self = this;
+                self.searchMess = e.value;
+            },
+            searchMemberList(list){
+                let self = this;
+//                console.log(self.searchMess)
+                let readerList = [];
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].Name.indexOf(self.searchMess) > -1) {
+                        readerList.push(list[i])
+                    }
+                }
+                return readerList;
             },
             clickOpen(){
                 let self=this;
@@ -69,8 +92,8 @@
             },
             getFolder(){
                 let self=this;
-                var body = 'code=' + self.userPlatformCode +
-                    '&fileclass=' + startDate + '&parent=' + endDate + '&order_key=1&order_val=';
+                var body = 'userguid=' + self.userPlatformCode +
+                    '&fileclass=' +3+ '&parent=' + '' + '&order_key='+'name'+'&order_val='+'asc';
 //                console.log(body)
                 self.$store.dispatch('FETCH_CLOUD_GET_FOLDER',{body:body})
             },
@@ -98,7 +121,7 @@
             self.baseUrl = self.getBaseUrl(bundleUrl);
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
 //            self.getData();
-            self.getFolder();
+//            self.getFolder();
         }
     }
 </script>

@@ -49,15 +49,15 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: $bgColor;
+        background-color: $fc;
     }
 
     .div_item_bottom {
-        @include marginRow();
-        @include paddingColumn();
+        @include marginRow($clw);
+        @include paddingColumn($clw);
         justify-content: center;
         align-items: center;
-        border-radius: 12px;
+        border-radius: 6wx;
         background-color: $colorCommon;
         flex-direction: row;
         flex: 0.8;

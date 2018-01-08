@@ -95,7 +95,6 @@
     }
 
     .scroll {
-        border-width: 1px;
         height: $bl;
         flex-direction: row;
         align-items: center;

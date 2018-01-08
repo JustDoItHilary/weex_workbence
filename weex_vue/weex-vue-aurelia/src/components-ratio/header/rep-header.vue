@@ -134,7 +134,7 @@
         created: function (e) {
             let self = this;
             self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
-            self.getMeasure();
+//            self.getMeasure();
         }
 
     };</script>
@@ -164,7 +164,7 @@
     }
     .text_titBar {
         text-align: left;
-        @include fontCommon($hs,#fff);
+        @include fontCommon(40px,#fff);
         @include marginRow();
         flex:1;
     }
@@ -174,7 +174,7 @@
         @include sideBorder(bottom,$bc);
     }
     .img_back_iOS {
-        @include wh(36wx,36wx);
+        @include wh(72px,72px);
         /*border-width: 1;*/
     }
     .text_active{

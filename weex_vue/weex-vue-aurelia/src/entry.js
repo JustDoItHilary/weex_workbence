@@ -22,24 +22,24 @@ Object.keys(filters).forEach(key => {
 })
 
 // register global mixins.
-Vue.mixin(mixins)
-
+Vue.mixin(mixins);
+//
 // Vue.directive('ratio',
 //     // {update:
 //         function (el, binding) {
 //         // console.log(binding.value)
 //         // console.log(el,binding);
-//         var list=['fontSize','height','width','borderWidth','margin','padding','marginLeft','marginRight','margingTop','marginBottom','paddingTop','paddingBottom','paddingLeft','paddingRight','borderBottomWidth','borderTopWidth','borderLeftWidth','borderRightWidth','left','right','top','bottom'];
+//         var list=['fontSize','height','width','borderWidth','borderBottomWidth','borderTopWidth','borderLeftWidth','borderRightWidth'];
 //         for(var obj in el.style){
 //             // console.log("style: ",obj);
 //             for(var i=0;i<list.length;i++){
 //                 if(obj==list[i]){
-//                     el.style[obj]=Math.round(binding.value * el.style[obj]);
+//                     el.style[obj]=Math.round((binding.value/2 )* el.style[obj]);
 //                     break;
 //                 }
 //             }
 //         }
-//         // console.log(el.style)
+//         console.log(el.style)
 //     // }
 // })
 

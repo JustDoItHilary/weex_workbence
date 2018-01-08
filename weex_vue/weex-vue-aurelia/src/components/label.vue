@@ -1,20 +1,20 @@
 <template>
     <div class="border_bottom">
-        <div class="flex_center div_border"
+        <div class="flex_center div_border div_label"
              @click="labelOne">
-            <div class="div_label">
+            <!--<div class="div_label">-->
                 <text :class="['text_center', 'select_' + (selected)]">{{labelOneTxt}}</text>
                 <text v-if="oneInfo"
                       class="txt_info">{{oneInfo}}</text>
-            </div>
+            <!--</div>-->
         </div>
-        <div class="flex_center"
+        <div class="flex_center div_label"
              @click="labelTwo">
-            <div class="div_label">
+            <!--<div class="div_label">-->
                 <text :class="['text_center', 'select_' + (!selected)]">{{labelTwoTxt}}</text>
                 <text v-if="twoInfo"
                       class="txt_info">{{twoInfo}}</text>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </template>
@@ -71,13 +71,13 @@
     .flex_center {
         flex: 1;
         align-items: center;
-        @include marginColumn($cl);
+        @include marginColumn($clw);
     }
 
     .text_center {
         text-align: center;
         @include fontCommon($bs);
-        @include paddingRow($sl);
+//        @include paddingRow($sl);
     }
 
     .select_true {
@@ -89,13 +89,13 @@
     }
 
     .txt_info {
-        position: absolute;
-        right: 0;
-        top: $sl;
-        height: $bl;
+        position: relative;
+        left:0;
+        top: -$clw;
+        height: $blw;
         text-align: center;
         background-color: #f00;
-        @include paddingRow($sl);
+        @include paddingRow($slw);
         @include borderRadius($bRadius);
         @include fontCommon($cs, #fff);
     }
@@ -106,8 +106,8 @@
         flex-direction: row;
         justify-content:center;
         align-items: center;
-        @include paddingColumn();
-        @include paddingRow();
+        @include paddingColumn($clw);
+        @include paddingRow($clw);
     }
 
 </style>

@@ -2,13 +2,6 @@ const modal = weex.requireModule('modal')
 import {
     fetchByPost, fetch
 } from '../fetch'
-const apiURL = {
-    yiyaoUrl: 'http://im.yiyao365.cn/',
-    baseUrl: 'http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=',
-    // baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
-    // baseUrl: 'http://192.168.100.96:8090/Handler/DailyAPIHandler.ashx?action=',
-
-}
 import {
     URL_YIYAO,
     URL_BASE,
@@ -24,6 +17,7 @@ import {
     URL_REP_GET_COMMENTS,
     URL_REP_GET_STATISTICS,
     URL_REP_GET_ALL_AUDITED,
+    URL_REP_GET_WEEKLY_NUM,
 } from './rep-api'
 
 /** -----------------rep------------------*/
@@ -137,15 +131,27 @@ export function FETCH_REP_GET_STATISTICS({commit, state}, {body}) {
             commit('SET_ERROR', {showType:2 ,mess: error});
         })
 }
+//获取本月提交统计情况
+export function FETCH_GET_WEEKLY_NUM({commit, state}, {body}) {
+    return fetchRep(URL_REP_GET_WEEKLY_NUM, body)
+        .then(retdata => {
+            // console.log(retdata)
+            commit('SET_ERROR', {showType:0});
+            commit('SET_REP_STATISTICS', {retdata})
+        },error=>{
+            state.repStatistics=[];
+            commit('SET_ERROR', {showType:2 ,mess: error});
+        })
+}
 
 
 /** -----------------rep------------------*/
 export function fetchUserPlatformCode(body) {
-    return fetchByPost(apiURL.yiyaoUrl + 'handle', body)
+    return fetchByPost(URL_YIYAO + 'handle', body)
 }
 export function fetchRep(type, body) {
-    return fetchByPost(apiURL.baseUrl + type, body)
+    return fetchByPost(URL_BASE + type, body)
 }
 export function fetchRepByGet(type, body) {
-    return fetch(apiURL.baseUrl + type + '&' + body)
+    return fetch(URL_BASE + type + '&' + body)
 }

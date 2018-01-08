@@ -1,33 +1,40 @@
 <template>
     <div  class="div_card" >
         <div   class="div_tit"  @click="clickShow">
-            <text   class="txt_tit" >{{tit}}</text>
-            <text   class="txt_else">{{txtElse}}</text>
+            <text class="txt_tit" >{{tit}}</text>
+            <text class="txt_else">{{txtElse}}</text>
         </div>
         <slot name="mess"></slot>
-        <div v-if="item.showed&&item.Extra.SHOWTYPE=='CV'" v-for="(data,index) in item.List"   :class="['div_item',index>0?'border_bottom_grey':'']">
-            <cell-justify   :txtLeft="data.tit" :txtRight="data.content"></cell-justify>
+        <div
+                v-if="item.showed&&item.Extra.SHOWTYPE=='CV'"
+                v-for="(data,index) in item.List"
+                :class="['div_item',index>0?'border_bottom_grey':'']">
+            <cell-justify :txtLeft="data.tit" :txtRight="data.content"></cell-justify>
         </div>
-        <div v-if="item.showed&&item.Extra.SHOWTYPE=='TS'"  >
-            <text v-if="ts(item.Extra.TS_TITLE)"  class="txt_content div_item_ts">{{ts(item.Extra.TS_TITLE)}}</text>
-            <text v-if="ts(item.Extra.TS_SUBTITLE)"  class="txt_content div_item_ts">{{ts(item.Extra.TS_SUBTITLE)}}</text>
+        <div
+                v-if="item.showed&&item.Extra.SHOWTYPE=='TS'"
+                v-for="(data,index) in item.List"
+                :class="['div_item',index>0?'border_bottom_grey':'']">
+            <cell-multiline :tit="data.tit" :content="data.content"></cell-multiline>
         </div>
-        <div v-if="item.showed&&item.Extra.SHOWTYPE=='TSLR'"   :class="['div_item',index>0?'border_bottom_grey':'']">
-            <cell-justify   :txtLeft="ts(item.Extra.TS_TITLE)" :txtRight="item.Name!='SEGMENT_MEMBERS'?ts(item.Extra.TS_SUBTITLE):''">
+        <div
+                v-if="item.showed&&item.Extra.SHOWTYPE=='TSLR'"
+                v-for="(data,index) in item.List"
+                :class="['div_item',index>0?'border_bottom_grey':'']">
+            <cell-justify :txtLeft="data.tit" :txtRight="data.content=='已签到'?'':data.content">
                 <text   
                        slot="else"
-                       v-if="item.Name=='SEGMENT_MEMBERS'"
-                       :class="['div_corner_'+(ts(item.Extra.TS_SUBTITLE)=='已签到')]"
-                       @click="clickSign(ts(item.Extra.TS_SUBTITLE)=='已签到',item.Data[0])"> {{ts(item.Extra.TS_SUBTITLE)}} </text>
+                       v-if="data.content=='已签到'"
+                       :class="['div_corner_'+(data.content=='已签到')]"
+                       @click="clickSign(data.content=='已签到',item.Data[index])"> {{data.content}} </text>
             </cell-justify>
         </div>
-        <div v-if="item.showed&&item.Extra.SHOWTYPE=='CVMD'" v-for="(data,index) in item.List"   :class="['div_item',index>0?'border_bottom_grey':'']">
-            <!--<cell-justify   :txtLeft="data.tit"></cell-justify>-->
-            <!--<cell-justify   :txtLeft="data.content"></cell-justify>-->
+        <div
+                v-if="item.showed&&item.Extra.SHOWTYPE=='CVMD'"
+                v-for="(data,index) in item.List"
+                :class="['div_item',index>0?'border_bottom_grey':'']">
             <text v-if="data.tit" class="txt_content">{{data.tit}}</text>
             <text v-if="data.content" class="txt_grey">{{data.content}}</text>
-            <!--<text class="txt_common">{{data.tit}}</text>-->
-            <!--<text class="txt_grey">{{data.content}}</text>-->
         </div>
     </div>
 </template>
@@ -51,7 +58,8 @@
 
         },
         components: {
-            cellJustify: require('./cell-justify.vue'),
+            cellJustify: require('../cell-justify.vue'),
+            cellMultiline: require('../cell-multiline.vue'),
         },
         computed: {
             baseUrl(){
@@ -102,7 +110,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../style/mixin";
+    @import "../../style/mixin";
 
     .div_card {
         background-color: #fff;
@@ -133,7 +141,6 @@
 
     .txt_content {
         @include fontCommon();
-        @include sideBorder(bottoom);
     }
     .txt_grey{
         @include fontCommon($cs,$css-grey);

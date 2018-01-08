@@ -1,41 +1,49 @@
 <template>
-    <div append="tree">
-        <app-header tit="周报提交情况">
-            <div slot="right" class="div_calendar" @click="clickTable">
-                <image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>
-            </div>
-        </app-header>
+    <div>
+        <app-header tit="周报提交情况"></app-header>
         <cell-txt-center 
                          :txt="startDate+' -- '+endDate"
                          fontColor="#58D68D"
                          class="cell_txt_center"
                          @clickTxtCenter="clickDate">
-            <text slot="left"
+            <text 
+                  slot="left"
                   class="div_add"
                   @click="clickLast()">上个周</text>
-            <text slot="right"
+            <text 
+                  slot="right"
                   class="div_add"
                   @click="clickNext()">下个周</text>
         </cell-txt-center>
-        <text v-if="errorInfo.errorMess" class="txt_loading">{{errorInfo.errorMess}}</text>
         <!--<input class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>-->
-        <div class="div_tit" >
-            <div class="div_table div_border">
-                <text class="txt_name">姓名</text>
+        <div 
+             class="div_tit" >
+            <div 
+                 class="div_table div_border">
+                <text 
+                      class="txt_name">姓名</text>
             </div>
-            <div class="div_table">
-                <text class="txt_state">提交情况</text>
+            <div 
+                 class="div_table">
+                <text 
+                      class="txt_state">提交情况</text>
             </div>
         </div>
-        <scroller class="scroll">
-            <div v-for="(item,index) in statistics"
+        <scroller 
+                  class="scroll">
+            <div 
+                 v-for="(item,index) in statistics"
                  class="div_item"
                  :style="{ backgroundColor: bgColor(item) }">
-                <div class="div_table div_border" >
-                    <text class="txt_name">{{item.name}} {{item.code}}</text>
+                <div 
+                     class="div_table div_border" >
+                    <text 
+                          class="txt_name">{{item.name}} {{item.code}}</text>
                 </div>
-                <div class="div_table">
-                    <text class="txt_state">{{getState(item)}}</text>
+                <div 
+                     class="div_table">
+                    <text 
+                          class="txt_state">{{getState(item)}}</text>
                 </div>
             </div>
         </scroller>
@@ -50,12 +58,12 @@
     const storage = weex.requireModule('storage');
     const stream = weex.requireModule('stream');
     const picker = weex.requireModule('picker');
+    const global = weex.requireModule('globalEvent');
 
     export default{
         components: {
             appHeader: require('../../components/header/rep-header.vue'),
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
-            CellError: require('../../components/error.vue'),
         },
         computed: {
             ratio(){
@@ -65,21 +73,12 @@
 //                console.log(this.$store.getters.getRepStatistics);
                 return this.$store.getters.getRepStatistics;
             },
-            errorInfo(){
-                return this.$store.getters.errorInfo;
-            },
-            baseUrl(){
-                return this.$store.getters.baseUrl;
-            },
         },
         data(){
             return {
                 startDate: '',
                 endDate: '',
                 date: '',
-                imgCalendarUrl: '/drawable/mon_white.png',
-                imgCalendarUrl_ios: '/drawable/mon_green.png',
-                isiOS:false,
             }
         },
         methods: {
@@ -104,10 +103,6 @@
                 } else {
                     return '#f00'
                 }
-            },
-            clickTable(){
-                let self=this;
-                self.$router.push(`/repMonStatistics`);
             },
             clickLast(){
                 let self = this;
@@ -151,7 +146,6 @@
             },
             getList(){
                 let self = this;
-                self.$store.commit('SET_ERROR', {showType:2 ,mess: "加载中..."});
                 var body = 'startDate=' + self.startDate + '&endDate=' + self.endDate;
 //                console.log(body)
                 self.$store.dispatch('FETCH_REP_GET_STATISTICS', {body: body});
@@ -160,7 +154,6 @@
 
         created(e){
             let self = this;
-            self.isiOS=weex.config.env.platform.toLowerCase() == 'ios';
             self.date = new Date();
 //            self.date=self.toDate("2017-12-9");
             var todayOfWeek = (new Date(self.date.getTime() - 86400000)).getDay();
@@ -180,14 +173,6 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../style/mixin.scss";
 
-    .div_calendar{
-        padding:$cl;
-    }
-    .img_calendar{
-        @include wh();
-        @include marginRow($bl);
-        @include marginColumn($cl);
-    }
     .div_tit{
         flex-direction: row;
         @include sideBorder(top);
@@ -199,7 +184,7 @@
     .scroll {
         @include marginRow();
         margin-bottom: $bl;
-        border-width: $borderW;
+        border-width: 1px;
     }
 
     .div_item {
@@ -208,7 +193,6 @@
     }
 
     .div_table {
-        @include marginColumn(0);
         padding:$cl;
         flex: 1;
     }
@@ -232,10 +216,5 @@
     .div_border{
         @include sideBorder(right);
         background-color: #fff
-    }
-    .txt_loading{
-        @include fontCommon($cs,$css-grey);
-        text-align: center;
-        margin-top: $cl;
     }
 </style>

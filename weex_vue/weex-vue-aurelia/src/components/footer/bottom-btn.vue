@@ -57,7 +57,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: $bgColor;
+        background-color: $fc;
     }
 
     .style_btn {

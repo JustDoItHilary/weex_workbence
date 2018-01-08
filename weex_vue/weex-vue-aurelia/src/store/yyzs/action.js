@@ -37,7 +37,7 @@ export function FETCH_SY_MEMBERINFO({commit, state}, {params}) {
 /** -----------------yyzs-会员近期消费------------------*/
 export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
     let body = 'QueryType=' + URL_YYZS_QUERY_ORDER_DETAIL + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
-    console.log('FETCH_SY_BODY: ',body)
+    // console.log('FETCH_SY_BODY: ',body)
     return fetchByPost(apiURL.syUrl + 'handle', body)
         .then(
             data => {
@@ -45,7 +45,7 @@ export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
                 commit('GET_SY_ORDER_DETAIL', {data});
             },
             error => {
-                state.syMemberInfo = [];
+                state.orderDetail = [];
                 commit('SET_ERROR', {showType:2 ,mess: error});
                 // commit('SET_ERROR', {showType:1,mess: error});//会员信息，不许刷新-showType=1
             }

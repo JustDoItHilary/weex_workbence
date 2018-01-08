@@ -44,7 +44,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 88;
+        height: 44wx;
     }
 
     .top-line {
@@ -52,13 +52,13 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 2;
+        height: 1wx;
     }
 
     .tab-icon {
-        margin-top: 5;
-        width: 40;
-        height: 40
+        margin-top: 3wx;
+        width: 20wx;
+        height: 20wx
     }
 
     .tab-text {

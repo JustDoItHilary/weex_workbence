@@ -1,6 +1,7 @@
 <template>
   <div style="flex-direction: column;">
-    <tabbar :tabItems="tabItems" @tabBarOnClick="tabBarOnClick"></tabbar>
+    <text>test</text>
+    <cell-tabbar :tabItems="tabItems" selectedColor="green" un @tabBarOnClick="tabBarOnClick"></cell-tabbar>
   </div>
 </template>
 
@@ -45,13 +46,14 @@
       }
     },
     components: {
-      tabbar: require('../include/tabbar.vue')
+      cellTabbar: require('../include/tabbar.vue')
     },
     created: function() {
       var baseURL = getBaseURL(this)
       for(var i = 0; i < this.tabItems.length; i++) {
         var tabItem = this.tabItems[i];
-        tabItem.src = baseURL + tabItem.src;
+//          tabItem.src = baseURL + tabItem.src;
+          tabItem.src = "http://192.168.100.120:8888/weex/hello.js"
       }
     },
     methods: {

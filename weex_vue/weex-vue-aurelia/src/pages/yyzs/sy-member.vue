@@ -1,12 +1,5 @@
 <template>
     <scroller class="scroll" append="tree">
-        <!--<div v-for="(item,index) in memberInfo" class="div_bottom">-->
-        <!--<logo-text class="border_bottom"  :tit="item.NAME" :imgLogoUrl="item.ICON">-->
-        <!--</logo-text>-->
-        <!--<div v-for="info in item.INFO" class="div_padding">-->
-        <!--<cell-time style="padding: 10px;" :txtLeft="info.TIT" :txtRight="info.CONTENT"></cell-time>-->
-        <!--</div>-->
-        <!--</div>-->
         <div class="div_top">
             <text class="txt_common">会员详情信息有异常？</text>
             <text class="txt_common txt_actived" @click="clickRepair">点击修复会员信息</text>
@@ -34,7 +27,7 @@
         },
         computed: {
             memberInfo(){
-//                console.log("member: ",this.$store.getters.syMemberInfo )
+//                console.log("member: ",this.$store.getters.getSyMemberInfo )
                 return this.$store.getters.getSyMemberInfo;
 //                return []
             },
@@ -125,28 +118,5 @@
     }
     .txt_actived{
         color:$colorCommon;
-    }
-    .div_bottom {
-        /*border-bottom-width: 10px;*/
-        @include paddingRow(16px);
-        @include paddingColumn(10px)
-
-    }
-    .img_end {
-        height: 48px;
-        width: 48px;
-    }
-
-    .border_bottom {
-        border-bottom-width: 10px;
-        border-color: $bc;
-        padding: 6px;
-    }
-
-    .div_padding {
-        padding-left: 72px;
-        border-bottom-width: 2px;
-        border-color: $bg;
-        @include paddingColumn(6px);
     }
 </style>

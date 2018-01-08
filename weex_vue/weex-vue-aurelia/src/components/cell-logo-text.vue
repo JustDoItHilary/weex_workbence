@@ -52,7 +52,7 @@
     }
 
     .div_logo {
-        @include wh(64px,64px);
+        @include wh(32wx,32wx);
         align-items: center;
         justify-content: center;
         border-radius: $bRadius;

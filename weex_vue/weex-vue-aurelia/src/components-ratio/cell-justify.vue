@@ -1,21 +1,15 @@
 <template>
-    <div v-ratio="ratio"
-         class="div-time"
+    <div class="div-time"
          :style="{'borderBottomWidth':bottomBorder}">
-        <text v-ratio="ratio"
-              style="font-size: 14;"
-              class="txt-left">{{txtLeft}}</text>
-        <div v-ratio="ratio"
-             class="div_right">
-            <text v-ratio="ratio"
-                  :class="['txt-right','txt-actived-'+active]"
+        <text class="txt-left">{{txtLeft}}</text>
+        <div class="div_right">
+            <text :class="['txt-right','txt-actived-'+active]"
                   v-if="txtRight"
                   @click="clickRight">{{txtRight}}</text>
             <text v-if="txtRightElse"
-                  v-ratio="ratio"
                   :class="['txt-right','txt-actived-'+active]">{{txtRightElse}}</text>
         </div>
-        <image v-ratio="ratio" class="img_open" :src="baseUrl+imgUrl" v-if="imgUrl"></image>
+        <image class="img_open" :src="baseUrl+imgUrl" v-if="imgUrl"></image>
         <slot name="else"></slot>
     </div>
 </template>
@@ -96,7 +90,7 @@
         border-color: $bc;
     }
     .txt-left{
-//    @include fontCommon;
+    @include fontCommon;
     }
     .txt-right{
     @include fontCommon;

@@ -1,58 +1,50 @@
 <template>
     <div>
-        <div v-ratio="ratio"
+        <div
              class="div_titBar bg_android"
              :style="{ height: actionBarHeight }"
              data-role="none"
              v-if="!isiOS">
             <!--回退按钮，监听事件放于子组件内部-->
-            <div v-ratio="ratio"
+            <div
                  class="div_close"
                  @click="clickClose">
-                <image v-ratio="ratio"
+                <image
                        class="img_back"
-                       style="width: 24;height:24;margin-left:16;margin-top: 8;margin-bottom: 8; "
                        :src="baseUrl+imgBackUrl"></image>
             </div>
-            <text v-ratio="ratio"
-                  style="flex:1;font-size: 20;margin-left: 8;"
+            <text
                   class="text_titBar">{{tit}}</text>
+            <slot name="right"></slot>
             <!--完成按钮，需要同时设置 iOS 端，监听事件放于父组件-->
-            <div v-ratio="ratio"
+            <div
                  @click="done"
                  v-if="done">
-                <image v-ratio="ratio"
+                <image
                        class="img_back"
                        :src="baseUrl+imgDoneUrl"></image>
             </div>
         </div>
 
-        <div v-ratio="ratio"
-             class="div_titBar bg_ios"
+        <div class="div_titBar bg_ios"
              :style="{ height: actionBarHeight }"
              data-role="none"
              v-if="isiOS">
-            <div v-ratio="ratio"
-                 class="div_titBar_iOS"
-                 :style="{ height: actionBarHeight,left:0,right:0}">
-                <text v-ratio="ratio"
-                      style="font-size: 16;color: #fff;"
-                      class="text_titBar_iOS">{{tit}}</text>
+            <div class="div_titBar_iOS"
+                 :style="{ height: actionBarHeight}">
+                <text class="text_titBar_iOS">{{tit}}</text>
             </div>
             <!--回退按钮，监听事件放于子组件内部-->
-            <div v-ratio="ratio"
-                 class="div_titBar_iOS_def"
+            <div class="div_titBar_iOS_def"
                  @click="clickClose">
-                <image  v-ratio="ratio"
-                        class="img_back_iOS"
-                        style="width:32;height: 32;"
+                <image class="img_back_iOS"
                         :src="baseUrl+imgBackUrl_iOS"></image>
                 <!--<text class="text_titBar_def_iOS">工作台</text>-->
             </div>
+            <slot name="right"></slot>
             <!--完成按钮，需要同时设置 Android 端，监听事件放于父组件-->
-            <text v-ratio="ratio"
+            <text 
                   class="text_titBar_def_iOS"
-                  style="font-size: 16;color:#fff;margin-right: 8;"
                   @click="done"
                   v-if="done">{{titRight}}</text>
         </div>
@@ -102,7 +94,7 @@
         },
         data(){
             return {
-                actionBarHeight: 56,
+                actionBarHeight: 112,
                 isiOS: false,
                 imgBackUrl:'/drawable/ic_back_white_48dp.png',
                 imgDoneUrl:'/drawable/ic_done_white_48dp.png',
@@ -128,19 +120,29 @@
                 let self=this;
                 configModule.getActionBarHeight(function(params){
                     var scale;
-                    if (self.$getConfig().env.platform.toLowerCase()=='ios') {
+                    if (self.isiOS) {
                         scale=params.width/750;
                     }else{
-                        scale = self.$getConfig().env.deviceWidth / 750;
+                        scale = weex.config.env.deviceWidth / 750;
                     }
                     self.actionBarHeight=params.height/scale;
+//                    require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
                 }.bind(this));
+//                configModule.getActionBarHeight(function(params){
+//                    var scale;
+//                    if (self.$getConfig().env.platform.toLowerCase()=='ios') {
+//                        scale=params.width/750;
+//                    }else{
+//                        scale = self.$getConfig().env.deviceWidth / 750;
+//                    }
+//                    self.actionBarHeight=params.height/scale;
+//                }.bind(this));
             },
         },
         created: function (e) {
             let self = this;
-//            self.getMeasure();
-            self.isiOS = self.$getConfig().env.platform.toLowerCase() == 'ios';
+            self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
+            self.getMeasure();
         }
 
     };</script>
@@ -149,7 +151,7 @@
 
     .div_titBar {
         flex-direction: row;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
         align-items: center;
     }
     .bg_android{
@@ -157,44 +159,38 @@
     }
     .bg_ios{
         background-color: $colorCommon;
-        border-color: $bc;
-        border-bottom-width: 1px;
+       // @include sideBorder(bottom,$bc);
     }
-
     .div_close {
         justify-content: center;
         align-items: center;
     }
-
     .img_back {
-//        @include wh();
-//        @include marginRow($bl);
-//        @include marginColumn($cl);
+        @include wh();
+        @include marginRow($bl);
+        @include marginColumn($cl);
     }
-
     .img_back_iOS {
-//        @include wh(32px,32px);
+        @include wh(80px,80px);
         /*border-width: 1;*/
     }
-
     .text_close {
-        color: #fff;
-//        margin: $cl;
-//        @include fontCommon($cs,#fff);
+        margin: $cl;
+        @include fontCommon($cs,#fff);
     }
     .text_titBar {
         text-align: left;
-        color:#fff;
-//        @include fontCommon(20px,#fff);
-//        @include marginRow();
+        @include fontCommon(40px,#fff);
+        @include marginRow();
+        flex:1;
     }
     .text_titBar_def_iOS {
-//        @include fontCommon($bs,$colorCommon);
-//        margin-right: $cl;
+        @include fontCommon($bs,$colorCommon);
+        margin-right: $cl;
     }
     .text_titBar_iOS {
         text-align: center;
-//        @include fontCommon($bs);
+        @include fontCommon(40px,#fff);
         font-family: HelveticaNeue-CondensedBlack;
     }
     .div_titBar_iOS_def {
@@ -203,8 +199,8 @@
     }
     .div_titBar_iOS {
         position: absolute;
-        /*left: 0;*/
-        /*right: 0;*/
+        left: 0;
+        right: 0;
         justify-content: center;
         align-items: center;
     }

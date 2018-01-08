@@ -27,11 +27,21 @@ const store = new Vuex.Store({
         // userPlatformCode:'fd6d8670cc9946a19b1fc92605a77347',
         userPlatformCode:'cd47e31df52647a0bdb5fffc6c8d6718',//大波
         // userPlatformCode:'',
+
+        cloudFolder:[],
+        cloudFile:[],
     },
 
     getters: {
         getUserPlatformCode(state){
             return state.userPlatformCode;
+        },
+
+        getCloudFolder(state){
+            return state.cloudFolder;
+        },
+        getCloudFile(state){
+            return state.cloudFile;
         },
     }
 })

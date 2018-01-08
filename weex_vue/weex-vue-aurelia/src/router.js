@@ -17,7 +17,17 @@ import RepReader from './pages/rep/repReader.vue'
 import RepTime from './pages/rep/repTime.vue'
 import RepHistory from './pages/rep/repHistory.vue'
 import RepStatistics from './pages/rep/repStatistics.vue'
+import RepMonStatistics from './pages/rep/repMonStatistics.vue'
 
+/*rep-ratio*/
+// import WorkRep from './pages/rep-ratio/workRep.vue'
+// import NewRep from './pages/rep-ratio/newRep.vue'
+// import RepDetails from './pages/rep-ratio/repDetails.vue'
+// import RepAssessment from './pages/rep-ratio/repAssessment.vue'
+// import RepReader from './pages/rep-ratio/repReader.vue'
+// import RepTime from './pages/rep-ratio/repTime.vue'
+// import RepHistory from './pages/rep-ratio/repHistory.vue'
+// import RepStatistics from './pages/rep-ratio/repStatistics.vue'
 /*slsj*/
 // import SlsjNew from './pages/slsj/slsjNew.vue'
 // import SlsjEdit from './pages/slsj/slsjEdit.vue'
@@ -31,23 +41,29 @@ import RepStatistics from './pages/rep/repStatistics.vue'
 // import WWDetails from './pages/ww/ww-details.vue'
 //
 /*ww-yyzs*/
-// import SyActivityDetails from './pages/ww/yyzs/sy-activity-details.vue'
-// import SyActivity from './pages/ww/yyzs/sy-activity.vue'
-// import SyMember from './pages/ww/yyzs/sy-member.vue'
+// import SyActivityDetails from './pages/yyzs/sy-activity-details.vue'
+// import SyActivity from './pages/yyzs/sy-activity.vue'
+// import SyQueryOrderDetails from './pages/yyzs/sy-queryDetails.vue'
+// import SyMember from './pages/yyzs/sy-member.vue'
+// import SyRepairMember from './pages/yyzs/sy-repairMember.vue'
 // import SYMain from './pages/ww/yyzs/sy-main.vue'
-// import GetToken from './pages/ww/yyzs/getToken.vue'
+// import GetToken from './pages/yyzs/getToken.vue'
 // import MemberOperator from './pages/ww/yyzs/memberOperator.vue'
 
 /*nj*/
 // import Main from './pages/nj/main.vue'
 // import ToTask from './pages/nj/toTask.vue'
 // import UserInfo from './pages/nj/userInfo.vue'
+
+/*cloud*/
+// import CloudDrive from './pages/cloud/cloudDrive.vue'
+// import CloudMyFile from './pages/cloud/myFile.vue'
 // //
 // import Error from './pages/ww/error.vue'
 
-import TestAurelia from './testAurelia.vue'
-// import Test from './foo.vue'
-import Test from './vue/components/input.vue'
+// import TestAurelia from './testAurelia.vue'
+import Test from './test.vue'
+// import Test from './vue/components/input.vue'
 
 
 Vue.use(Router)
@@ -163,6 +179,14 @@ export default new Router({
                 keepAlive: false
             }
         },
+        {
+            path: '/repMonStatistics',
+            component: RepMonStatistics,
+            name: 'RepMonStatistics',
+            meta: {
+                keepAlive: false
+            }
+        },
         /*slsj*/
         // {
         //     path: '/slsjNew', component: SlsjNew
@@ -201,9 +225,19 @@ export default new Router({
         //     name:'syActivity'
         // },
         // {
+        //     path:'/syQueryOrderDetails',
+        //     component:SyQueryOrderDetails,
+        //     name:'syQueryOrderDetails'
+        // },
+        // {
         //     path:'/syMember',
         //     component:SyMember,
         //     name:'syMember'
+        // },
+        // {
+        //     path:'/syRepairMember/:params',
+        //     component:SyRepairMember,
+        //     name:'syRepairMember'
         // },
         // {
         //     path:'/syMain',
@@ -243,9 +277,16 @@ export default new Router({
         //         keepAlive: false
         //     }
         // },
-        {
-            path: '/aurelia', component: TestAurelia,
-        },
+        // {
+        //     path: '/aurelia', component: TestAurelia,
+        // },
+        /*cloud*/
+        // {
+        //     path:'/cloud',component:CloudDrive,
+        // },
+        // {
+        //     path:'/cloudMyFile',component:CloudMyFile,
+        // },
         {
             path: '/test', component: Test,
             meta: {
@@ -253,7 +294,7 @@ export default new Router({
             }
         },
 
-        {path: '/', redirect: '/test'}
+        {path: '/', redirect: '/workRep'}
         // {path: '/', redirect:`/applyList/${JSON.stringify({GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'})}`}
     ]
 })

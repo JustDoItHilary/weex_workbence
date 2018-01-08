@@ -1,17 +1,16 @@
 <template>
-    <div v-ratio="ratio"  class="div_bottom">
-        <div v-ratio="ratio"
-             v-if="btnHeight"
-             class="div_item_bottom"
-             :style="{height: btnHeight}"
-             @click="click">
-            <text v-ratio="ratio" class="text_bottom">{{name}}</text>
+    <div class="div_bottom">
+        <div
+                v-if="btnHeight"
+                class="div_item_bottom"
+                :style="{height: btnHeight}"
+                @click="click">
+            <text class="text_bottom">{{name}}</text>
         </div>
         <div v-else
-             v-ratio="ratio"
              class="div_item_bottom"
              @click="click">
-            <text v-ratio="ratio"   class="text_bottom">{{name}}</text>
+            <text class="text_bottom">{{name}}</text>
         </div>
     </div>
 </template>
@@ -30,12 +29,12 @@
                 default: ''
             },
         },
-        computed:{
+        computed: {
             ratio(){
                 return this.$store.getters.ratio;
             }
         },
-        methods:{
+        methods: {
             click(){
                 this.$emit('clickBtn');
             },
@@ -61,7 +60,7 @@
         border-radius: 12px;
         background-color: $colorCommon;
         flex-direction: row;
-        flex:0.8;
+        flex: 0.8;
     }
 
     .text_bottom {

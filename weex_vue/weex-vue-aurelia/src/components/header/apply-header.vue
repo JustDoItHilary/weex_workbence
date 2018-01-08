@@ -142,7 +142,7 @@
         created: function (e) {
             let self = this;
             self.isiOS = weex.config.env.platform.toLowerCase() == 'ios';
-//            self.getMeasure();
+            self.getMeasure();
         }
 
     };</script>
@@ -171,7 +171,7 @@
         @include marginColumn($cl);
     }
     .img_back_iOS {
-        @include wh(64px,64px);
+        @include wh(40wx,40wx);
         /*border-width: 1;*/
     }
     .text_close {
@@ -180,7 +180,7 @@
     }
     .text_titBar {
         text-align: left;
-        @include fontCommon(40px,#fff);
+        @include fontCommon(20wx,#fff);
         @include marginRow();
         flex:1;
     }
@@ -190,7 +190,7 @@
     }
     .text_titBar_iOS {
         text-align: center;
-        @include fontCommon($bs,#fff);
+        @include fontCommon(20wx,#fff);
         font-family: HelveticaNeue-CondensedBlack;
     }
     .div_titBar_iOS_def {

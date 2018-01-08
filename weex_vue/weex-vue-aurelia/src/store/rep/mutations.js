@@ -4,35 +4,6 @@ import {
     replaceTransfer, sortList
 } from '../../mixins'
 
-// //设置token
-// export function SET_TOKEN(state, {token}) {
-//     state.selfToken = token;
-// }
-// //设置 baseUrl
-// export function SET_BASE_URL(state, {url}) {
-//     state.baseUrl = url;
-// }
-// //设置 不同平台的放大倍数
-// export function SET_RATIO(state, {ratio}) {
-//     state.ratio = ratio;
-// }
-// //设置 error
-// export function SET_ERROR(state, {showType, mess}) {
-//     // console.log(showType)//showType:0-不显示；1：请求成功-没有数据；2：请求失败-请求服务器失败；3：请求失败-刷新数据失败；4：正在请求-正在请求中的loading
-//     if (showType == 0) {//请求数据成功后设置
-//         state.errorInfo.errorMess = '';
-//         state.errorInfo.errorImg = '';
-//     } else if (showType == 1) {//页面中 computed 中获取数据时判断列表为空时设置
-//         // state.errorInfo.errorImg='/drawable/no_data.png';
-//         state.errorInfo.errorMess = mess;
-//     } else if (showType == 4) {//初始进入新界面时设置 废弃（改为 refresh 组件）
-//         state.errorInfo.errorMess = '加载中...';
-//     } else {//请求失败后设置
-//         // state.errorInfo.errorImg=showType==2?'/drawable/loading_404.png':'';
-//         state.errorInfo.errorMess = mess;
-//     }
-//
-// }
 
 /** -----------------REP------------------*/
 export function SET_USERPLATFORMCODE(state, {retdata, callback}) {
@@ -175,16 +146,22 @@ export function SET_REP_ASSESSMENT(state, {retdata}) {
 }
 export function SET_REP_STATISTICS(state, {retdata}) {
     // console.log(retdata)
+    // 从列表中去除 管理员，冯张龙，赵九州，赵兴庭 的数据；
+    var unShowedList=["E296606E-C816-4DF3-B23B-E8831A289E84","f8f3398735d54c53be296f69e33792ee","9ec37a7eb7f44cd5b07833661ea3c093","746f094512b347ecaba7918b2a849f40"];
     state.repStatistics=[];
     if (retdata.length > 0) {
         for (var i = 0; i < retdata.length; i++) {
-            if (retdata[i].code == 'Administrator') {
-                retdata.splice(i, 1);
-                break;
+            for(var j=0;j<unShowedList.length;j++){
+                if (retdata[i].guid == unShowedList[j]) {
+                    retdata.splice(i, 1);
+                    i--;
+                    break;
+                }
             }
         }
         state.repStatistics = retdata;
     }
+    // console.log(state.repStatistics)
 }
 export function SET_REP_FIRST_SELECTED(state, {selected}) {
     state.isSelected = selected;

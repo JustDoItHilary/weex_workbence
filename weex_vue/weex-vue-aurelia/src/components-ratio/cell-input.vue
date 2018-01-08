@@ -1,31 +1,26 @@
 <template>
-    <div >
-        <div v-ratio="ratio"
-             class="div-tit"
+    <div>
+        <div class="div-tit"
              v-if="txtTit">
-            <text v-ratio="ratio"
-                  class="tit"
+            <text class="tit"
                   style="flex:1;">{{txtTit}}</text>
-            <text v-ratio="ratio"
-                  class="tit color_active"
+            <text class="tit color_active"
                   @click="clickPick">{{txtList.length>0?txtList[index].NAME:''}}</text>
-            <slot v-ratio="ratio"
-                  name='arrow-right'
+            <slot name='arrow-right'
                   @click="clickPick"></slot>
             <!--<img class="img" src="../../assets/img/ic_keyboard_arrow_right_black_48dp.png" @click="clickPick"/>-->
         </div>
         <textarea v-if="txtHide"
-                  v-ratio="ratio"
+                  ref="inputArea"
+                  type="text"
                   class="content input_content"
                   :value="txtInput"
                   :rows="txtLines"
                   @input="inputContent($event)"
                   :placeholder="txtHide"></textarea>
         <text v-if="!txtHide&&txtInput"
-              v-ratio="ratio"
               class="content">{{txtInput}}</text>
-        <slot v-ratio="ratio"
-              name="content"></slot>
+        <slot name="content"></slot>
     </div>
 </template>
 
@@ -106,8 +101,14 @@
                 self.txtInput=e.value;
                 self.$emit('clickCellInput',self.txtList.length>0?self.txtList[self.index].GUID:'',self.txtInput,self.type);
 //                console.log(self.txtInput,self.index)
-            }
-        }
+            },
+            clickBlur(){
+//                console.log("clickBlur",this.$refs['inputArea']);
+                if(this.txtHide){
+                    this.$refs['inputArea'].blur();
+                }
+            },
+        },
     }
 </script>
 

@@ -1,11 +1,10 @@
 /*common*/
-//$colorCommon: #58D68D;
-$colorCommon: rgb(2, 136, 209);
+$colorCommon: #58D68D;
+//$colorCommon: rgb(2, 136, 209);
 //$colorCommon: #3190e8;
 //$colorCommon: #d9d9d9;
 //$slsjColor: rgb(2,n 136, 209);
 $applyColor: #58D68D;
-$bgColor: #fff;
 //$bgColor:rgb(242,244,246);
 
 $css-blue: rgb(2, 136, 209);
@@ -17,21 +16,29 @@ $css-grey: #aaa;
 $css-black: #000;
 $css-orange: #F5B041;
 $blue: #3190e8;
-$bg: #e4e4e4;
+$bg: #ebedef;
 
-$radius: 8px;
-$bRadius:100px;
-$hs:96px;
-$ls:48px;
+$borderW:0.5wx;
+$radius: 4wx;
+$bRadius:100wx;
+/*图片、输入框等的宽度或高度*/
+$hh:48wx;
+$bh:36wx;
+$lh:24wx;
+/*font-size*/
+$hs:20wx;//特大，用于标题、logo
+$bs:16wx;
+$cs:14wx;
+$ss:12wx;
+/*间距，因为不同设备间距不需要保持一致，所以使用 px */
+$sl:8;
+$cl:16;
+$bl:32;
 
-$bs:32px;
-$cs:28px;
-$ss:24px;
-
-$sl:8px;
-$cl:16px;
-$bl:32px;
-$borderW:1px;
+$mlw:2wx;
+$slw:4wx;
+$clw:8wx;
+$blw:16wx;
 
 
 @mixin slsjBtnCommon {
@@ -90,7 +97,7 @@ $borderW:1px;
 @mixin cornerBtn($fontSize:$cs,$fontColor:#000,$bgColor:#fff,$borderWidth:$borderW) {
   font-size: $fontSize;
   color: $fontColor;
-  border-radius: 50px;
+  border-radius: 50wx;
   align-items: center;
   justify-content: center;
   border-width: $borderWidth;
@@ -101,10 +108,17 @@ $borderW:1px;
   @include paddingRow($cl);
 }
 //卡片
-@mixin card($bg:$bgColor,$borderColor:$bc,$borderRadius:$radius){
+@mixin card($bg:$fc,$borderColor:$bc,$borderRadius:$radius){
   background-color:$bg;
   padding: $cl;
   @include borderCommon($borderW, $borderColor,$borderRadius);
+}
+@mixin searchBox($bC:$fc,$bh:$bh,$r:$radius,$borderW:0){
+  height: $bh;
+  background-color: $bC;
+  align-items: center;
+  justify-content: center;
+  @include borderRadius($r);
 }
 //边框的一条边：方向，颜色，宽度
 @mixin sideBorder($side:bottom,$sideColor:#000,$wid:$borderW) {
@@ -171,7 +185,7 @@ $borderW:1px;
 }
 
 //宽高
-@mixin wh($width:$ls, $height:$ls) {
+@mixin wh($width:$lh, $height:$lh) {
   width: $width;
   height: $height;
 }
@@ -195,7 +209,7 @@ $borderW:1px;
 }
 
 @function dp($size:1) {
-  @return $size* 750 / ( $deviceWidth / $scale )*1px;
+  @return $size* 750 / ( $deviceWidth / $scale )*1wx;
 }
 
 $deviceWidth:640;

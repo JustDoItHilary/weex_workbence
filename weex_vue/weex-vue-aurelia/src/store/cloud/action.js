@@ -19,8 +19,8 @@ import {
 export function FETCH_CLOUD_GET_FOLDER({commit, state}, {body}) {
     return fetchBP(URL_CLOUD_GET_FOLDER,body)
         .then(retdata => {
-            console.log(retdata)
-            // commit('SET_', {retdata});
+            // console.log(retdata)
+            commit('SET_FOLDER', {retdata});
         }, error => {
             // commit('SET_ERROR', {showType:2 ,mess: error});
         })
@@ -100,6 +100,7 @@ export function FETCH_CLOUD_CANCEL_SHARE({commit, state}, {body}) {
 
 
 export function fetchBP(type, body) {
+    console.log(URL_BASE+type,body);
     return fetchByPost(URL_BASE + type, body)
 }
 export function fetchBG(type, body) {

@@ -269,7 +269,7 @@
     }
 
     .cell-scroll {
-        height: $lh;
+        height: $ls;
         flex-direction: row;
         align-items: center;
         flex: 1;

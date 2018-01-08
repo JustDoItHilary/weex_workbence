@@ -43,7 +43,7 @@
     @import "../style/mixin.scss";
 
     .logo {
-        @include wh($hs, $hs);
+        @include wh($hh, $hh);
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -79,7 +79,7 @@
 
     .div_time {
         flex: 1;
-        width: $hs;
+        width: $hh;
         justify-content: center;
         align-items: center;
     }

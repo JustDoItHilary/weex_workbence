@@ -1,11 +1,11 @@
 <template>
-    <div v-ratio="ratio" class="div_bottom">
-        <cell-btn v-ratio="ratio"
+    <div  class="div_bottom">
+        <cell-btn
                   class="style_btn"
                   :btnHeight="btnHeight"
                   :name="txtLeft"
                   @clickBtn="left"></cell-btn>
-        <cell-btn v-ratio="ratio"
+        <cell-btn
                   v-if="txtRight"
                   class="style_btn"
                   :btnHeight="btnHeight"
@@ -61,6 +61,7 @@
     }
 
     .style_btn {
+        flex:1;
     }
 
 </style>

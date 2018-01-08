@@ -1,21 +1,18 @@
 <template>
-    <div v-ratio="ratio"  class="root">
-        <scroller v-ratio="ratio"  scroll-direction="horizontal"
+    <div class="root">
+        <scroller scroll-direction="horizontal"
                   style="flex-direction: row;"
                   :class="[isiOS? 'scroll':'' ]">
-            <div v-ratio="ratio"
-                 v-for="(item,index) in tabs"
+            <div v-for="(item,index) in tabs"
                  :class="['div_tab',showBorderBottom&&item.visiable?'border_selected':'',showBorderBottom&&(!item.visiable)?'border_selected_false':'']"
-                 :style="{width:tabWidth}"
+                 :style="{width:tabWidth+'px'}"
                  @click="clickTab(item)">
                 <image v-if="item.imgUrl"
-                       v-ratio="ratio"
                        class="img_logo"
                        :src="item.visiable?item.selectedImgUrl:item.imgUrl"
                 ></image>
-                <text v-ratio="ratio"
-                      class="txt_tit"
-                      :style="{ color:item.visiable?item.activeTitColor:item.titColor,fontSize:fontSize }"
+                <text class="txt_tit"
+                      :style="{ color:item.visiable?item.activeTitColor:item.titColor,fontSize:fontSize+'px' }"
                 >{{item.tit}}</text>
             </div>
         </scroller>
@@ -99,13 +96,11 @@
         height: 80px;
     }
     .border_selected{
-        border-bottom-width: 6px;
-        border-color: $colorCommon;
+        @include sideBorder(bottom,$colorCommon,6px);
         padding-bottom:18px;
     }
     .border_selected_false{
-        border-bottom-width: 1px;
-        border-color: $bc;
+        @include sideBorder(bottom,$bc);
         padding-bottom:24px;
     }
 </style>

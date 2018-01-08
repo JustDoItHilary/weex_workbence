@@ -1,34 +1,35 @@
 <template>
     <div class="root" bubble="true" style="border-width:10px;border-color: red;">
-        <list >
-            <refresh class="refresh" display="show">
-                <text class="indicator">Refreshing ...</text>
-            </refresh>
-            <cell v-for="item in list">
-                <text style="font-size:28px;padding:30px;"  :class="$style.red" :style="sty">test</text>
-            </cell>
-        </list>
-        <!--<scroller >-->
-            <!--&lt;!&ndash;<text v-for="item in list">{{item}}  test      </text>&ndash;&gt;-->
-            <!--<div class="root" @click="click('#ff0')">-->
-                <!--<text class="txt">{{getSize(28)+',,,'+width+',,,'+scale}}心若在梦就在迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +-->
-                    <!--'，按旷工半天 处理。 研发部门弹性工作制要求: 研发</text>-->
-            <!--</div>-->
-            <!--&lt;!&ndash;<text @click="click('#0f0')" class="txt_else" style="border-width: 10;font-size: 16;" v-ratio="ratio">1{{rootText}}</text>&ndash;&gt;-->
-            <!--&lt;!&ndash;<text @click="click('#f0f')" v-ratio="ratio" :class="['txt']" style="border-width: 10;">2{{rootText}}</text>&ndash;&gt;-->
-            <!--&lt;!&ndash;<text @click="click('#0ff')" v-ratio="ratio" :class="['txt']" style="border-width: 10;" v-if="showType">2{{rootText}}</text>&ndash;&gt;-->
+        <!--<list >-->
+            <!--<refresh class="refresh" display="show">-->
+                <!--<text class="indicator">Refreshing ...</text>-->
+            <!--</refresh>-->
+            <!--<cell v-for="item in list" style="flex-direction: row;">-->
+                <!--<text style="font-size:28px;padding:30px;" >test11111</text>-->
+                <!--<text style="font-size:1rem;" >test22222</text>-->
+            <!--</cell>-->
+        <!--</list>-->
+        <scroller >
+            <!--<text v-for="item in list">{{item}}  test      </text>-->
+            <div class="root" @click="click('#ff0')">
+                <text class="txt">{{getSize(28)+',,,'+width+',,,'+scale}}心若在梦就在迟到、早退时间大于 30 分钟，且提供合理解释的，按事假半天处理;无合理解释的' +
+                    '，按旷工半天 处理。 研发部门弹性工作制要求: 研发</text>
+            </div>
+            <text @click="click('#0f0')" class="txt_else" style="border-width: 10;font-size: 16;" v-ratio="ratio">1{{rootText}}</text>
+            <text @click="click('#f0f')" v-ratio="ratio" :class="['txt']" style="border-width: 10;">2{{rootText}}</text>
+            <text @click="click('#0ff')" v-ratio="ratio" :class="['txt']" style="border-width: 10;" v-if="showType">2{{rootText}}</text>
 
-            <!--<text class="txt1">test1</text>-->
-            <!--<text class="txt2">test2</text>-->
-            <!--<text class="txt3">test3</text>-->
-            <!--&lt;!&ndash;<validator name="validation" style="border-width: 1px;border-color: red;">&ndash;&gt;-->
-                <!--&lt;!&ndash;<input type="text" v-model='comment' ref='comment' v-validate:comment="{ minlength: 3, maxlength: 15 }">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span v-show="$validation.comment.minlength">不得少于3个字符</span>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<span v-show="$validation.comment.maxlength">不得大于15个字符</span>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</validator>&ndash;&gt;-->
-        <!--</scroller>-->
+            <text class="txt1">test1</text>
+            <text class="txt2">test2</text>
+            <text class="txt3">test3</text>
+            <!--<validator name="validation" style="border-width: 1px;border-color: red;">-->
+                <!--<input type="text" v-model='comment' ref='comment' v-validate:comment="{ minlength: 3, maxlength: 15 }">-->
+                <!--<div>-->
+                    <!--<span v-show="$validation.comment.minlength">不得少于3个字符</span>-->
+                    <!--<span v-show="$validation.comment.maxlength">不得大于15个字符</span>-->
+                <!--</div>-->
+            <!--</validator>-->
+        </scroller>
     </div>
 </template>
 
@@ -105,9 +106,9 @@
                 return tt+'dp';
             },
             setRatio(){
-//                return 1;
-                this.ratio= 750 / ( this.width / this.scale );
-                this.$store.commit('SET_RATIO', {ratio: this.ratio});
+                return 2;
+//                this.ratio= 750 / ( this.width / this.scale );
+//                this.$store.commit('SET_RATIO', {ratio: this.ratio});
             },
         },
         created(e){
@@ -156,7 +157,6 @@
 <style module>
     .red{
         color:red;
-        border-width: 1px;
     }
 </style>
 <style module="b">

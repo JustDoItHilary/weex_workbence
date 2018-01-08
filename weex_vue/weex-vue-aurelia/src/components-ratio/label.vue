@@ -1,27 +1,18 @@
 <template>
-    <div v-ratio="ratio"
-         class="border_bottom">
-        <div v-ratio="ratio"
-             class="flex_center div_border"
+    <div class="border_bottom">
+        <div class="flex_center div_border"
              @click="labelOne">
-            <div v-ratio="ratio"
-                 class="div_label">
-                <text v-ratio="ratio"
-                      :class="['text_center', 'select_' + (selected)]">{{labelOneTxt}}</text>
-                <text v-ratio="ratio"
-                      v-if="oneInfo"
+            <div class="div_label">
+                <text :class="['text_center', 'select_' + (selected)]">{{labelOneTxt}}</text>
+                <text v-if="oneInfo"
                       class="txt_info">{{oneInfo}}</text>
             </div>
         </div>
-        <div v-ratio="ratio"
-             class="flex_center"
+        <div class="flex_center"
              @click="labelTwo">
-            <div v-ratio="ratio"
-                 class="div_label">
-                <text v-ratio="ratio"
-                      :class="['text_center', 'select_' + (!selected)]">{{labelTwoTxt}}</text>
-                <text v-ratio="ratio"
-                      v-if="twoInfo"
+            <div class="div_label">
+                <text :class="['text_center', 'select_' + (!selected)]">{{labelTwoTxt}}</text>
+                <text v-if="twoInfo"
                       class="txt_info">{{twoInfo}}</text>
             </div>
         </div>

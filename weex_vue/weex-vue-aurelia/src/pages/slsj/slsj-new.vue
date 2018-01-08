@@ -218,6 +218,6 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../style/mixin.scss";
     .bg{
-        background-color: $bgColor;
+        background-color: $fc;
     }
 </style>

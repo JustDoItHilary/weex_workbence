@@ -111,14 +111,13 @@
             },
             getData(){
                 let self = this;
-//                var token='@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjMuM2MxNzEwMTZ8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJ';
+                var token='@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjMuM2MxNzEwMTZ8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJ';
 //                var token='@@otK5OTk5fEAxODM1NDI4OTg1N3xAZjRjOGRINjc4Y2E0ZmQ3MWM2NjI5NmRIYTJkNjQ3OTA-';
-                configModule.getUrl('', function (ret) {
-                    var token = ret.split('=')[1];
-                    self.$store.commit('SET_TOKEN', {token: token,callback:function () {
-                        self.getOngoingAct();
-                    }});
-                });
+//                configModule.getUrl('', function (ret) {
+//                    var token = ret.split('=')[1];
+                    self.$store.dispatch('setToken', {token: token});
+                    self.getOngoingAct();
+//                });
             },
             setRatio(){
                 let self = this;
@@ -132,8 +131,8 @@
         created: function (e) {
             let self = this;
 //            self.setRatio();
-            var bundleUrl = self.$getConfig().bundleUrl;
-//            var bundleUrl = 'http://weex.yy365.cn/sy-activity.js?id=C-00000152';
+//            var bundleUrl = self.$getConfig().bundleUrl;
+            var bundleUrl = 'http://weex.yy365.cn/sy-activity.js?id=C-00000152';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/sy-member.js?id=C-00000152';
             self.baseUrl = self.getBaseUrl(bundleUrl);
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});

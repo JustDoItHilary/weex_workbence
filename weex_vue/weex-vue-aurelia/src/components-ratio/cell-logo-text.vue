@@ -1,27 +1,19 @@
 <template>
-    <div v-ratio="ratio"
-         class="div_row">
-        <div v-ratio="ratio"
-             class="div_logo">
-            <text v-ratio="ratio"
-                  class="text_logo"
+    <div class="div_row">
+        <div class="div_logo">
+            <text class="text_logo"
                   v-if="firName">{{firName}}</text>
-            <image v-ratio="ratio"
-                   class="img_logo"
+            <image class="img_logo"
                    v-if="imgLogoUrl"
                    :src="imgLogoUrl"></image>
         </div>
-        <div v-ratio="ratio"
-             class="div_member">
-            <text v-ratio="ratio"
-                  class="text_member"
+        <div class="div_member">
+            <text class="text_member"
                   v-if="tit">{{tit}}</text>
-            <text v-ratio="ratio"
-                  class="text_code"
+            <text class="text_code"
                   v-if="content">{{content}}</text>
         </div>
-        <slot v-ratio="ratio"
-              class="div_member"
+        <slot class="div_member"
               name="endImg"></slot>
     </div>
 </template>
@@ -60,7 +52,7 @@
     }
 
     .div_logo {
-        @include wh(32px,32px);
+        @include wh(64px,64px);
         align-items: center;
         justify-content: center;
         border-radius: $bRadius;

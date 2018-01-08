@@ -331,12 +331,12 @@
 
     .option_selected_true {
         @include marginRow($sl);
-        @include cornerBtn($cs, #fff, $colorCommon, 0);
+        @include cornerBtn($cs, #fff, $colorCommon, 0px);
     }
 
     .option_selected_false {
         @include marginRow($sl);
-        @include cornerBtn($cs, #fff, $css-grey, 0);
+        @include cornerBtn($cs, #fff, $css-grey, 0px);
     }
 
     .txt_add {
@@ -367,7 +367,7 @@
     }
 
     .cell-scroll {
-        height: $lh;
+        height: $ls;
         flex-direction: row;
         align-items: center;
         flex: 1;

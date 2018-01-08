@@ -554,12 +554,12 @@
     @import "../../style/mixin.scss";
 
     .bg{
-        background-color: $bgColor;
+        background-color: $fc;
     }
 
     .item_border{
         height:8px;
-        background-color:$bgColor;
+        background-color:$fc;
     }
 
     .div_tit {

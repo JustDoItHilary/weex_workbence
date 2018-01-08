@@ -214,7 +214,7 @@
     }
 
     .img_search {
-        @include wh(70wx, 70wx);
+        @include wh(140px, 140px);
     }
 
     .txt_hide {
