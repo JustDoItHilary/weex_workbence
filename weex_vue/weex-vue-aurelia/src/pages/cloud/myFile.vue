@@ -35,7 +35,10 @@
         },
         computed: {
             cloudList(){
-                return this.$store.getters.getCloudFolder.concat(this.$store.getters.getCloudFile);
+                var folderList=this.$store.getters.getCloudFolder;
+                var fileList=this.$store.getters.getCloudFile;
+                console.log(folderList,fileList)
+                return folderList.concat(fileList);
             },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
@@ -51,6 +54,7 @@
                 imgArrowRightUrl:'/drawable/ic_keyboard_arrow_right_black_48dp.png',
                 imgDropDownUrl:'/drawable/ic_arrow_drop_down_black_48dp.png',
                 isShow:false,
+                searchMess:'',
 
             }
         },
@@ -120,6 +124,8 @@
             var bundleUrl = 'http://192.168.100.120:8888/weex/sy-member.js';
             self.baseUrl = self.getBaseUrl(bundleUrl);
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
+            var list1=[2,3];var list2=[4,5];
+            console.log(list1.concat(list2))
 //            self.getData();
 //            self.getFolder();
         }
@@ -188,16 +194,12 @@
     }
     .input {
         flex:1;
-        height: 64px;
-        background-color: $bc;
-        border-radius: 12px;
-        align-items: center;
-        justify-content: center;
+        @include searchBox($bg);
         @include marginColumn();
         @include marginRow();
     }
     .txt_center {
-        height: $ls;
+        height: $lh;
         text-align: center;
         font-weight: bold;;
         font-size: $cs;

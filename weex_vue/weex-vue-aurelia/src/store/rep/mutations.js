@@ -110,6 +110,9 @@ export function SET_REP_ALL_AUDITED(state, {retdata}) {
         }
         state.reviewList = table1;
     }
+    if (state.reviewList.length < 1) {
+        this.dispatch('setError', {showType: 1, mess: '暂无待审核'});
+    }
 }
 //设置 repDetails
 export function SET_REP_DETAILS(state, {item}) {

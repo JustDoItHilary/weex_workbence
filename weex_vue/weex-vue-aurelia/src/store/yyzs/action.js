@@ -34,10 +34,11 @@ export function FETCH_SY_MEMBERINFO({commit, state}, {params}) {
             }
         )
 }
+
 /** -----------------yyzs-会员近期消费------------------*/
 export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
     let body = 'QueryType=' + URL_YYZS_QUERY_ORDER_DETAIL + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
-    // console.log('FETCH_SY_BODY: ',body)
+    console.log('FETCH_SY_BODY: ',body)
     return fetchByPost(apiURL.syUrl + 'handle', body)
         .then(
             data => {
@@ -51,6 +52,25 @@ export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
             }
         )
 }
+
+// /** -----------------yyzs-会员近期消费------------------*/
+// export function FETCH_QUERY_ORDER_DETAIL({commit,state},{id,body,header}) {
+//     // let body = 'QueryType=' + URL_YYZS_QUERY_ORDER_DETAIL + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
+//     console.log(id,body);
+//     return fetchByPostWithHeader(apiURL.appUrl +'api/SYCRMAPPOrder/QueryOrderDetailLately/'+id, body,header)
+//         .then(
+//             data => {
+//                 console.log(data);
+//                 commit('SET_ERROR', {showType:0});
+//                 commit('GET_SY_ORDER_DETAIL', {data});
+//             },
+//             error => {
+//                 state.orderDetail = [];
+//                 commit('SET_ERROR', {showType:2 ,mess: error});
+//                 // commit('SET_ERROR', {showType:1,mess: error});//会员信息，不许刷新-showType=1
+//             }
+//         )
+// }
 
 // /** -----------------yyzs-会员近期消费------------------*/
 // export function FETCH_QUERY_ORDER_DETAIL({commit,state},{id,body,header}) {
@@ -69,7 +89,6 @@ export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
 //             }
 //         )
 // }
-
 /*-------修复会员信息---------*/
 export function FETCH_SY_REPAIR_MEMBER({commit,state}, {params,callback}) {
     let body = 'QueryType=' + URL_YYZS_REPAIR_MEMBER + '&UserGuid=' + state.base.selfToken + '&Params=' + params;

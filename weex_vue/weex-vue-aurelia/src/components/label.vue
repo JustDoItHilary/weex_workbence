@@ -71,7 +71,7 @@
     .flex_center {
         flex: 1;
         align-items: center;
-        @include marginColumn($clw);
+        @include marginColumn($slw);
     }
 
     .text_center {

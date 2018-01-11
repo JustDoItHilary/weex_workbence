@@ -1,7 +1,7 @@
 <template>
     <div style="background-color:#ebedef;" append="tree">
         <app-header tit="工作汇报"  :close="clickClose" >
-            <div slot="right" class="div_calendar" @click="clickCalendar">
+            <div v-if="isSelected" slot="right" class="div_calendar" @click="clickCalendar">
                 <image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>
             </div>
         </app-header>
@@ -16,8 +16,7 @@
         <div v-if="isSelected==false">
             <input  class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
         </div>
-        <!--<cell-error v-if="repList.length<1" :errorImg="errorInfo.errorImg"-->
-                    <!--:errorMess="errorInfo.errorMess"></cell-error>-->
+        <cell-error v-if="errorInfo.errorMess" :errorMess="errorInfo.errorMess"></cell-error>
         <list  class="list">
             <!--我的汇报-->
             <cell v-if="isSelected"  class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
@@ -72,7 +71,7 @@
             BottomBtn: require('../../components/footer/bottom-btn.vue'),
             Label: require('../../components/label.vue'),
             DateLogo: require('../../components/cell-date-logo.vue'),
-//            CellError: require('../../components/error.vue'),
+            CellError: require('../../components/error.vue'),
         },
         data(){
             return {
@@ -93,9 +92,10 @@
             }
         },
         computed: {
-//            errorInfo(){
-//                return this.$store.getters.errorInfo;
-//            },
+            errorInfo(){
+//                console.log(this.$store.getters.errorInfo)
+                return this.$store.getters.errorInfo;
+            },
             userPlatformCode(){
                 return this.$store.getters.getUserPlatformCode
             },
@@ -270,9 +270,9 @@
             },
             getData(){
                 let self = this;
-//                self.token = '@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--';
-                configModule.getUrl('', function (ret) {
-                    self.token = ret.split('=')[1];
+                self.token = '@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--';
+//                configModule.getUrl('', function (ret) {
+//                    self.token = ret.split('=')[1];
                     self.$store.commit('SET_TOKEN', {token: self.token});
                     //获取大平台账号
                     self.$store.dispatch('FETCH_USERPLATEFORMCODE',
@@ -283,7 +283,7 @@
                                 self.getLastWeekReviewNum();
                             }
                         });
-                });
+//                });
             },
             setDate(){
                 let self = this;
@@ -305,15 +305,15 @@
             let self = this;
 //            self.setRatio();
             self.isiOS=weex.config.env.platform.toLowerCase() == 'ios';
-            var bundleUrl = self.$getConfig().bundleUrl || '';
-//            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
+//            var bundleUrl = self.$getConfig().bundleUrl || '';
+            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
             self.baseUrl = bundleUrl.split('/').slice(0, -1).join('/');
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
             self.setDate();
-            self.getData();
-//            self.getMyRep();
-//            self.getLastWeekReviewNum();
+//            self.getData();
+            self.getMyRep();
+            self.getLastWeekReviewNum();
         }
         ,
         beforeRouteEnter: function (to, from, next) {

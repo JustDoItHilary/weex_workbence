@@ -73,6 +73,7 @@ export function FETCH_REP_EMP({commit, state}, {body}) {
 export function FETCH_REP_GET_ALL_AUDITED({commit, state}, {body}) {
     return fetchRep(URL_REP_GET_ALL_AUDITED, body)
         .then(retdata => {
+            console.log(retdata);
             commit('SET_ERROR', {showType:0});
             commit('SET_REP_ALL_AUDITED', {retdata})
         }, error => {

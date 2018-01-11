@@ -1,8 +1,8 @@
 <template>
     <div>
-        <text class="txt_content">{{tit}}</text>
+        <text class="txt_content" :style="{color:txtColor}">{{tit}}</text>
         <text v-if="content"
-              class="txt_content txt_div">{{content}}</text>
+              class="txt_content txt_div" :style="{color:contentColor}">{{content}}</text>
     </div>
 </template>
 
@@ -19,6 +19,8 @@
                 required:false,
                 default:''
             },
+            titColor:{},
+            contentColor:{},
         },
         computed:{
         },

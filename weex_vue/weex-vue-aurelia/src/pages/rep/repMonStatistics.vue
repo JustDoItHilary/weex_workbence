@@ -67,8 +67,8 @@
             CellError: require('../../components/error.vue'),
         },
         computed: {
-            ratio(){
-                return this.$store.getters.ratio;
+            userPlatformCode(){
+                return this.$store.getters.getUserPlatformCode
             },
             statistics(){
 //                console.log(this.$store.getters.getRepStatistics);
@@ -93,9 +93,9 @@
                 end=new Date(end.getTime()-86400000);
                 start=self.formatDate(start, "yyyy-MM-dd");
                 end=self.formatDate(end, "yyyy-MM-dd");
-                var body = 'startDate=' + start + '&endDate=' + end;
+                var body ='code='+self.userPlatformCode+ '&startDate=' + start + '&endDate=' + end;
 //                console.log(body)
-                self.$store.dispatch('FETCH_GET_WEEKLY_NUM',{body:body});
+                self.$store.dispatcsh('FETCH_GET_WEEKLY_NUM',{body:body});
             },
             clickLast(){
                 let self = this;

@@ -16,7 +16,7 @@
 
     export default{
         components: {
-            cellHeader: require('../../components/header/apply-header.vue'),
+            cellHeader: require('../../components/header/yyzs-header.vue'),
             CellCard: require('../../components/cell-card.vue'),
             cellError: require('../../components/error.vue')
         },

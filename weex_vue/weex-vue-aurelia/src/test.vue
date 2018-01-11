@@ -1,84 +1,97 @@
+
 <template>
-    <scroller>
-        <div>
-            <text class="txt">我来自偶然，像一颗尘土，有谁看出我的脆弱，我来自何方，我情归何处。。。</text>
-            <text class="txt_px">我来自偶然，像一颗尘土，有谁看出我的脆弱，我来自何方，我情归何处。。。</text>
-            <text class="txt_wx">我来自偶然，像一颗尘土，有谁看出我的脆弱，我来自何方，我情归何处。。。</text>
-
-            <div style="flex-direction: row;width:750px;">
-            <div style="flex-direction: row;flex:1;" class="root">
-                <div style="border-width: 1px;flex:1;">
-                    <text>j我来自偶然，像一颗尘土，有谁看出我的脆弱，我来自何方，我情归何处。。。sldfkjsl</text>
-                </div>
-                <text  style="border-width: 1px;flex:1;">lsjdflskjfl</text>
-
-                <div  style="border-width: 1px;flex:1;" class="item">
-                    <text style="flex:1;">j我来自偶然lsjdflskjfl</text>
+    <div>
+        <div  class="row2" :style="getStyle(20)">
+            <div v-for="(text, k) in list" class="item2">
+                <div>
+                    <text>{{text}}</text>
                 </div>
             </div>
-            <div style="border-width: 1px;top:0;bottom:0;"></div>
-            </div>
-            <!--<div  style="border-width: 1px;flex:1;position:fixed;">-->
-                <!--<text style="flex:1;">j我来自偶然lsjdflskjfl</text>-->
-            <!--</div>-->
-
-            <!--<div style="margin-top: 20px;">-->
-                <!--<div style="border-width: 1px;margin-top: 20;flex-direction: row;">-->
-                    <!--<div v-for="dic in list" style="flex:1;border-width: 1px;" class="root">-->
-                        <!--<div style="flex:1;border-width: 0px;" class="txt_item">-->
-                            <!--<text style="flex:1;font-size: 30;">{{dic}}</text>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div style="background-color: rgb(235,235,235);height:1;"></div>-->
-            <!--</div>-->
         </div>
-    </scroller>
-</template>
 
+
+        <cell-tab :style="getStyle(0)" :list="list" ></cell-tab>
+        <cell-tab :style="getStyle(10)" :list="list" ></cell-tab>
+        <cell-tab :style="getStyle(20)" :list="list" ></cell-tab>
+        <cell-tab :style="getStyle(30)" :list="list" ></cell-tab>
+        <cell-tab :style="getStyle(40)" :list="list" ></cell-tab>
+
+
+        <!--<div style="" :style="{marginLeft:getMargin(0),marginRight:getMargin(0)}">-->
+        <!--<text class="txt" v-for="item in list">{{item}}</text>-->
+        <!--</div>-->
+
+        <div v-for="item in list2" class="row"  :style="getStyle(item)">
+            <div v-for="(text, k) in list" class="item">
+                <!--<div>-->
+                <text>{{text}}</text>
+                <!--</div>-->
+            </div>
+        </div>
+
+        <!--<cell-tab class="cell_tab" :style="getMargins(0)" :list="list"  @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" :style="getMargins(10)" :list="list" @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" :style="getMargins(20)" :list="list" @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" :style="getMargins(30)" :list="list" @clickTabPar="clickTabPar"></cell-tab>-->
+
+        <!--<cell-tab class="cell_tab"  :list="list" :tabWidth="getWidth(0)" @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" style="margin-left: 10;margin-right: 10;" :list="list" :tabWidth="getWidth(10)" @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" style="margin-left: 20;margin-right: 20;" :list="list" :tabWidth="getWidth(20)" @clickTabPar="clickTabPar"></cell-tab>-->
+        <!--<cell-tab class="cell_tab" style="margin-left: 30;margin-right: 30;"  :list="list" :tabWidth="getWidth(30)" @clickTabPar="clickTabPar"></cell-tab>-->
+    </div>
+    </div>
+</template>
+<style rel="stylesheet/scss" lang="sass" scoped>
+    @import "./style/mixin";
+
+    .item {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        border-width: 1;
+    }
+
+    .row {
+        flex-direction: row;
+    }
+    .item2{
+        flex:1;
+        justify-content: center;
+        align-items:center;
+        border-width:1;
+    }
+    .row2{
+        flex-direction: row;
+        height:80px;
+    }
+</style>
 <script>
-    export default  {
-        data(){
+    module.exports = {
+        components: {
+            CellTab: require('./components/tab/sy-tab2.vue')
+        },
+        data: function () {
             return {
-                list:["冷冷清清 凄凄惨惨戚戚 三杯两盏淡酒 怎及她晚来风急",2,3]
+                list: ["全部", "重点商品", "重点孕婴", "重点糖sdfsdfs尿病", "重点商品", "重点孕婴", "重点糖sdfsdfs尿病"],
+                selected: 1,
+                list2:[0,10,20,30,40,50],
+                list3: ["全部", "重点商品"],
+                listq:[
+                    ['A', 'B', 'C'],
+                    ['D', 'E', 'F'],
+                    ['G', 'H', 'I']
+                ]
             }
+        },
+        methods:{
+            getStyle(len){
+                var style = {};
+                var lenElse = 750 - parseInt((750 - 2 * len) / this.list.length) * this.list.length;
+                style.marginLeft = parseInt(lenElse / 2);
+                style.marginRight = lenElse - style.marginLeft;
+                console.log(style);
+                return style;
+            },
         },
     }
 </script>
-
-<style>
-    .root{
-        position: relative;
-    }
-    .item{
-        top:0;
-        bottom:0;
-    }
-    .txt_item{
-        position: fixed;
-        right:0px;
-        bottom:0;
-        top:0;
-
-    }
-    .txt{
-        padding:20px;
-        font-size: 24;
-    }
-    .txt_px{
-        padding:20px;
-        font-size: 24px;
-    }
-    .txt_wx{
-        padding:20px;
-        font-size: 24wx;
-    }
-    .txt_rem{
-        padding:20px;
-        font-size: 24rem;
-    }
-    .input{
-        border-bottom-width:2px;
-        border-color: red;
-    }
-</style>

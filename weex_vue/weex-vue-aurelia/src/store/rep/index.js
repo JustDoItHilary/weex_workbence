@@ -25,8 +25,8 @@ const store = new Vuex.Store({
         // userPlatformCode:'133a751178924c7f936fb70b4b306e46',//ZHOULISI
         // userPlatformCode:'545e1ced3b364bbabf44bb2b72903862',//废弃：测试-大波
         // userPlatformCode:'fd6d8670cc9946a19b1fc92605a77347',
-        // userPlatformCode:'cd47e31df52647a0bdb5fffc6c8d6718',//大波
-        userPlatformCode:'',
+        userPlatformCode:'cd47e31df52647a0bdb5fffc6c8d6718',//大波
+        // userPlatformCode:'',
         repList:[], //我的汇报列表
         lastWeekRepDetails:{}, //上周 rep 详情
         repDetails:{},//rep 详情

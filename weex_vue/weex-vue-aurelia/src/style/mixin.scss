@@ -1,6 +1,6 @@
 /*common*/
-$colorCommon: #58D68D;
-//$colorCommon: rgb(2, 136, 209);
+//$colorCommon: #58D68D;
+$colorCommon: rgb(2, 136, 209);
 //$colorCommon: #3190e8;
 //$colorCommon: #d9d9d9;
 //$slsjColor: rgb(2,n 136, 209);
@@ -10,7 +10,7 @@ $applyColor: #58D68D;
 $css-blue: rgb(2, 136, 209);
 $wg: #efefef;
 $bc: #d9d9d9;
-$gc: #dfdfdf;
+//$gc: #dfdfdf;
 $fc: #fff;
 $css-grey: #aaa;
 $css-black: #000;
@@ -141,7 +141,7 @@ $blw:16wx;
   border-radius: $radius;
 }
 //边框：宽度，颜色，圆角
-@mixin borderCommon($w:$borderW,$c:$gc,$r:$radius) {
+@mixin borderCommon($w:$borderW,$c:$bc,$r:$radius) {
   border-width: $w;
   border-color: $c;
   -webkit-border-radius: $radius;
