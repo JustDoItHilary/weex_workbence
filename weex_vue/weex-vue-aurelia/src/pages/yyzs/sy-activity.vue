@@ -11,11 +11,6 @@
         <cell-error v-if="errorInfo.errorMess" :errorImg="errorInfo.errorImg"
                     :errorMess="errorInfo.errorMess"></cell-error>
         <scroller class="scroll">
-            <!--<refresh class="refresh" @refresh="onRefresh" :display="showRefresh?'show':'hide'">-->
-                <!--<loading-indicator class="indicator"></loading-indicator>-->
-                <!--<text class="txt_refresh">加载中...</text>-->
-            <!--</refresh>-->
-            <text class="txt_refresh" v-if="show">加载中...</text>
             <div v-if="isSelected" class="div_card" v-for="(item,index) in ongoingAct" @click="clickItem(item)">
                 <text class="txt_tit">{{item.TITLE}}</text>
             </div>
@@ -23,7 +18,6 @@
                 <text class="txt_tit">{{his.TITLE}}</text>
             </div>
         </scroller>
-        <!--<cell-btn v-if="false" class="style_btn" name="详情" @clickBtn="clickBtn"></cell-btn>-->
     </div>
 </template>
 
@@ -41,7 +35,6 @@
             return {
                 baseUrl: '',
                 id: '',
-                showRefresh:true,
             }
         },
         computed: {
@@ -87,15 +80,11 @@
             },
             getOngoingAct(){
                 let self = this;
-                self.$store.dispatch('FETCH_GET_ONGOING_ACT', {params: {},callback:function () {
-                    self.showRefresh=false;
-                }})
+                self.$store.dispatch('FETCH_GET_ONGOING_ACT', {params: {}})
             },
             getHistoryAct(){
                 let self = this;
-                self.$store.dispatch('FETCH_GET_HISTORY_ACT', {params: {},callback:function () {
-                    self.showRefresh=false;
-                }})
+                self.$store.dispatch('FETCH_GET_HISTORY_ACT', {params: {}})
             },
             getData(){
                 let self = this;
