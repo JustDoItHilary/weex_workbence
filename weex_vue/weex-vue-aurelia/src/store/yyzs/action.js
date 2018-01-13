@@ -15,6 +15,7 @@ import {
     URL_YYZS_GET_HISTORY_ACT,
     URL_YYZS_REPAIR_MEMBER,
     URL_YYZS_QUERY_ORDER_DETAIL,
+    URL_YYZS_GET_HEALTH_HISTORY,
 } from './api'
 
 /** -----------------yyzs-会员信息------------------*/
@@ -108,6 +109,22 @@ export function FETCH_SY_REPAIR_MEMBER({commit,state}, {params,callback}) {
             },
             error => {
                 commit('SET_ERROR', {showType:2 ,mess: error});
+            }
+        )
+}
+export function FETCH_SY_GET_HEALTH_HISTORY({commit, state}, {params}) {
+    let body = 'QueryType=' + URL_YYZS_GET_HEALTH_HISTORY + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
+    // console.log('FETCH_SY_BODY: ',body)
+    return fetchByPost(apiURL.syUrl + 'Health', body)
+        .then(
+            data => {
+                commit('SET_ERROR', {showType:0});
+                commit('GET_SY_HEALTH_HISTORY', {data});
+            },
+            error => {
+                state.syHealthList = [];
+                commit('SET_ERROR', {showType:2 ,mess: error});
+                // commit('SET_ERROR', {showType:1,mess: error});//会员信息，不许刷新-showType=1
             }
         )
 }

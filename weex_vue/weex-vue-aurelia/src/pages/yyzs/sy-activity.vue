@@ -51,9 +51,6 @@
             isSelected(){/*当前显示的是否为"进行中"页面*/
                 return this.$store.getters.getActSelected;
             },
-//            selfToken(){
-//                return this.$store.getters.selfToken;
-//            },
             ongoingAct(){
                 return this.$store.getters.getOngoingAct;
             },
@@ -103,10 +100,9 @@
             getData(){
                 let self = this;
                 var token='@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjMuM2MxNzEwMTZ8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJ';
-//                var token='@@otK5OTk5fEAxODM1NDI4OTg1N3xAZjRjOGRINjc4Y2E0ZmQ3MWM2NjI5NmRIYTJkNjQ3OTA-';
 //                configModule.getUrl('', function (ret) {
 //                    var token = ret.split('=')[1];
-                    self.$store.dispatch('setToken', {token: token});
+                self.$store.dispatch('setToken', {token: token});
                     self.getOngoingAct();
 //                });
             },

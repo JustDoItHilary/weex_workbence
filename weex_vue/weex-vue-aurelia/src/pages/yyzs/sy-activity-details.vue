@@ -4,7 +4,7 @@
         <cell-error v-if="errorInfo.errorMess" :errorImg="errorInfo.errorImg" :errorMess="errorInfo.errorMess"></cell-error>
         <scroller class="scroll">
             <div v-for="item in member">
-                <cell-card :tit="item.Extra.DESC" :txtElse="item.showed?'折叠':'展开'" :item="item" @clickItem="clickItem"></cell-card>
+                <cell-card :tit="item.Extra.DESC" :txtElse="item.hasOwnProperty('NEEDFOLD')?(item.showed?'折叠':'展开'):''" :item="item" @clickItem="clickItem"></cell-card>
             </div>
         </scroller>
     </div>
@@ -17,13 +17,11 @@
     export default{
         components: {
             cellHeader: require('../../components/header/yyzs-header.vue'),
-            CellCard: require('../../components/cell-card.vue'),
+            CellCard: require('../../components/card/sy-card.vue'),
             cellError: require('../../components/error.vue')
         },
         data(){
             return {
-                ratio: 1,
-                refreshing: false,
             }
         },
         computed: {
@@ -36,18 +34,8 @@
             member(){
                 return this.$store.getters.getMemberInfo;
             },
-//            ratio(){
-//                return this.$store.getters.ratio;
-//            },
         },
         methods: {
-//            onrefresh (event) {
-//                console.log('is refreshing');
-//                this.refreshing = true;
-//                setTimeout(() => {
-//                    this.refreshing = false;
-//                }, 2000);
-//            },
             clickItem(ret){
                 if(ret==="refresh"){
                     this.getData();

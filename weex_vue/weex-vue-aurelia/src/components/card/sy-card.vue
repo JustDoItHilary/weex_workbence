@@ -70,14 +70,10 @@
         },
         methods: {
             loadMoreCard(){
-                console.log("loadMoreCard");
+//                console.log("loadMoreCard");
                 let self=this;
-//                var more=self.item.List.slice(20*self.index+1,20*(self.index+1));
-//                console.log("more: ",more);
-//                self.list.concat(more);
                 self.index++;
                 self.list=self.item.List.slice(0,20*self.index);
-                console.log("list: ",self.list)
             },
             clickShow(){
                 let self = this;
@@ -95,27 +91,11 @@
                     });
                 }
             },
-            ts(str){
-                let self = this;
-                var arr = self.toArr(str);
-                if (self.item.Data && self.item.Data.length > 0) {
-                    for (var i = 0; i < arr.length; i++) {
-                        for (var key in self.item.Data[0]) {
-                            var key2 = key.split(' ').join('');
-                            arr[i] = arr[i].split(' ').join('');
-                            if (key2 == arr[i]) {
-                                str = str.replace(new RegExp('{' + arr[i] + '}', 'g'), self.item.Data[0][key]);
-                            }
-                        }
-                    }
-                }
-                return str
-            },
         },
         created(){
             let self=this;
-            self.index=1;
-            self.list=self.item.List.slice(0,20);
+//            self.index=1;
+//            self.list=self.item.List.slice(0,20);
         },
     }
 </script>

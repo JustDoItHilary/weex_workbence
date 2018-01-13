@@ -41,11 +41,12 @@ import Router from 'vue-router'
 // import WWDetails from './pages/ww/ww-details.vue'
 //
 /*ww-yyzs*/
-// import SyActivityDetails from './pages/yyzs/sy-activity-details.vue'
-// import SyActivity from './pages/yyzs/sy-activity.vue'
-import SyQueryOrderDetails from './pages/yyzs/sy-queryDetails.vue'
+import SyActivity from './pages/yyzs/sy-activity.vue'
+import SyActivityDetails from './pages/yyzs/sy-activity-details.vue'
+// import SyQueryOrderDetails from './pages/yyzs/sy-queryDetails.vue'
 // import SyRepairMember from './pages/yyzs/sy-repairMember.vue'
 // import SyMember from './pages/yyzs/sy-member.vue'
+// import SyHealthHistory from './pages/yyzs/sy-health-history.vue'
 // import SYMain from './pages/ww/yyzs/sy-main.vue'
 // import GetToken from './pages/yyzs/getToken.vue'
 // import MemberOperator from './pages/ww/yyzs/memberOperator.vue'
@@ -214,21 +215,26 @@ export default new Router({
         //     }
         // },
         /*ww-yyzs*/
-        // {
-        //     path:'/syActivityDetails/:params',
-        //     component:SyActivityDetails,
-        //     name:'syActivityDetails'
-        // },
-        // {
-        //     path:'/syActivity',
-        //     component:SyActivity,
-        //     name:'syActivity'
-        // },
         {
-            path:'/syQueryOrderDetails',
-            component:SyQueryOrderDetails,
-            name:'syQueryOrderDetails'
+            path:'/syActivityDetails/:params',
+            component:SyActivityDetails,
+            name:'syActivityDetails'
         },
+        {
+            path:'/syActivity',
+            component:SyActivity,
+            name:'syActivity'
+        },
+        // {
+        //     path:'/syQueryOrderDetails',
+        //     component:SyQueryOrderDetails,
+        //     name:'syQueryOrderDetails'
+        // },
+        // {
+        //     path:'/syHealthHistory',
+        //     component:SyHealthHistory,
+        //     name:'syHealth'
+        // },
         // {
         //     path:'/syMember',
         //     component:SyMember,
@@ -294,7 +300,7 @@ export default new Router({
         //     }
         // },
 
-        {path: '/', redirect: '/syQueryOrderDetails'}
+        {path: '/', redirect: '/syActivity'}
         // {path: '/', redirect:`/applyList/${JSON.stringify({GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'})}`}
     ]
 })

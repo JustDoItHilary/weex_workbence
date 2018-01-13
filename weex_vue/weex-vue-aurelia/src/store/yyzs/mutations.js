@@ -152,6 +152,14 @@ export function GET_SY_ORDER_DETAIL(state, {data}) {
     // console.log(state.orderDetail);
 }
 
+/*------会员健康信息------*/
+export function GET_SY_HEALTH_HISTORY(state, {data}) {
+    // console.log(data);
+    state.syHealthList = [];
+    this.commit('getTables', {data, name: 'syHealthList', warning: '暂无会员健康信息'});
+    // console.log(state.orderDetail);
+}
+
 /*-----------------yyzs-营销活动详情--------------*/
 export function SET_CRM(state, {retdata}) {
     state.memberInfo = [];
@@ -189,7 +197,7 @@ export function SET_CRM(state, {retdata}) {
         // console.log(state.memberInfo)
     }
     if (state.memberInfo.length < 1) {
-        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
+        this.dispatch('setError', {showType: 1, mess: '暂无营销活动'});
     }
 }
 /*-----------------yyzs-营销活动 label 选中项--------------*/
@@ -209,10 +217,9 @@ export function SET_ONGOING_ACT(state, {retdata}) {
                 state.ongoingAct.push(item);
             }
         }
-        // console.log(state.ongoingAct);
     }
     if (state.ongoingAct.length < 1) {
-        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
+        this.dispatch('setError', {showType: 1, mess: '暂无营销活动'});
     }
 }
 /*-----------------yyzs-营销活动 历史--------------*/
@@ -224,13 +231,11 @@ export function SET_HISTORY_ACT(state, {retdata}) {
         if (typeof data === 'object' && Array.isArray(data)) {
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
-                // item.LIST=item.TITLE.split(',');
                 state.historyAct.push(item);
             }
         }
-        // console.log(state.historyAct);
     }
     if (state.historyAct.length < 1) {
-        SET_ERROR(state, {showType: 1, mess: '暂无营销活动'});
+        this.dispatch('setError', {showType: 1, mess: '暂无营销活动'});
     }
 }
