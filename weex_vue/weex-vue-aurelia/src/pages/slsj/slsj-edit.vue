@@ -551,7 +551,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
 
     .bg{
         background-color: $fc;

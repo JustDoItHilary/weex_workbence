@@ -5,7 +5,7 @@
                  :style="getWidth()"
                  @click="clickTab(index)"
             >
-                <text :class="['text_center', 'txt_select_' + (selected==index)]">{{item}}</text>
+                <text :class="['text_center', 'txt_select_' + (selected==index)]">{{item[name]}}</text>
             </div>
     </div>
 </template>
@@ -19,6 +19,8 @@
             },
             tabMargin:{
                 require:true,
+            },
+            name:{
             }
         },
         components: {},

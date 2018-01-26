@@ -1,0 +1,10 @@
+{
+    "weex-chart": {
+        "source": {
+            "type": "registry",
+            "id": "weex-chart"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}

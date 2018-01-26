@@ -37,13 +37,13 @@
                 </div>
                 <div style="flex-direction: row;flex:1;">
                 <!--<div class="div_table div_border">-->
-                    <text class="txt_state div_table div_border">{{item.PostCounts}}</text>
+                    <text class="txt_state div_table div_border"> {{item.PostCounts}} </text>
                 <!--</div>-->
                 <!--<div class="div_table div_border">-->
-                    <text class="txt_state div_table div_border">{{item.unPostCounts}}</text>
+                    <text class="txt_state div_table div_border"> {{item.unPostCounts}} </text>
                 <!--</div>-->
                 <!--<div class="div_table">-->
-                    <text class="txt_state div_table">{{item.LaterCounts}}</text>
+                    <text class="txt_state div_table"> {{item.LaterCounts}} </text>
                 <!--</div>-->
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 start=self.formatDate(start, "yyyy-MM-dd");
                 end=self.formatDate(end, "yyyy-MM-dd");
                 var body ='code='+self.userPlatformCode+ '&startDate=' + start + '&endDate=' + end;
-//                console.log(body)
+                console.log(body)
                 self.$store.dispatcsh('FETCH_GET_WEEKLY_NUM',{body:body});
             },
             clickLast(){
@@ -131,7 +131,7 @@
 
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
 
     .div_calendar{
        // padding:$cl;

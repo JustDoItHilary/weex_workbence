@@ -1,6 +1,6 @@
 /*common*/
-//$colorCommon: #58D68D;
-$colorCommon: rgb(2, 136, 209);
+$colorCommon: #58D68D;
+//$colorCommon: rgb(2, 136, 209);
 //$colorCommon: #3190e8;
 //$colorCommon: #d9d9d9;
 //$slsjColor: rgb(2,n 136, 209);
@@ -39,7 +39,10 @@ $mlw:2wx;
 $slw:4wx;
 $clw:8wx;
 $blw:16wx;
+$llw:32wx;
 
+$img:70wx;
+$btnRadius:6wx;
 
 @mixin slsjBtnCommon {
   background-color: $colorCommon;

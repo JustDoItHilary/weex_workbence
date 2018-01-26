@@ -14,8 +14,8 @@ export const URL_REP_GET_STATISTICS ='GetStatistics' //获取周报提交统计
 export const URL_REP_GET_WEEKLY_NUM ='GetWeeklyNUM' //获取周报本月提交次数
 
 /* URL */
-export const URL_BASE ='http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=' //获取工作汇报-测试
-// export const URL_BASE ='http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=' //获取工作汇报
+// export const URL_BASE ='http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=' //获取工作汇报-测试
+export const URL_BASE ='http://daily.romens.cn/Handler/DailyAPIHandler.ashx?action=' //获取工作汇报
 // baseUrl: 'http://192.168.100.117:8095/Handler/DailyAPIHandler.ashx?action=',
 // baseUrl: 'http://192.168.100.96:8090/Handler/DailyAPIHandler.ashx?action=',
 export const URL_YIYAO ='http://im.yiyao365.cn/' //获取大平台账号

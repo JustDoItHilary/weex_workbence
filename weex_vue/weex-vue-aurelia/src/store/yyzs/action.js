@@ -38,6 +38,8 @@ export function FETCH_SY_MEMBERINFO({commit, state}, {params}) {
 
 /** -----------------yyzs-会员近期消费------------------*/
 export function FETCH_QUERY_ORDER_DETAIL({commit, state}, {params}) {
+    commit('SET_ERROR', {showType: 2, mess: "加载中..."});
+    state.orderDetail = [];
     let body = 'QueryType=' + URL_YYZS_QUERY_ORDER_DETAIL + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
     console.log('FETCH_SY_BODY: ',body)
     return fetchByPost(apiURL.syUrl + 'handle', body)
@@ -113,6 +115,8 @@ export function FETCH_SY_REPAIR_MEMBER({commit,state}, {params,callback}) {
         )
 }
 export function FETCH_SY_GET_HEALTH_HISTORY({commit, state}, {params}) {
+    commit('SET_ERROR', {showType: 2, mess: "加载中..."});
+    state.syHealthList = [];
     let body = 'QueryType=' + URL_YYZS_GET_HEALTH_HISTORY + '&UserGuid=' + state.base.selfToken + '&Params=' + params;
     // console.log('FETCH_SY_BODY: ',body)
     return fetchByPost(apiURL.syUrl + 'Health', body)

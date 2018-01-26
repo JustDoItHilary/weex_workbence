@@ -40,7 +40,7 @@
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../style/mixin.scss";
+    @import "../style/mixin";
 
     .logo {
         @include wh($hh, $hh);
@@ -86,5 +86,6 @@
 
     .text_logo {
         font-size: $cs;
+        lines:1;
     }
 </style>

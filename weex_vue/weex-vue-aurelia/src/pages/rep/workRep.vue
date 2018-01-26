@@ -270,9 +270,9 @@
             },
             getData(){
                 let self = this;
-                self.token = '@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--';
-//                configModule.getUrl('', function (ret) {
-//                    self.token = ret.split('=')[1];
+//                self.token = '@@ODg4ODg4fEA1NzllZjJlMGVlNWY2fEBjNGMxMDkyOTU5M2NiZWEzZTA3YWE5MTMxYzFjN2U1Mg--';
+                configModule.getUrl('', function (ret) {
+                    self.token = ret.split('=')[1];
                     self.$store.commit('SET_TOKEN', {token: self.token});
                     //获取大平台账号
                     self.$store.dispatch('FETCH_USERPLATEFORMCODE',
@@ -283,7 +283,7 @@
                                 self.getLastWeekReviewNum();
                             }
                         });
-//                });
+                });
             },
             setDate(){
                 let self = this;
@@ -291,22 +291,12 @@
                 self.year = self.date.getFullYear();
                 self.month = self.date.getMonth();
             },
-            setRatio(){
-                let self=this;
-                var envConfig=self.$getConfig().env;
-                var width=envConfig.hasOwnProperty('deviceWidth')?envConfig.deviceWidth:0;
-                var scale=envConfig.hasOwnProperty('scale')?envConfig.scale:2;
-                self.ratio=750 / ( width / scale );
-                self.$store.commit('SET_RATIO',{ratio:self.ratio});
-            },
-        }
-        ,
+        },
         created: function (e) {
             let self = this;
-//            self.setRatio();
             self.isiOS=weex.config.env.platform.toLowerCase() == 'ios';
-//            var bundleUrl = self.$getConfig().bundleUrl || '';
-            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
+            var bundleUrl = self.$getConfig().bundleUrl || '';
+//            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/applyType.js';
             self.baseUrl = bundleUrl.split('/').slice(0, -1).join('/');
             self.$store.commit('SET_BASE_URL', {url: self.baseUrl});
@@ -336,7 +326,7 @@
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
 
     .div_calendar{
         padding:$cl;
@@ -411,7 +401,7 @@
 
     .cell_bottom_btn {
         @include paddingColumn($clw);
-        @include paddingRow($slw);
+        @include paddingRow($bl);
     }
 
     .div_search {

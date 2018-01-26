@@ -166,7 +166,7 @@
 </style>
 
 <style lang="sass" rel="stylesheet/scss" >
-    @import "./style/mixin";
+    @import "style/mixin";
 
 
     .root {

@@ -216,7 +216,7 @@
         }
     };</script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
     .bg{
         background-color: $fc;
     }

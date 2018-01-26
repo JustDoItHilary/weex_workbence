@@ -1,9 +1,9 @@
 <template>
     <div append="tree">
         <app-header tit="周报提交情况">
-            <div slot="right" class="div_calendar" @click="clickTable">
-                <image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>
-            </div>
+            <!--<div slot="right" class="div_calendar" @click="clickTable">-->
+                <!--<image class="img_calendar" :src="baseUrl+(isiOS?imgCalendarUrl_ios:imgCalendarUrl)"></image>-->
+            <!--</div>-->
         </app-header>
         <cell-txt-center 
                          :txt="startDate+' -- '+endDate"
@@ -178,7 +178,7 @@
 
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
 
     .div_calendar{
         padding:$cl;

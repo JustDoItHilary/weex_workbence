@@ -1,0 +1,15 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "weex-chart": {
+            "PACKAGE_NAME": "com.weex.app"
+        }
+    },
+    "dependent_plugins": {}
+}

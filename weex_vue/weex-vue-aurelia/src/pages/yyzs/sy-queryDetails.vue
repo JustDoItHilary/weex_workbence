@@ -100,7 +100,6 @@
 //            },
             getData(){
                 let self = this;
-                self.$store.commit('SET_ERROR', {showType: 2, mess: "加载中..."});
                 var params = {};
                 params.MEMBERID = self.memberID;
                 params.FILTERWEIGHT = self.params[self.selected];

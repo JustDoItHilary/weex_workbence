@@ -110,16 +110,46 @@
             },
             getMeasure(){
                 let self=this;
-                configModule.getActionBarHeight(function(params){
-                    var scale;
-                    if (self.isiOS) {
-                        scale=params.width/750;
-                    }else{
-                        scale = weex.config.env.deviceWidth / 750;
-                    }
-                    self.actionBarHeight=params.height/scale;
+                var platform= weex.config.env.platform.toLowerCase();
+                var model=weex.config.env.deviceModel.toLowerCase();
+                self.isiOS =platform == 'ios';
+//                if (self.isiOS&&model.indexOf('iphone')>-1||platform=='android') {
+                    configModule.getActionBarHeight(function (params) {
+                        var scale;
+//                        modal.toast({message:  'getActionBarHeight： ' + JSON.stringify(params), duration: 3});
+                        if(params.hasOwnProperty("isLandScape")&&params.isLandScape==1){
+                            configModule.getContainerHeight(function (params) {
+                                // let ratio = this.$getConfig().env.devHeight /(2*750);
+                                //从本地获取按钮的高度占布局高度的比值
+//                                modal.toast({message: "getContainerHeight: "+JSON.stringify(params), duration: 3});
+                                let ratio = params.ratio;
+                                if (ratio !== null) {
+                                    //由于是横屏显示，所以高度为设备的宽度
+                                    self.actionBarHeight = 750 * ratio;
+                                }
+                            }.bind(this));
+                        }else {
+                            if (self.isiOS) {
+                                scale = params.width / 750;
+                            } else {
+                                scale = weex.config.env.deviceWidth / 750;
+                            }
+                            self.actionBarHeight = params.height / scale;
+                        }
 //                    require('@weex-module/myModule').printLog('getActionBarHeight: '+self.actionBarHeight);
-                }.bind(this));
+                    }.bind(this));
+//                }else{
+//                    configModule.getContainerHeight(function (params) {
+//                        // let ratio = this.$getConfig().env.devHeight /(2*750);
+//                        //从本地获取按钮的高度占布局高度的比值
+//                        modal.toast({message: params.ratio , duration: 3});
+//                        let ratio = params.ratio;
+//                        if (ratio !== null) {
+//                            //由于是横屏显示，所以高度为设备的宽度
+//                            self.actionBarHeight = 750 * ratio;
+//                        }
+//                    }.bind(this));
+//                }
 //                configModule.getActionBarHeight(function(params){
 //                    var scale;
 //                    if (self.$getConfig().env.platform.toLowerCase()=='ios') {
@@ -174,7 +204,7 @@
         @include sideBorder(bottom,$bc);
     }
     .img_back_iOS {
-        @include wh(36wx,36wx);
+        @include wh($bh,$bh);
         /*border-width: 1;*/
     }
     .text_active{

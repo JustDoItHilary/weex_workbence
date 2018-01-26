@@ -151,7 +151,10 @@ export default {
             str = str.replace(/&/g, "§§"); //因为参数放于 json 对象中，所以不能包含 &
             // 不能包含 [] {} ,但是未进行转义，在以后需要时再进行转义
             return str;
-        }
+        },
+        isArr(o){
+            return Object.prototype.toString.call(o)=='[object Array]';
+        },
     }
 }
 export function sortList(sortBy, list) {
@@ -208,6 +211,9 @@ export function replaceTS(str,itemData) {
         }
     }
     return str;
+}
+export function isArr(o) {
+    return Object.prototype.toString.call(o)=='[object Array]';
 }
 export function toParam(obj) {
     var param = "";

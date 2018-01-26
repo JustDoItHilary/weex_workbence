@@ -136,7 +136,7 @@
 
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
     .header{
         width: 750px;
     }

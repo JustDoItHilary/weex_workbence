@@ -62,6 +62,7 @@ const store = new Vuex.Store({
 
         orderDetail:[],
         syHealthList:[],
+        syTabs:[],
 
         /*{".expires":"Wed, 29 Nov 2017 09:42:05 GMT",".issued":"Mon, 30 Oct 2017 09:42:05 GMT",
          "access_token":"wd158S_Kt7PVs7sqyqo6-eF-K0qmRhm4s5UPf2D8npqTmd46RIDzeJ0ScUTDbPQsSdKYN9TOFviYLKaRDwtoP_
@@ -112,6 +113,9 @@ const store = new Vuex.Store({
         },
         getSyHealth(state){
             return state.syHealthList;
+        },
+        getSyTabs(state){
+            return state.syTabs;
         }
     }
 })

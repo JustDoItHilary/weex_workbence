@@ -43,7 +43,7 @@
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../style/mixin.scss";
+    @import "../style/mixin";
 
     .div_bottom {
         flex-direction: row;
@@ -57,7 +57,7 @@
         @include paddingColumn($clw);
         justify-content: center;
         align-items: center;
-        border-radius: 6wx;
+        border-radius: $btnRadius;
         background-color: $colorCommon;
         flex-direction: row;
         flex: 0.8;

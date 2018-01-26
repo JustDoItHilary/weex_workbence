@@ -133,7 +133,7 @@
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../style/mixin.scss";
+    @import "../../style/mixin";
 
     .cell_txt_center {
         @include fontCommon();
@@ -157,7 +157,7 @@
         margin-top: $cl;
     }
     .img_search{
-        @include wh(140px,140px);
+        @include wh($img,$img);
     }
     .txt_hide{
         @include fontCommon($bs,$css-grey);

@@ -39,7 +39,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "./style/mixin";
+    @import "style/mixin";
 
     .div_root{
     }

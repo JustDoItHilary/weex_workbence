@@ -33,7 +33,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="sass" scoped>
-    @import "../style/mixin.scss";
+    @import "../style/mixin";
 
     .div{
             flex-direction:row;

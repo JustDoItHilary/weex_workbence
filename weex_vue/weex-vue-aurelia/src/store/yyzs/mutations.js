@@ -2,7 +2,7 @@ const modal = weex.requireModule('modal');
 var storage = weex.requireModule('storage');
 
 import {
-    replaceTS
+    replaceTS,isArr
 } from '../../mixins'
 export function setItem(item) {
     var extra = item.Extra;
@@ -67,6 +67,9 @@ export function getTables(state, {data, name, warning}) {
         });
     }
     // console.log(state[name])
+}
+export function getTabs(state, {data, name, warning}) {
+
 }
 export function SET_MEMBER_OPERATOR(state, {data}) {
     if (data.hasOwnProperty('DATA') && data.DATA.length > 0) {
@@ -156,6 +159,10 @@ export function GET_SY_ORDER_DETAIL(state, {data}) {
 export function GET_SY_HEALTH_HISTORY(state, {data}) {
     // console.log(data);
     state.syHealthList = [];
+    if(data.hasOwnProperty('SELDATA')&&isArr(data.SELDATA)&&data.SELDATA.length>0){
+        state.syTabs=data.SELDATA;
+        state.syTabs.unshift({NAME:"全部"});
+    }
     this.commit('getTables', {data, name: 'syHealthList', warning: '暂无会员健康信息'});
     // console.log(state.orderDetail);
 }
