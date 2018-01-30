@@ -9,15 +9,15 @@ import Router from 'vue-router'
 // import ApplyDetails from './pages/apply/application-details.vue'
 
 /*rep*/
-import WorkRep from './pages/rep/workRep.vue'
-import NewRep from './pages/rep/newRep.vue'
-import RepDetails from './pages/rep/repDetails.vue'
-import RepAssessment from './pages/rep/repAssessment.vue'
-import RepReader from './pages/rep/repReader.vue'
-import RepTime from './pages/rep/repTime.vue'
-import RepHistory from './pages/rep/repHistory.vue'
-import RepStatistics from './pages/rep/repStatistics.vue'
-import RepMonStatistics from './pages/rep/repMonStatistics.vue'
+// import WorkRep from './pages/rep/workRep4.vue'
+// import NewRep from './pages/rep/newRep.vue'
+// import RepDetails from './pages/rep/repDetails.vue'
+// import RepAssessment from './pages/rep/repAssessment.vue'
+// import RepReader from './pages/rep/repReader.vue'
+// import RepTime from './pages/rep/repTime.vue'
+// import RepHistory from './pages/rep/repHistory.vue'
+// import RepStatistics from './pages/rep/repStatistics.vue'
+// import RepMonStatistics from './pages/rep/repMonStatistics.vue'
 
 /*slsj*/
 // import SlsjNew from './pages/slsj/slsjNew.vue'
@@ -34,7 +34,7 @@ import RepMonStatistics from './pages/rep/repMonStatistics.vue'
 /*ww-yyzs*/
 // import SyActivity from './pages/yyzs/sy-activity.vue'
 // import SyActivityDetails from './pages/yyzs/sy-activity-details.vue'
-// import SyQueryOrderDetails from './pages/yyzs/sy-queryDetails.vue'
+import SyQueryOrderDetails from './pages/yyzs/sy-queryDetails.vue'
 // import SyRepairMember from './pages/yyzs/sy-repairMember.vue'
 // import SyMember from './pages/yyzs/sy-member.vue'
 // import SyHealthHistory from './pages/yyzs/sy-health-history.vue'
@@ -54,7 +54,7 @@ import RepMonStatistics from './pages/rep/repMonStatistics.vue'
 // import Error from './pages/ww/error.vue'
 
 // import TestAurelia from './testAurelia.vue'
-import Test from './test.vue'
+// import Test from './test.vue'
 // import Test from './vue/components/input.vue'
 
 
@@ -107,78 +107,78 @@ export default new Router({
         // },
 
         /*rep*/
-        {
-            path: '/workRep',
-            component: WorkRep,
-            name: 'home',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/newRep/:params',//params: 0-新建 1-新建已经保存过 2-补交
-            component: NewRep,
-            name: 'newRep',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repDetails',
-            component: RepDetails,
-            name: 'repDetails',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repAssessment/:params',
-            component: RepAssessment,
-            name: 'repAssessment',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repReader',
-            component: RepReader,
-            name: 'repReader',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repTime/:params',
-            component: RepTime,
-            name: 'repTime',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repHistory',
-            component: RepHistory,
-            name: 'repHistory',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repStatistics',
-            component: RepStatistics,
-            name: 'RepStatistics',
-            meta: {
-                keepAlive: false
-            }
-        },
-        {
-            path: '/repMonStatistics',
-            component: RepMonStatistics,
-            name: 'RepMonStatistics',
-            meta: {
-                keepAlive: false
-            }
-        },
+        // {
+        //     path: '/workRep',
+        //     component: WorkRep,
+        //     name: 'home',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/newRep/:params',//params: 0-新建 1-新建已经保存过 2-补交
+        //     component: NewRep,
+        //     name: 'newRep',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repDetails',
+        //     component: RepDetails,
+        //     name: 'repDetails',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repAssessment/:params',
+        //     component: RepAssessment,
+        //     name: 'repAssessment',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repReader',
+        //     component: RepReader,
+        //     name: 'repReader',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repTime/:params',
+        //     component: RepTime,
+        //     name: 'repTime',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repHistory',
+        //     component: RepHistory,
+        //     name: 'repHistory',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repStatistics',
+        //     component: RepStatistics,
+        //     name: 'RepStatistics',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
+        // {
+        //     path: '/repMonStatistics',
+        //     component: RepMonStatistics,
+        //     name: 'RepMonStatistics',
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
         /*slsj*/
         // {
         //     path: '/slsjNew', component: SlsjNew
@@ -216,11 +216,11 @@ export default new Router({
         //     component:SyActivity,
         //     name:'syActivity'
         // },
-        // {
-        //     path:'/syQueryOrderDetails',
-        //     component:SyQueryOrderDetails,
-        //     name:'syQueryOrderDetails'
-        // },
+        {
+            path:'/syQueryOrderDetails',
+            component:SyQueryOrderDetails,
+            name:'syQueryOrderDetails'
+        },
         // {
         //     path:'/syHealthHistory',
         //     component:SyHealthHistory,
@@ -284,14 +284,14 @@ export default new Router({
         // {
         //     path:'/cloudMyFile',component:CloudMyFile,
         // },
-        {
-            path: '/test', component: Test,
-            meta: {
-                keepAlive: false
-            }
-        },
+        // {
+        //     path: '/test', component: Test,
+        //     meta: {
+        //         keepAlive: false
+        //     }
+        // },
 
-        {path: '/', redirect: '/workRep'}
+        {path: '/', redirect: '/syQueryOrderDetails'}
         // {path: '/', redirect:`/applyList/${JSON.stringify({GUID: 'e35ac823-5a4e-11e7-af47-ec388f6f5b1d', NAME: '团建'})}`}
     ]
 })

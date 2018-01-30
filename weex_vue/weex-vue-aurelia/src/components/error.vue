@@ -47,7 +47,7 @@
         @include marginColumn($bl);
     }
     .txt_hide{
-        @include marginColumn($sl);
+        @include marginColumn($bl);
         @include fontCommon($bs,$css-grey);
     }
 </style>

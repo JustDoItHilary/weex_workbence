@@ -121,7 +121,7 @@
                 let self = this;
                 self.$store.commit('SET_REP_DETAILS', {item: {}});
                 self.$store.commit('GET_READER', {auditors: ''});
-                if (item.hasOwnProperty('repDetail')) {//已保存，设置本周详情&审阅者
+                if (item&&item.hasOwnProperty('repDetail')) {//已保存，设置本周详情&审阅者
                     var details = item.repDetail;
                     self.$store.commit('SET_REP_DETAILS', {item: details});
                     if (details.hasOwnProperty("Auditors")) {
@@ -129,7 +129,8 @@
                     }
                 } else {//未保存，设置审阅者
                     var last = self.$store.getters.getRepList[0];
-                    if (last.hasOwnProperty("Auditors")) {
+                    console.log(self.$store.getters.getRepList)
+                    if (last&&last.hasOwnProperty("Auditors")) {
                         self.$store.commit('GET_READER', {auditors: last.Auditors});
                     }
                 }

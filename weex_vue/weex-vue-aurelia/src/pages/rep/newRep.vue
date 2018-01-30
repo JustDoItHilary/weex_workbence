@@ -1,6 +1,10 @@
 <template>
     <div style="background-color:#ebedef;" append="node">
-        <app-header tit="工作汇报"></app-header>
+        <app-header tit="工作汇报">
+            <div slot="right" class="div_calendar" @click="clickTitRight">
+                <image class="img_calendar" :src="baseUrl+(isiOS?imgRepairUrl_ios:imgRepairUrl)"></image>
+            </div>
+        </app-header>
         <scroller>
             <cell-peo
                     class="div_item"
@@ -109,9 +113,6 @@
             CellInput: require('../../components/cell-input.vue')
         },
         computed: {
-            ratio(){
-                return this.$store.getters.ratio;
-            },
             getParams(){
                 if (this.$route && this.$route.params) {
 //                    console.log(this.$route.params)
@@ -138,7 +139,11 @@
                 } else {
                     return self.lastDetails.UpdateTime?self.lastDetails.UpdateTime:'';
                 }
-            }
+            },
+            baseUrl(){
+                console.log(this.$store.getters.baseUrl);
+                return this.$store.getters.baseUrl;
+            },
         },
         data(){
             return {
@@ -148,9 +153,16 @@
                 lastWeekMon:'',
                 lastWeekSun:'',
                 lastDetail:{},
+                isiOS:false,
+                imgRepairUrl: '/drawable/repair_white.png',
+                imgRepairUrl_ios: '/drawable/repair_green.png',
             }
         },
         methods: {
+            clickTitRight(){
+                let self=this;
+                self.$router.push('/repHistory');
+            },
             clickCellBtn(){
                 let self = this;
 //                console.log("cell",this.$refs['cellInput']);
@@ -301,6 +313,7 @@
         },
         created(){
             let self = this;
+            self.isiOS=weex.config.env.platform.toLowerCase() == 'ios';
             var params=self.getParams;
             if (params.index == 0) {
                 if (self.repDetails.Guid) {
@@ -373,5 +386,13 @@
         flex: 1;
         margin-left: $cl;
         margin-right: $sl;
+    }
+    .div_calendar{
+        padding:$cl;
+    }
+    .img_calendar{
+        @include wh();
+        @include marginRow($bl);
+        @include marginColumn($cl);
     }
 </style>

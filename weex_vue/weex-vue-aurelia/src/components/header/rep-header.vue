@@ -116,12 +116,12 @@
 //                if (self.isiOS&&model.indexOf('iphone')>-1||platform=='android') {
                     configModule.getActionBarHeight(function (params) {
                         var scale;
-//                        modal.toast({message:  'getActionBarHeight： ' + JSON.stringify(params), duration: 3});
+//                        modal.alert({message:  'getActionBarHeight： ' + JSON.stringify(params), duration: 3});
                         if(params.hasOwnProperty("isLandScape")&&params.isLandScape==1){
                             configModule.getContainerHeight(function (params) {
                                 // let ratio = this.$getConfig().env.devHeight /(2*750);
                                 //从本地获取按钮的高度占布局高度的比值
-//                                modal.toast({message: "getContainerHeight: "+JSON.stringify(params), duration: 3});
+//                                modal.alert({message: "getContainerHeight: "+JSON.stringify(params), duration: 3});
                                 let ratio = params.ratio;
                                 if (ratio !== null) {
                                     //由于是横屏显示，所以高度为设备的宽度

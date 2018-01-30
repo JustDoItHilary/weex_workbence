@@ -13,76 +13,17 @@
                :labelOne="clickLabelOne"
                :labelTwo="clickLabelTwo"
         ></label>
-        <!--<div v-if="isSelected"></div>-->
-        <div
-             class="div_week"
-             @click="clickShowTime">
+
+        <my-rep v-if="isSelected"></my-rep>
+
+        <div v-if="!isSelected"
+                class="div_week"
+                @click="clickShowTime">
             <text class="text_time">{{mon+' -- '+sun}}</text>
             <image class="img_open" :src="baseUrl+(isShowTime?imgShowUp:imgShowDown)"></image>
         </div>
 
-        <div style="position: relative;flex:1;">
-
-            <input v-if="!isSelected"  class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
-
-            <cell-error v-if="errorInfo.errorMess" :errorMess="errorInfo.errorMess"></cell-error>
-
-            <list  class="list">
-                <!--我的汇报-->
-                <cell v-if="isSelected"  class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
-                      @longpress="longPressItem(item)">
-                    <div  class="div_item">
-                        <div  class="div_item_top">
-                            <date-logo :type="item.IsPost==0"
-                                       :month="item.month"
-                                       :year="item.year"></date-logo>
-                            <div  class="flex_left">
-                                <text  class="text_tit">{{item.startTime}} -- {{item.endTime}}</text>
-                                <text  :class="['text_tit', 'select_'+item.IsPost ]">{{item.checked}}</text>
-                            </div>
-                        </div>
-                        <text  class="text_mulit">下周工作计划:</text>
-                        <text  class="text_tit txt_border">{{item.myPlan}}</text>
-                        <image v-if="item.AuditFlag==1"  class="img_logo" :src="baseUrl+imgLogoUrl"></image>
-                    </div>
-                </cell>
-                <!--团队汇报-->
-                <cell v-if="!isSelected"
-                      class="cell_member"
-                      v-for="(item,index) in reviewList"
-                      @click="clickReview(item)">
-                    <div  class="div_member">
-                        <text  class="text_member">{{item.Name}}</text>
-                    </div>
-                    <text  :class="['div_logo','select_bg_'+item.isAudited]">{{item.isAudited?'全部审核':'有未审核'}}</text>
-                </cell>
-            </list>
-
-            <div v-if="(!isSelected)&&isShowTime"
-                      class="div_time">
-                <cell-txt-center
-                        :txt="year+'年'+(month+1)+'月'"
-                        fontColor="#aaa"
-                        class="cell_txt_center">
-                    <text slot="left"
-                            class="cornerBtn"
-                            @click="clickLast()"> 上个月 </text>
-                    <text slot="right"
-                            class="cornerBtn"
-                            @click="clickNext()"> 下个月 </text>
-                </cell-txt-center>
-                <div class="cell_border"
-                     v-for="(item,index) in timeList"
-                     @click="clickTimeItem(item)">
-                    <text :class="['text_tit',item.actived?'select_true':'']">{{item.startDate+' ~ '+item.endDate}}</text>
-                </div>
-                <div class="div_else"></div>
-            </div>
-
-        </div>
-        <div v-if="isSelected" class="div_add">
-            <image v-if="isSelected" class="img_add"  :src="baseUrl+imgAddUrl" @click="clickLeft"></image>
-        </div>
+        <team-rep v-if="!isSelected" :isShowTime="isShowTime" @clickTeamTime="clickTeamTime"></team-rep>
     </div>
 </template>
 
@@ -103,6 +44,8 @@
             CellError: require('../../components/error.vue'),
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
             RepView: require('./views/repView.vue'),
+            myRep:require('./myRep.vue'),
+            teamRep:require('./teamRep.vue'),
         },
         data(){
             return {
@@ -201,11 +144,11 @@
                 let self=this;
                 self.isShowTime=!self.isShowTime;
             },
-            clickTimeItem(item){
+            clickTeamTime(mon,sun){
                 let self=this;
                 self.isShowTime=false;
-                self.mon=item.startDate;
-                self.sun=item.endDate;
+                self.mon=mon;
+                self.sun=sun;
                 self.getTeamRep();
             },
             clickClose(){
@@ -325,7 +268,7 @@
             //获取团队汇报（待审核信息）
             getTeamRep(){
                 let self = this;
-                var body = 'code=' + self.userPlatformCode + '&startDate=' + mon + '&endDate=' + sun + '&type=1';
+                var body = 'code=' + self.userPlatformCode + '&startDate=' + self.mon + '&endDate=' + self.sun + '&type=1';
 //                console.log('REPCALLBACK: ', body);
                 self.$store.dispatch('FETCH_REP_GET_ALL_AUDITED', {body: body});
             },
@@ -532,23 +475,6 @@
     .txt_border{
         margin-bottom: $cl;
     }
-    .div_add{
-        position: absolute;
-        bottom:4*$bl;
-        right:2*$bl;
-        border-radius: 100px;
-        background-color: $colorCommon;
-        //padding:$slw;
-        //box-shadow: 6px 6px 4px $css-grey;
-    }
-    .img_add{
-        position: absolute;
-        bottom:4*$bl;
-        right:2*$bl;
-        border-radius: 100px;
-        background-color: $colorCommon;
-        @include wh($bh,$bh);
-    }
     .div_week {
         margin-top: 1px;
         padding-top: $cl;
@@ -581,30 +507,8 @@
         align-items: center;
         flex:1;
     }
-    .cell_border {
-        width:750px;
-        @include sideBorder(bottom, $bc);
-        align-items: center;
-        background-color: $fc;
-        @include paddingColumn($bl);
-    }
-    .div_else{
-        flex:1;
-        background-color: #000;
-        opacity:.4;
-        border-width: 1px;
-        width:750px;
-    }
     .div_label{
         @include paddingColumn($sl);
-    }
-    .cell_txt_center {
-        @include fontCommon();
-        width:750px;
-        text-align: center;
-        padding-bottom: $clw;
-        padding-top: $blw;
-        background-color: $fc;
     }
 
 </style>

@@ -2,7 +2,7 @@
 // import 'lib-flexible'
 import App from './App.vue'
 import router from './router'
-import store from './store/rep'
+import store from './store/yyzs'
 import {sync} from 'vuex-router-sync'
 // import * as filters from './filters'
 import mixins from './mixins'

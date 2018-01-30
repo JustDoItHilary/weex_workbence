@@ -13,8 +13,8 @@
                :labelOne="clickLabelOne"
                :labelTwo="clickLabelTwo"
         ></label>
-        <!--<div v-if="isSelected"></div>-->
-        <div
+        <div v-if="isSelected"></div>
+        <div v-if="!isSelected"
              class="div_week"
              @click="clickShowTime">
             <text class="text_time">{{mon+' -- '+sun}}</text>
@@ -80,6 +80,13 @@
             </div>
 
         </div>
+        <bottom-btn v-if="false"
+                    class="cell_bottom_btn"
+                    txtLeft="新建"
+                    txtRight="提交统计"
+                    :left="clickLeft"
+                    :right="clickRight"
+        ></bottom-btn>
         <div v-if="isSelected" class="div_add">
             <image v-if="isSelected" class="img_add"  :src="baseUrl+imgAddUrl" @click="clickLeft"></image>
         </div>
@@ -102,7 +109,6 @@
             DateLogo: require('../../components/cell-date-logo.vue'),
             CellError: require('../../components/error.vue'),
             CellTxtCenter: require('../../components/cell-txt-center.vue'),
-            RepView: require('./views/repView.vue'),
         },
         data(){
             return {
@@ -150,6 +156,7 @@
                 return this.$store.getters.getLastNFNum
             },
             isSelected(){/*当前显示的是否为"我的汇报"页面*/
+                console.log("isSelected: ",this.$store.getters.getSelected)
                 return this.$store.getters.getSelected
             },
             timeList(){
@@ -325,7 +332,14 @@
             //获取团队汇报（待审核信息）
             getTeamRep(){
                 let self = this;
-                var body = 'code=' + self.userPlatformCode + '&startDate=' + mon + '&endDate=' + sun + '&type=1';
+//                //因为 getDay() 获取一周中的第几天，是从周日开始，所以我们获取当前是一周中的第几天时向前推一天
+//                var todayOfWeek = (new Date(self.date - 86400000)).getDay();
+//                var startDate = new Date(self.year, self.month, self.date.getDate() - todayOfWeek);
+//                //本周的结束日期
+//                var endDate = new Date(self.year, self.month, self.date.getDate() - todayOfWeek + 6);
+//                startDate = self.formatDate(startDate, 'yyyy-MM-dd');
+//                endDate = self.formatDate(endDate, 'yyyy-MM-dd');
+                var body = 'code=' + self.userPlatformCode + '&startDate=' + self.mon + '&endDate=' + self.sun + '&type=1';
 //                console.log('REPCALLBACK: ', body);
                 self.$store.dispatch('FETCH_REP_GET_ALL_AUDITED', {body: body});
             },

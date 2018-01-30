@@ -13,76 +13,16 @@
                :labelOne="clickLabelOne"
                :labelTwo="clickLabelTwo"
         ></label>
-        <!--<div v-if="isSelected"></div>-->
-        <div
+
+        <div v-if="!isSelected"
              class="div_week"
              @click="clickShowTime">
             <text class="text_time">{{mon+' -- '+sun}}</text>
             <image class="img_open" :src="baseUrl+(isShowTime?imgShowUp:imgShowDown)"></image>
         </div>
+        <rep-view :isShowTime="isShowTime" @clickTeamTime="clickTeamTime"></rep-view>
 
-        <div style="position: relative;flex:1;">
-
-            <input v-if="!isSelected"  class="txt_center input" type="text" placeholder="搜索" @input="input" :value="searchMess"/>
-
-            <cell-error v-if="errorInfo.errorMess" :errorMess="errorInfo.errorMess"></cell-error>
-
-            <list  class="list">
-                <!--我的汇报-->
-                <cell v-if="isSelected"  class="cell" v-for="(item,index) in repList" @click="clickItem(index)"
-                      @longpress="longPressItem(item)">
-                    <div  class="div_item">
-                        <div  class="div_item_top">
-                            <date-logo :type="item.IsPost==0"
-                                       :month="item.month"
-                                       :year="item.year"></date-logo>
-                            <div  class="flex_left">
-                                <text  class="text_tit">{{item.startTime}} -- {{item.endTime}}</text>
-                                <text  :class="['text_tit', 'select_'+item.IsPost ]">{{item.checked}}</text>
-                            </div>
-                        </div>
-                        <text  class="text_mulit">下周工作计划:</text>
-                        <text  class="text_tit txt_border">{{item.myPlan}}</text>
-                        <image v-if="item.AuditFlag==1"  class="img_logo" :src="baseUrl+imgLogoUrl"></image>
-                    </div>
-                </cell>
-                <!--团队汇报-->
-                <cell v-if="!isSelected"
-                      class="cell_member"
-                      v-for="(item,index) in reviewList"
-                      @click="clickReview(item)">
-                    <div  class="div_member">
-                        <text  class="text_member">{{item.Name}}</text>
-                    </div>
-                    <text  :class="['div_logo','select_bg_'+item.isAudited]">{{item.isAudited?'全部审核':'有未审核'}}</text>
-                </cell>
-            </list>
-
-            <div v-if="(!isSelected)&&isShowTime"
-                      class="div_time">
-                <cell-txt-center
-                        :txt="year+'年'+(month+1)+'月'"
-                        fontColor="#aaa"
-                        class="cell_txt_center">
-                    <text slot="left"
-                            class="cornerBtn"
-                            @click="clickLast()"> 上个月 </text>
-                    <text slot="right"
-                            class="cornerBtn"
-                            @click="clickNext()"> 下个月 </text>
-                </cell-txt-center>
-                <div class="cell_border"
-                     v-for="(item,index) in timeList"
-                     @click="clickTimeItem(item)">
-                    <text :class="['text_tit',item.actived?'select_true':'']">{{item.startDate+' ~ '+item.endDate}}</text>
-                </div>
-                <div class="div_else"></div>
-            </div>
-
-        </div>
-        <div v-if="isSelected" class="div_add">
-            <image v-if="isSelected" class="img_add"  :src="baseUrl+imgAddUrl" @click="clickLeft"></image>
-        </div>
+        <image v-if="isSelected" class="img_add"  :src="baseUrl+imgAddUrl" @click="clickLeft"></image>
     </div>
 </template>
 
@@ -179,34 +119,16 @@
             },
         },
         methods: {
-            clickLast(){
-                let self = this;
-                if(self.month>0){
-                    self.month=self.month-1;
-                }else{
-                    self.year=self.year-1;
-                    self.month=11;
-                }
-            },
-            clickNext(){
-                let self = this;
-                if(self.month<11){
-                    self.month=self.month+1;
-                }else{
-                    self.year=self.year+1;
-                    self.month=0;
-                }
+            clickTeamTime(mon,sun){
+                let self=this;
+                self.isShowTime=false;
+                self.mon=mon;
+                self.sun=sun;
+                self.getTeamRep();
             },
             clickShowTime(){
                 let self=this;
                 self.isShowTime=!self.isShowTime;
-            },
-            clickTimeItem(item){
-                let self=this;
-                self.isShowTime=false;
-                self.mon=item.startDate;
-                self.sun=item.endDate;
-                self.getTeamRep();
             },
             clickClose(){
                 configModule.finish();
@@ -253,65 +175,6 @@
                 }
                 self.$router.push(`/newRep/${JSON.stringify({index:0})}`)
             },
-            clickItem(index){
-                let self = this;
-                self.$store.commit('SET_REP_DETAILS', {item: self.$store.getters.getRepList[index]});
-                var details = self.$store.getters.getRepDetails;
-                if (details.hasOwnProperty("Auditors")) {
-                    self.$store.commit('GET_READER', {auditors: details.Auditors});
-                }
-                self.$router.push(`/repDetails`)
-            },
-            longPressItem(item){
-                let self = this;
-                self.toConfirm('确定删除?',function () {
-                    if (item.IsPost == 1) {
-                        self.toToast('已经提交不可删除！')
-                    } else {
-                        self.deleteRep(item.Guid);
-                    }
-                })
-            },
-            //删除已经保存但未提交的周报
-            deleteRep(guid){
-                let self = this;
-                var body = 'code=' + self.$store.getters.getUserPlatformCode + '&isWeek=1&guid=' + guid + '&cros=&version=1';
-                self.$store.dispatch('FETCH_REP_DELETE', {
-                    body: body, callback: function (retdata) {
-                        if (retdata == true) {
-                            self.getMyRep();
-                        } else {
-                            self.toToast('删除操作：' + retdata)
-                        }
-                    }
-                });
-            },
-            clickReview(item){
-                let self = this;
-                let params = {};
-                params.Name = item.Name;
-                params.Guid = item.Guid;
-                self.$router.push(`/repTime/${JSON.stringify(params)}`);
-                self.$store.commit('SET_REP_LIST', {retdata:[], callback:function () {
-
-                }});
-            },
-            /*tui*/
-            input: function (e) {
-                let self = this;
-                self.searchMess = e.value;
-            },
-            searchMemberList(list){
-                let self = this;
-//                console.log(self.searchMess)
-                let readerList = [];
-                for (let i = 0; i < list.length; i++) {
-                    if (list[i].Name.indexOf(self.searchMess) > -1) {
-                        readerList.push(list[i])
-                    }
-                }
-                return readerList;
-            },
             //获取上周未审核周报数目
             getLastWeekReviewNum(){
                 let self = this;
@@ -325,7 +188,7 @@
             //获取团队汇报（待审核信息）
             getTeamRep(){
                 let self = this;
-                var body = 'code=' + self.userPlatformCode + '&startDate=' + mon + '&endDate=' + sun + '&type=1';
+                var body = 'code=' + self.userPlatformCode + '&startDate=' + self.mon + '&endDate=' + self.sun + '&type=1';
 //                console.log('REPCALLBACK: ', body);
                 self.$store.dispatch('FETCH_REP_GET_ALL_AUDITED', {body: body});
             },

@@ -127,7 +127,7 @@
             let self = this;
 //            var bundleUrl = self.$getConfig().bundleUrl || '';
 //            memberid=1001502924
-            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?memberid=1005437214&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
+            var bundleUrl = 'http://weex.yy365.cn/sy-member.js?memberid=1001075089&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
 //            var bundleUrl = 'http://192.168.100.120:8888/weex/sy-member.js?memberid=1005437214&token=@@OTk5OTk5fEAxODU2MTYwNjkyMHxAYzRjMTA5Mjk1OTNjYmVhM2UwN2FhOTEzMWMxYzdlNTJ8QHYzLjIuMmMxNzA4MzB8QDU4ZTMxMjdkZmI4NmUzNDM1ODgyZGRkNWU0MDQ5YWJi';
             let urlArr = bundleUrl.split("?");
             self.baseUrl = urlArr[0].split('/').slice(0, -1).join('/');

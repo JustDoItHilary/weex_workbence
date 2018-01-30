@@ -40,6 +40,7 @@ export function FETCH_REP_LIST({commit, state}, {body, callback}) {
     // var body='code='+state.userPlatformCode+'&startDate='+startDate+'&endDate='+endDate+'&type=1&cros=';
     // let body='QueryType='+URL_APPLY_GET_LIST+'&UserGuid='+state.selfToken+'&Params='+params;
     // var body='Params='+params;
+    commit('SET_ERROR', {showType:4});
     return fetchRep(URL_REP_GET_LIST, body)
         .then(retdata => {
             commit('SET_ERROR', {showType:0});
